@@ -1,7 +1,12 @@
+package DTO;
+
 public class Supplier {
     private String supplierId;
     private String supplierName;
     private String contactPhone;
+
+    public Supplier() {
+    }
 
     public Supplier(String supplierId, String supplierName, String contactPhone) {
         this.supplierId = supplierId;

@@ -1,3 +1,4 @@
+package BUS;
 public class StatisticsReport {
     
     public void revenueStatistics() {

@@ -1,13 +1,16 @@
-public class SupplierManager {
+package DAO; // Khai báo địa chỉ hiện tại
+import DTO.Supplier;
+
+public class SupplierDAO {
     private Supplier[] supplierList; 
     private int count; 
 
-    public SupplierManager() {
+    public SupplierDAO() {
         this.supplierList = new Supplier[100];
         this.count = 0;
     }
 
-    public SupplierManager(Supplier[] supplierList, int count) 
+    public SupplierDAO(Supplier[] supplierList, int count) {
         this.supplierList = supplierList;
         this.count = count;
     }

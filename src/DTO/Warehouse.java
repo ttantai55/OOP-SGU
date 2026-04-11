@@ -1,10 +1,14 @@
+package DTO;
 import java.util.Date;
 
 public class Warehouse {
     private String warehouseId;
     private int stockQuantity;
     private Date lastUpdated;
-    
+
+    public Warehouse() {
+    }
+
     public Warehouse(String warehouseId, int stockQuantity, Date lastUpdated) {
         this.warehouseId = warehouseId;
         this.stockQuantity = stockQuantity;

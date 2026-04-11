@@ -1,13 +1,16 @@
-public class WarehouseManager implements IInventoryService {
+package DAO; // Khai báo địa chỉ hiện tại
+import DTO.Warehouse; // Import để gọi Warehouse từ DTO sang
+
+public class WarehouseDAO {
     private Warehouse[] warehouseList;
     private int count;
 
-    public WarehouseManager() {
+    public WarehouseDAO() {
         this.warehouseList = new Warehouse[100];
         this.count = 0;
     }
 
-    public WarehouseManager(Warehouse[] warehouseList, int count) {
+    public WarehouseDAO(Warehouse[] warehouseList, int count) {
         this.warehouseList = warehouseList;
         this.count = count;
     }
@@ -26,10 +29,5 @@ public class WarehouseManager implements IInventoryService {
 
     public void setCount(int count) {
         this.count = count;
-    }
-
-    @Override
-    public int checkStock(String productId) {
-        return 0; 
     }
 }
