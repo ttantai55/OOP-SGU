@@ -31,6 +31,15 @@ public class AccessoryDTO extends ProductsDTO {
     }
 
     @Override
+    public void input() {
+        super.input();
+        System.out.println("Moi nhap loai san pham:");
+        setType(sc.nextLine());
+        System.out.println("Moi nhap Mo ta ve san pham:");
+        setDescription(sc.nextLine());
+    }
+
+    @Override
     public String toString() {
         String accessoryFormat = " %-20s | %-40s |";
         

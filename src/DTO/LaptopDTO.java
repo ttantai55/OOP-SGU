@@ -1,59 +1,30 @@
 package DTO;
 
 public class LaptopDTO extends ProductsDTO {
-    private String cpu;
-    private String ram;
-    private String storage;
-    private String gpu;
-    private String screenSize;
-    private String screenResol;// do phan giai
+    private CpuDTO cpu;
+    private RamDTO ram;
+    private StorageDTO storage;
+    private GpuDTO gpu;
+    private ScreenDTO screen;
     private String battery; //pin
 
-    public LaptopDTO(){
-
+    public LaptopDTO() {
+        super();
+        this.cpu = new CpuDTO();
+        this.ram = new RamDTO();
+        this.storage = new StorageDTO();
+        this.gpu = new GpuDTO();
+        this.screen = new ScreenDTO();
     }
 
-    public LaptopDTO(String productIMEI, String productID, String categoryID, String brandID, String productName, double price, int warrantyPeriod, String origin, String cpu, String ram, String storage, String gpu, String screenSize, String screenResol, String battery){
-        super(productIMEI,productID,categoryID,brandID,productName,price,warrantyPeriod,origin);
+    public LaptopDTO(String productIMEI, String productID, String categoryID, String brandID, String productName, double price, int warrantyPeriod, String origin, CpuDTO cpu, RamDTO ram, StorageDTO storage, GpuDTO gpu, ScreenDTO screen, String battery, boolean status){
+        super(productIMEI,productID,categoryID,brandID,productName,price,warrantyPeriod,origin,status);
+        this.cpu = cpu;
+        this.ram = ram;
+        this.storage = storage;
+        this.gpu = gpu;
+        this.screen = screen;
         this.battery = battery;
-        this.cpu = cpu;
-        this.gpu = gpu;
-        this.ram = ram;
-        this.screenResol = screenResol;
-        this.screenSize = screenSize;
-        this.storage = storage;
-    }
-
-    public String getCpu() {
-        return cpu;
-    }
-
-    public void setCpu(String cpu) {
-        this.cpu = cpu;
-    }
-
-    public String getRam() {
-        return ram;
-    }
-
-    public void setRam(String ram) {
-        this.ram = ram;
-    }
-
-    public String getStorage() {
-        return storage;
-    }
-
-    public void setStorage(String storage) {
-        this.storage = storage;
-    }
-
-    public String getGpu() {
-        return gpu;
-    }
-
-    public void setGpu(String gpu) {
-        this.gpu = gpu;
     }
 
     public String getBattery() {
@@ -64,30 +35,28 @@ public class LaptopDTO extends ProductsDTO {
         this.battery = battery;
     }
 
-    public String getScreenResol() {
-        return screenResol;
-    }
 
-    public void setScreenResol(String screenResol) {
-        this.screenResol = screenResol;
-    }
+    @Override
+    public void input(){
+        super.input();
+        System.out.println("Moi nhap cau hinh Laptop:");
 
-    public String getScreenSize() {
-        return screenSize;
+        this.cpu.input();
+        this.ram.input();
+        this.storage.input();
+        this.gpu.input();
+        this.screen.input();
+        
+        System.out.println("Moi nhap Dung luong pin:");
+        setBattery(sc.nextLine());
     }
-
-    public void setScreenSize(String screenSize) {
-        this.screenSize = screenSize;
-    }
-
-    
 
     @Override
     public String toString() {
         String laptopFormat = " %-20s | %-15s | %-20s | %-20s | %-15s | %-15s | %-15s |";
         
         return super.toString() + String.format(laptopFormat, 
-                cpu, ram, storage, gpu, screenSize, screenResol, battery);
+                cpu, ram, storage, gpu, screen, battery);
     }
     
     @Override

@@ -10,6 +10,7 @@ public class ProductsDTO {
     private double price;
     private int warrantyPeriod;
     private String origin;
+    private boolean status;
 
     Scanner sc = new Scanner(System.in);
 
@@ -17,7 +18,7 @@ public class ProductsDTO {
 
     }
 
-    public ProductsDTO(String productIMEI, String productID, String categoryID, String brandID, String productName, double price, int warrantyPeriod, String origin){
+    public ProductsDTO(String productIMEI, String productID, String categoryID, String brandID, String productName, double price, int warrantyPeriod, String origin, boolean status){
         this.brandID = brandID;
         this.categoryID = categoryID;
         this.origin = origin;
@@ -26,6 +27,7 @@ public class ProductsDTO {
         this.productIMEI = productIMEI;
         this.productName = productName;
         this.warrantyPeriod = warrantyPeriod;
+        this.status = status;
     }
 
     public String getProductIMEI() {
@@ -91,6 +93,15 @@ public class ProductsDTO {
     public void setWarrantyPeriod(int warrantyPeriod) {
         this.warrantyPeriod = warrantyPeriod;
     }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+  
     
     
     public void input(){
@@ -107,7 +118,7 @@ public class ProductsDTO {
         setBrandID(sc.nextLine());
         System.out.println("Moi nhap Gia San Pham:");
         setPrice(Double.parseDouble(sc.nextLine()));
-        System.out.println("Moi nhap nam San Xuat:");
+        System.out.println("Moi nhap thoi gian bao hanh cua san pham:");
         setWarrantyPeriod(Integer.parseInt(sc.nextLine()));
         System.out.println("Moi nhap nguon goc san pham: ");
         setOrigin(sc.nextLine());
