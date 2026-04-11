@@ -1,4 +1,6 @@
-public class Laptop extends Products {
+package DTO;
+
+public class LaptopDTO extends ProductsDTO {
     private String cpu;
     private String ram;
     private String storage;
@@ -6,6 +8,21 @@ public class Laptop extends Products {
     private String screenSize;
     private String screenResol;// do phan giai
     private String battery; //pin
+
+    public LaptopDTO(){
+
+    }
+
+    public LaptopDTO(String productIMEI, String productID, String categoryID, String brandID, String productName, double price, int warrantyPeriod, String origin, String cpu, String ram, String storage, String gpu, String screenSize, String screenResol, String battery){
+        super(productIMEI,productID,categoryID,brandID,productName,price,warrantyPeriod,origin);
+        this.battery = battery;
+        this.cpu = cpu;
+        this.gpu = gpu;
+        this.ram = ram;
+        this.screenResol = screenResol;
+        this.screenSize = screenSize;
+        this.storage = storage;
+    }
 
     public String getCpu() {
         return cpu;
@@ -63,9 +80,20 @@ public class Laptop extends Products {
         this.screenSize = screenSize;
     }
 
+    
+
+    @Override
+    public String toString() {
+        String laptopFormat = " %-20s | %-15s | %-20s | %-20s | %-15s | %-15s | %-15s |";
+        
+        return super.toString() + String.format(laptopFormat, 
+                cpu, ram, storage, gpu, screenSize, screenResol, battery);
+    }
+    
     @Override
     public void displayInfo(){
-
+        System.out.println(toString());
     }
+    
     
 }
