@@ -1,12 +1,14 @@
 package DTO;
 
+import java.util.Scanner;
+
 public class Address {
     private String houseNumber;
     private String street;
     private String ward;
     private String district;
     private String city;
-
+    static Scanner sc = new Scanner(System.in);
     public Address() {
     }
 
@@ -57,17 +59,29 @@ public class Address {
     public void setCity(String city) {
         this.city = city;
     }
-    //chưa làm ****
-    public void inPut(){}
+    public String hienThiDiaChi() {
+        return houseNumber + ", " + street + ", " + ward + ", " + district + ", " + city;
+    }
+
+    public void inPut(){
+        System.out.println("Moi nhap so nha: ");
+        setHouseNumber(sc.nextLine());
+        System.out.println("Moi nhap ten duong");
+        setStreet(sc.nextLine());
+        System.out.println("Moi nhap ten phuong/xa: ");
+        setWard(sc.nextLine());
+        System.out.println("Moi nhap quan/huyen: ");
+        setDistrict(sc.nextLine());
+        System.out.println("moi nhap tinh: ");
+        setCity(sc.nextLine());
+    }
     //****
     @Override
     public String toString() {
-        return "Address{" +
-                "city='" + city + '\'' +
-                ", houseNumber='" + houseNumber + '\'' +
-                ", street='" + street + '\'' +
-                ", ward='" + ward + '\'' +
-                ", district='" + district + '\'' +
-                '}';
+        return String.format("%-7s | %-20s | %-15s | %-15s | %-15s |",
+                houseNumber, street, ward, district, city);
+    }
+    public void displayInfo(){
+        System.out.println(toString());
     }
 }

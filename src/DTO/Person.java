@@ -1,11 +1,13 @@
 package DTO;
 
+import java.util.Scanner;
+
 public class Person {
     protected String fullName;
     protected String phoneNumber;
     protected String email;
     protected Address address;
-
+    static Scanner sc = new Scanner(System.in);
     public Person() {
     }
 
@@ -48,16 +50,26 @@ public class Person {
         this.email = email;
     }
 
-    //****
-    public void input(){}
-    //****
+
+    public void input(){
+        System.out.println("Moi nhap ho va ten: ");
+        setFullName(sc.nextLine());
+        System.out.println("Moi nhap so dien thoai(10 so bat dau tu so 0): ");
+        setPhoneNumber(sc.nextLine());
+        System.out.println("Moi nhap email: ");
+        setEmail(sc.nextLine());
+        System.out.println("Moi nhap dia chi: ");
+        this.address = new Address();
+        this.address.inPut();
+
+    }
+
     @Override
     public String toString() {
-        return "Person{" +
-                "address=" + address +
-                ", fullName='" + fullName + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", email='" + email + '\'' +
-                '}';
+        return String.format("%-30s | %-15s | %-25s | %-45s",
+                fullName, phoneNumber, email, address.hienThiDiaChi());
+    }
+    public void displayInfo(){
+        System.out.println(toString());
     }
 }

@@ -1,12 +1,14 @@
 package DTO;
 
 import java.util.Date;
+import java.util.Scanner;
 
 public class DeliveryEmployee extends Employee{
     private String licensePlate;
     private String deliveryArea;
     private int deliveryCount;
     private float feePerOrder;
+    static Scanner sc = new Scanner(System.in);
     public DeliveryEmployee(){}
 
     public DeliveryEmployee(String employeeId, String position, float baseSalary, Date startDate, String deliveryArea, String licensePlate, float feePerOrder, int deliveryCount) {
@@ -17,24 +19,68 @@ public class DeliveryEmployee extends Employee{
         this.deliveryCount = deliveryCount;
     }
 
-    //***
-    public void input(){}
-    //***
-    public float calculateSalary(){
+    public String getDeliveryArea() {
+        return deliveryArea;
+    }
+
+    public void setDeliveryArea(String deliveryArea) {
+        this.deliveryArea = deliveryArea;
+    }
+
+    public int getDeliveryCount() {
+        return deliveryCount;
+    }
+
+    public void setDeliveryCount(int deliveryCount) {
+        this.deliveryCount = deliveryCount;
+    }
+
+    public float getFeePerOrder() {
         return feePerOrder;
     }
+
+    public void setFeePerOrder(float feePerOrder) {
+        this.feePerOrder = feePerOrder;
+    }
+
+    public String getLicensePlate() {
+        return licensePlate;
+    }
+
+    public void setLicensePlate(String licensePlate) {
+        this.licensePlate = licensePlate;
+    }
+
+    //***
+    @Override
+    public void input(){
+        super.input();
+        System.out.println("Bien so xe: ");
+        setLicensePlate(sc.nextLine());
+        System.out.println("khu vuc giao hang: ");
+        setDeliveryArea(sc.nextLine());
+        System.out.println("so don giao: ");
+        setDeliveryCount(Integer.parseInt(sc.nextLine()));
+        System.out.println("phi moi don");
+        setFeePerOrder(Float.parseFloat(sc.nextLine()));
+    }
+    //***
+    @Override
+    public float calculateSalary(){
+        return getBaseSalary()+(feePerOrder*deliveryCount);
+    }
     //****
+    @Override
     public String getRole(){
-        return "chưa làm";
+        return "nhan vien giao hang";
     }
 //***
     @Override
     public String toString() {
-        return "DeliveryEmployee{" +
-                "deliveryArea='" + deliveryArea + '\'' +
-                ", licensePlate='" + licensePlate + '\'' +
-                ", deliveryCount=" + deliveryCount +
-                ", feePerOrder=" + feePerOrder +
-                '}';
+        return super.toString() + String.format("|%-20s | %-20s | %-10d | %-15.2f |-15.2f |"
+        , licensePlate, deliveryArea, deliveryCount, feePerOrder,calculateSalary());
+    }
+    public void displayInfo(){
+        System.out.println(toString());
     }
 }

@@ -158,16 +158,16 @@ public class CustomerDAO implements IRepository<Customer> {
 
     // Thống kê theo loại khách hàng
     public void statsbyType() {
-        int regular = 0, silver = 0, vip = 0;
+        int VIP = 0, thuong = 0, moi = 0;
         for (int i = 0; i < count; i++) {
             switch (customers[i].getCustomerType().toUpperCase()) {
-                case "REGULAR": regular++; break;
-                case "SILVER":  silver++;  break;
-                case "VIP":     vip++;     break;
+                case "VIP": VIP++; break;
+                case "thuong":  thuong++;  break;
+                case "moi":     moi++;     break;
             }
         }
-        System.out.println("Regular : " + regular);
-        System.out.println("Silver  : " + silver);
-        System.out.println("VIP     : " + vip);
+        System.out.println("VIP : " + VIP);
+        System.out.println("thuong  : " +  thuong);
+        System.out.println("moi     : " + moi);
     }
 }

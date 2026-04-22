@@ -1,11 +1,12 @@
 package DTO;
 
 import java.util.Date;
+import java.util.Scanner;
 
 public class TechnicianEmployee extends Employee {
     private int repairCount;// số lượng sửa chữa
     private float expenditure;//tiền chỉ tiêu
-
+    static Scanner sc = new Scanner(System.in);
     public TechnicianEmployee() {}
 
     public TechnicianEmployee(String employeeId, String position, float baseSalary, Date startDate, float expenditure, int repairCount) {
@@ -31,21 +32,32 @@ public class TechnicianEmployee extends Employee {
     }
 
     //****
-    public void input(){}
-    //****
-    public float calculateSalary(){
-        return repairCount;
+    @Override
+    public void input(){
+        super.input();
+        System.out.println("so luong san pham da sua chua: ");
+        setRepairCount(Integer.parseInt(sc.nextLine()));
+        System.out.println(" Tien chi tieu");//cần thêm method check chỉ tiêu
+        setExpenditure(Float.parseFloat(sc.nextLine()));
+
     }
     //****
+    @Override
+    public float calculateSalary(){
+        return getBaseSalary() + (getRepairCount()*50000f) + expenditure;
+    }
+    //****
+    @Override
     public String getRole(){
-        return "Technician";
+        return "nhan vien ky thuat";
     }
 
     @Override
     public String toString() {
-        return "TechnicianEmployee{" +
-                "expenditure=" + expenditure +
-                ", repairCount=" + repairCount +
-                '}';
+        return super.toString() + String.format("|%-10d | %-15.2f | %-15.2f |",
+                repairCount, expenditure, calculateSalary());
+    }
+    public void displayInfo(){
+        System.out.println(toString());
     }
 }
