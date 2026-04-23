@@ -19,6 +19,7 @@ public class ProductListBUS {
         System.out.println("Moi nhap so luong San Pham can nhap:");
         int amount = Integer.parseInt(sc.nextLine());
         pList = new ProductsDTO[amount];
+        
         for (int i = 0; i < pList.length; i++) {
             System.out.println("Moi chon Danh Muc cho San pham: \n1.Laptop \n2.Phu kien");
             temp = Integer.parseInt(sc.nextLine());
@@ -77,7 +78,7 @@ public class ProductListBUS {
             System.out.printf(" %-10s | %-25s | %-30s | %,15.2f | %7d c |\n", 
                     productIDPresent, 
                     pList[i].getProductName(),
-                    pList[i].getSpecSummary(), 
+                    pList[i].getSpecSummary(), // Lay thong so chi tiet
                     pList[i].getPrice(), 
                     amount);
         }

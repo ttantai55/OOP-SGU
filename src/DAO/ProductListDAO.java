@@ -4,7 +4,6 @@ import DTO.ProductsDTO;
 
 public class ProductListDAO {
 
-
     public void addProduct(ProductsDTO p){
         
     }
