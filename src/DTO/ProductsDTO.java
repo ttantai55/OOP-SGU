@@ -1,26 +1,28 @@
 package DTO;
 import java.util.Scanner;
 
-public class ProductsDTO {
-    private String productIMEI;
-    private String productID;
-    private String categoryID;
-    private String brandID;
+public abstract class ProductsDTO {
+    private String productIMEI; // duy nhat 
+    private String productID;   // quan ly dong may
+    private CategoryDTO category;
+    private BrandDTO brand;
     private String productName;
     private double price;
     private int warrantyPeriod;
     private String origin;
     private boolean status;
 
-    Scanner sc = new Scanner(System.in);
+    static Scanner sc = new Scanner(System.in);
 
+    //Khoi tao de oj de tranh bi loi NULL khi goi ham input
     public ProductsDTO(){
-
+        this.category = new CategoryDTO();
+        this.brand = new BrandDTO();
     }
 
-    public ProductsDTO(String productIMEI, String productID, String categoryID, String brandID, String productName, double price, int warrantyPeriod, String origin, boolean status){
-        this.brandID = brandID;
-        this.categoryID = categoryID;
+    public ProductsDTO(String productIMEI, String productID, CategoryDTO category, BrandDTO brand, String productName, double price, int warrantyPeriod, String origin, boolean status){
+        this.brand = brand;
+        this.category = category;
         this.origin = origin;
         this.price = price;
         this.productID = productID;
@@ -46,22 +48,22 @@ public class ProductsDTO {
         this.productID = productID;
     }
 
-    public String getCategoryID() {
-        return categoryID;
+    public CategoryDTO getCategory() {
+        return category;
     }
 
-    public void setCategoryID(String categoryID) {
-        this.categoryID = categoryID;
+    public void setCategory(CategoryDTO category) {
+        this.category = category;
     }
 
-    public String getBrandID() {
-        return brandID;
+    public BrandDTO getBrand() {
+        return brand;
     }
 
-    public void setBrandID(String brandID) {
-        this.brandID = brandID;
+    public void setBrand(BrandDTO brand) {
+        this.brand = brand;
     }
-    
+
     public String getProductName() {
         return productName;
     }
@@ -112,12 +114,10 @@ public class ProductsDTO {
         setProductID(sc.nextLine());
         System.out.println("Moi nhap ten San Pham:");
         setProductName(sc.nextLine());
-        System.out.println("Moi nhap ma Danh Muc:");
-        setCategoryID(sc.nextLine());
-        System.out.println("Moi nhap ma Thuong Hieu:");
-        setBrandID(sc.nextLine());
-        System.out.println("Moi nhap Gia San Pham:");
+        System.out.println("Moi nhap gia San Pham:");
         setPrice(Double.parseDouble(sc.nextLine()));
+        this.category.input();
+        this.brand.input();
         System.out.println("Moi nhap thoi gian bao hanh cua san pham:");
         setWarrantyPeriod(Integer.parseInt(sc.nextLine()));
         System.out.println("Moi nhap nguon goc san pham: ");
@@ -127,15 +127,18 @@ public class ProductsDTO {
     
     @Override
     public String toString() {
-        String productsFormat = " %-16s | %-10s | %-11s | %-10s | %-30s | %,15.2f | %10d | %-15s |";
+        String productsFormat = "%-8s|%-8s|%-11s|%-10s|%-20s|%,15.2f|%8d|%-10s|";
         // Dùng %,15.2f cho price (double) và %10d cho warrantyPeriod (int)
         return String.format(productsFormat, 
-                productIMEI, productID, categoryID, brandID, productName, price, warrantyPeriod, origin);
+                productIMEI, productID, getCategory().getCategoryName(), getBrand().getBrandName(), productName, price, warrantyPeriod, origin);
     }
 
     public void displayInfo(){
         System.out.println(toString());
     }
 
-    
+    // Class cha ch co thong so
+    public abstract String getSpecSummary();
+
+   
 }

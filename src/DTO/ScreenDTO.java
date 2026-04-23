@@ -43,11 +43,16 @@ public class ScreenDTO {
         setResolution(sc.nextLine());
     }
 
-    /*// --- Xuất chuỗi ---
+    // --- Xuất chuỗi ---
     @Override
     public String toString() {
         // Kết quả VD: "15.6 inch (Full HD)"
-        return size + " inch (" + resolution + ")";
+        String screenInfo = size + " inch (" + resolution + ")";
+        return String.format("%-15s|", screenInfo);
     }
-        */
+
+    public String getShortSummary(){
+        return this.size + " inch (" + resolution + ")";
+    }
+    
 }

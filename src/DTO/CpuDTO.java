@@ -6,7 +6,7 @@ public class CpuDTO {
     private String brand;       // Hang san xuat (VD: Intel, AMD, Apple)
     private String model;       //  Ma chip(VD: Core i7-13700H, M3 Max)
     private int coreCount;      // So nhan (VD: 14)
-    private int threadCount;    // So Luong (VD: 20)
+    private int threadCount;    // So Luồng (VD: 20)
 
     Scanner sc = new Scanner(System.in);
 
@@ -56,11 +56,11 @@ public class CpuDTO {
 
 
     public void input() {
-        System.out.println("--- Nhập chi tiết thông số CPU ---");
+        System.out.println("--- Nhap chi tiet thông so CPU ---");
         System.out.print("Moi nhap hang san xuat (VD: Intel, AMD): ");
         setBrand(sc.nextLine());
         
-        System.out.print("Moi nhap ma CPU (VD: Core i7-13700H): ");
+        System.out.print("Moi nhap ma chip CPU (VD: Core i7-13700H): ");
         setModel(sc.nextLine());
         
         System.out.print("Moi nhap so nhan (Core): ");
@@ -72,11 +72,19 @@ public class CpuDTO {
     }
 
     // --- Hàm xuất chuỗi ---
-   /*  @Override
+    @Override
     public String toString() {
-        // Gom tất cả lại thành một chuỗi đẹp mắt. 
-        return String.format("%s %s (%dC/%dT, %.1fGHz)", 
-                brand, model, coreCount, threadCount);
+        // Bước 1: Nối tất cả lại thành 1 chuỗi duy nhất
+        // Ví dụ kết quả: "Intel i7 (14C/20T)"
+        String cpuInfo = brand + " " + model + " (" + coreCount + "C/" + threadCount + "T)";
+        
+        // Bước 2: Ép chuỗi đó vào 1 khung rộng 20 ký tự (căn lề trái)
+        return String.format("%-20s|", cpuInfo);
     }
-    */
+    // Lay thong so ngan gon
+    public String getShortSummary() {
+        return this.brand + " " +this.model;
+    }
+
+  
 }

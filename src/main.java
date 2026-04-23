@@ -1,10 +1,10 @@
 
-import DTO.LaptopDTO;
+import BUS.ProductListBUS;
 
 public class main {
-public static void main(String[] args) {
-    LaptopDTO lp = new LaptopDTO();
-    lp.input();
-    lp.displayInfo();
-}
+    public static void main(String[] args) {
+       ProductListBUS p = new ProductListBUS();
+       p.inputList();
+
+    }
 }

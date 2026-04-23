@@ -6,7 +6,7 @@ public class LaptopDTO extends ProductsDTO {
     private StorageDTO storage;
     private GpuDTO gpu;
     private ScreenDTO screen;
-    private String battery; //pin
+    private String battery;     //pin
 
     public LaptopDTO() {
         super();
@@ -15,9 +15,13 @@ public class LaptopDTO extends ProductsDTO {
         this.storage = new StorageDTO();
         this.gpu = new GpuDTO();
         this.screen = new ScreenDTO();
+
+        // Tu dong gan LapTop vao phan ten Danh Muc
+        CategoryDTO cate = new CategoryDTO();
+        cate.setCategoryName("Laptop");
     }
 
-    public LaptopDTO(String productIMEI, String productID, String categoryID, String brandID, String productName, double price, int warrantyPeriod, String origin, CpuDTO cpu, RamDTO ram, StorageDTO storage, GpuDTO gpu, ScreenDTO screen, String battery, boolean status){
+    public LaptopDTO(String productIMEI, String productID, CategoryDTO categoryID, BrandDTO brandID, String productName, double price, int warrantyPeriod, String origin, CpuDTO cpu, RamDTO ram, StorageDTO storage, GpuDTO gpu, ScreenDTO screen, String battery, boolean status){
         super(productIMEI,productID,categoryID,brandID,productName,price,warrantyPeriod,origin,status);
         this.cpu = cpu;
         this.ram = ram;
@@ -27,6 +31,46 @@ public class LaptopDTO extends ProductsDTO {
         this.battery = battery;
     }
 
+    public CpuDTO getCpu() {
+        return cpu;
+    }
+
+    public void setCpu(CpuDTO cpu) {
+        this.cpu = cpu;
+    }
+
+    public RamDTO getRam() {
+        return ram;
+    }
+
+    public void setRam(RamDTO ram) {
+        this.ram = ram;
+    }
+
+    public StorageDTO getStorage() {
+        return storage;
+    }
+
+    public void setStorage(StorageDTO storage) {
+        this.storage = storage;
+    }
+
+    public GpuDTO getGpu() {
+        return gpu;
+    }
+
+    public void setGpu(GpuDTO gpu) {
+        this.gpu = gpu;
+    }
+
+    public ScreenDTO getScreen() {
+        return screen;
+    }
+
+    public void setScreen(ScreenDTO screen) {
+        this.screen = screen;
+    }
+    
     public String getBattery() {
         return battery;
     }
@@ -39,7 +83,7 @@ public class LaptopDTO extends ProductsDTO {
     @Override
     public void input(){
         super.input();
-        System.out.println("Moi nhap cau hinh Laptop:");
+        System.out.println("===Moi nhap cau hinh Laptop===:");
 
         this.cpu.input();
         this.ram.input();
@@ -51,18 +95,23 @@ public class LaptopDTO extends ProductsDTO {
         setBattery(sc.nextLine());
     }
 
+
+
     @Override
     public String toString() {
-        String laptopFormat = " %-20s | %-15s | %-20s | %-20s | %-15s | %-15s | %-15s |";
         
-        return super.toString() + String.format(laptopFormat, 
-                cpu, ram, storage, gpu, screen, battery);
+        return super.toString() +  
+                cpu.toString() + ram.toString() + storage.toString() + gpu.toString() + screen.toString() + String.format("%5s", battery);
     }
     
     @Override
     public void displayInfo(){
         System.out.println(toString());
     }
-    
+    @Override
+    // Thong so tom tat
+    public String getSpecSummary(){
+        return cpu.getShortSummary() + "|" +gpu.getShortSummary() + "|" + ram.getShortSummary() + "|" + screen.getShortSummary() +"|" + storage.getShortSummary();
+    }
     
 }

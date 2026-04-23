@@ -42,11 +42,16 @@ public class StorageDTO {
         setCapacity(Integer.parseInt(sc.nextLine()));
     }
 
-    /*// --- Xuất chuỗi ---
+    // --- Xuất chuỗi ---
     @Override
     public String toString() {
         // Nếu dung lượng >= 1024 thì có thể đổi hiển thị thành TB cho đẹp, nhưng tạm thời cứ để GB cho đơn giản nhé
-        // Kết quả VD: "512GB SSD NVMe PCIe"
-        return capacity + "GB " + type;
-    }*/
+        // Kết quả VD: "512GB SSD"
+        String stoInfo = capacity + "GB " + type;
+        return String.format("%-10s|", stoInfo);
+    }
+
+    public String getShortSummary() {
+    return this.capacity + "GB " + this.type; // VD: "512GB SSD NVMe"
+    }
 }

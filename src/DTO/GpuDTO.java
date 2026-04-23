@@ -44,7 +44,7 @@ public class GpuDTO {
 
     // --- Nhập liệu ---
     public void input() {
-        System.out.println("--- Nhập thông tin Card đồ họa (GPU) ---");
+        System.out.println("--- Nhap thong tin Card đo hoa (GPU) ---");
         System.out.print("Moi nhap hang san xuat (VD: NVIDIA, AMD): ");
         setBrand(sc.nextLine());
         
@@ -55,10 +55,17 @@ public class GpuDTO {
         setVram(Integer.parseInt(sc.nextLine()));
     }
 
-   /*  // --- Xuất chuỗi ---
+    // --- Xuất chuỗi ---
     @Override
     public String toString() {
         // Kết quả VD: "NVIDIA RTX 4060 (8GB)"
-        return brand + " " + model + " (" + vram + "GB)";
-    }*/
+        String gpuInfo = brand + " " + model + " (" + vram + "GB)";
+
+        return String.format("%-20s|", gpuInfo);
+    }
+
+    public String getShortSummary(){
+        return this.brand + " "+ this.model;
+    }
 }
+    

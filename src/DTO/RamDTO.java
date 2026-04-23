@@ -44,11 +44,15 @@ public class RamDTO {
         setType(sc.nextLine());
     }
 
-   /*  // --- Xuất chuỗi ---
+    // --- Xuất chuỗi ---
     @Override
     public String toString() {
         // Kết quả VD: "16GB DDR5"
-        return capacity + "GB " + type; 
+        String ramInfo = capacity + "GB " + type; 
+        return String.format("%-10s|", ramInfo);
     }
-        */
+    
+    public String getShortSummary(){
+        return this.capacity + "GB";
+    }
 }
