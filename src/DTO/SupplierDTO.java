@@ -1,17 +1,25 @@
 package DTO;
 
-public class Supplier {
+import java.util.Scanner;
+
+public class SupplierDTO {
+    
+
     private String supplierId;
     private String supplierName;
     private String contactPhone;
+    private String email;
 
-    public Supplier() {
+    static Scanner sc = new Scanner(System.in);
+
+    public SupplierDTO() {
     }
 
-    public Supplier(String supplierId, String supplierName, String contactPhone) {
+    public SupplierDTO(String supplierId, String supplierName, String contactPhone, String email) {
         this.supplierId = supplierId;
         this.supplierName = supplierName;
         this.contactPhone = contactPhone;
+        this.email = email;
     }
 
     public String getSupplierId() {
@@ -38,7 +46,33 @@ public class Supplier {
         this.contactPhone = contactPhone;
     }
     
-    public void displayInfo() {
-        System.out.println("Supplier ID: " + supplierId + " | Name: " + supplierName + " | Phone: " + contactPhone);
+    public String getemail() {
+        return email;
     }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void displayInfo() {
+      System.out.println(toString());
+    }
+
+    public String toString(){
+        String supplierFormat = "%-15s|%-15s|%-15s|%-20s|";
+        return String.format(supplierFormat, supplierId, supplierName, contactPhone, email);
+    }
+
+    public void input(){
+        System.out.println("Moi nhap thong tin nha cung cap:");
+        System.out.println("Moi nhap ID nha cung cap:");    
+        setSupplierId(sc.nextLine());
+        System.out.println("Moi nhap ten nha cung cap:");
+        setSupplierName(sc.nextLine());
+        System.out.println("Moi nhap so dien thoai nha cung cap:");
+        setContactPhone(sc.nextLine());
+        System.out.println("Moi nhap email nha cung cap:");
+        setEmail(sc.nextLine());
+    }
+
 }
