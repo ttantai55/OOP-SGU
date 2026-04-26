@@ -49,5 +49,4 @@ public double getTotalNeedToPay() {
 }
 
 public abstract void processPayment();
-
 }

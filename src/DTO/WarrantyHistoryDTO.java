@@ -1,25 +1,26 @@
 package DTO;
+
 import java.util.Date;
 
 public class WarrantyHistoryDTO {
 
     private String historyId;
     private Date warrantyDate;
-    private int attemptNumber; // bảo hành lần thứ mấy
-    private String errorDescription;// mô tả lỗi
-    private String solution; // hướng giải quyết
-    private String replacedParts; // linh kiện thay thế
-    private double repairCost; // giá sửa
-    private String note; // ghi chú
-    private String technician; // nhaan viên kĩ thuật
-    private String processStatus; // trạng thái
+    private int attemptNumber;      // bảo hành lần thứ mấy
+    private String errorDescription; // mô tả lỗi
+    private String solution;         // hướng giải quyết
+    private String replacedParts;    // linh kiện thay thế
+    private double repairCost;       // giá sửa
+    private String note;             // ghi chú
+    private TechnicianEmployee technician; // nhân viên kĩ thuật
+    private String processStatus;    // trạng thái
 
     public WarrantyHistoryDTO() {
     }
-    public WarrantyHistoryDTO(String historyId, Date warrantyDate, int attemptNumber, String errorDescription,
-                              String solution, String replacedParts, double repairCost,
-                              String note, String technician, String processStatus) {
 
+    public WarrantyHistoryDTO(String historyId, Date warrantyDate, int attemptNumber,
+                              String errorDescription, String solution, String replacedParts,
+                              double repairCost, String note, TechnicianEmployee technician, String processStatus) {
         this.historyId = historyId;
         this.warrantyDate = warrantyDate;
         this.attemptNumber = attemptNumber;
@@ -30,86 +31,85 @@ public class WarrantyHistoryDTO {
         this.note = note;
         this.technician = technician;
         this.processStatus = processStatus;
-
     }
 
-   public String getHistoryId() {
-    return historyId;
-}
+    public String getHistoryId() {
+        return historyId;
+    }
 
-public void setHistoryId(String historyId) {
-    this.historyId = historyId;
-}
+    public void setHistoryId(String historyId) {
+        this.historyId = historyId;
+    }
 
-public Date getWarrantyDate() {
-    return warrantyDate;
-}
+    public Date getWarrantyDate() {
+        return warrantyDate;
+    }
 
-public void setWarrantyDate(Date warrantyDate) {
-    this.warrantyDate = warrantyDate;
-}
+    public void setWarrantyDate(Date warrantyDate) {
+        this.warrantyDate = warrantyDate;
+    }
 
-public int getAttemptNumber() {
-    return attemptNumber;
-}
+    public int getAttemptNumber() {
+        return attemptNumber;
+    }
 
-public void setAttemptNumber(int attemptNumber) {
-    this.attemptNumber = attemptNumber;
-}
+    public void setAttemptNumber(int attemptNumber) {
+        this.attemptNumber = attemptNumber;
+    }
 
-public String getErrorDescription() {
-    return errorDescription;
-}
+    public String getErrorDescription() {
+        return errorDescription;
+    }
 
-public void setErrorDescription(String errorDescription) {
-    this.errorDescription = errorDescription;
-}
+    public void setErrorDescription(String errorDescription) {
+        this.errorDescription = errorDescription;
+    }
 
-public String getSolution() {
-    return solution;
-}
+    public String getSolution() {
+        return solution;
+    }
 
-public void setSolution(String solution) {
-    this.solution = solution;
-}
+    public void setSolution(String solution) {
+        this.solution = solution;
+    }
 
-public String getReplacedParts() {
-    return replacedParts;
-}
+    public String getReplacedParts() {
+        return replacedParts;
+    }
 
-public void setReplacedParts(String replacedParts) {
-    this.replacedParts = replacedParts;
-}
+    public void setReplacedParts(String replacedParts) {
+        this.replacedParts = replacedParts;
+    }
 
-public double getRepairCost() {
-    return repairCost;
-}
+    public double getRepairCost() {
+        return repairCost;
+    }
 
-public void setRepairCost(double repairCost) {
-    this.repairCost = repairCost;
-}
+    public void setRepairCost(double repairCost) {
+        this.repairCost = repairCost;
+    }
 
-public String getNote() {
-    return note;
-}
+    public String getNote() {
+        return note;
+    }
 
-public void setNote(String note) {
-    this.note = note;
-}
+    public void setNote(String note) {
+        this.note = note;
+    }
 
-public String getTechnician() {
-    return technician;
-}
+    public TechnicianEmployee getTechnician() {
+        return technician;
+    }
 
-public void setTechnician(String technician) {
-    this.technician = technician;
-}
+    public void setTechnician(TechnicianEmployee technician) {
+        this.technician = technician;
+    }
 
-public String getProcessStatus() {
-    return processStatus;
-}
+    public String getProcessStatus() {
+        return processStatus;
+    }
 
-public void setProcessStatus(String processStatus) {
-    this.processStatus = processStatus;
-}
+    public void setProcessStatus(String processStatus) {
+        this.processStatus = processStatus;
+    }
 }

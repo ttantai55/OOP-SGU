@@ -1,53 +1,64 @@
 package DTO;
+
 import java.util.Date;
 
 public class WarrantyDTO {
 
     private String warrantyId;
+    private ProductsDTO product;
     private Date startDate;
     private Date endDate;
-    private WarrantyHistoryDTO[] historyList;
+    private WarrantyHistoryDTO[] warrantyHistory;
 
     public WarrantyDTO() {
     }
 
-    public WarrantyDTO(String warrantyId, Date startDate, Date endDate, WarrantyHistoryDTO[] historyList) {
+    public WarrantyDTO(String warrantyId, ProductsDTO product, Date startDate, Date endDate) {
         this.warrantyId = warrantyId;
+        this.product = product;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.historyList = historyList;
+        this.warrantyHistory = new WarrantyHistoryDTO[0];
     }
 
+  
     public String getWarrantyId() {
-    return warrantyId;
-}
+        return warrantyId;
+    }
 
-public void setWarrantyId(String warrantyId) {
-    this.warrantyId = warrantyId;
-}
+    public void setWarrantyId(String warrantyId) {
+        this.warrantyId = warrantyId;
+    }
 
-public Date getStartDate() {
-    return startDate;
-}
+    public ProductsDTO getProduct() {
+        return product;
+    }
 
-public void setStartDate(Date startDate) {
-    this.startDate = startDate;
-}
+    public void setProduct(ProductsDTO product) {
+        this.product = product;
+    }
 
-public Date getEndDate() {
-    return endDate;
-}
+    public Date getStartDate() {
+        return startDate;
+    }
 
-public void setEndDate(Date endDate) {
-    this.endDate = endDate;
-}
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
 
-public WarrantyHistoryDTO[] getHistoryList() {
-    return historyList;
-}
+    public Date getEndDate() {
+        return endDate;
+    }
 
-public void setHistoryList(WarrantyHistoryDTO[] historyList) {
-    this.historyList = historyList;
-}
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
 
+    public WarrantyHistoryDTO[] getWarrantyHistory() {
+        return warrantyHistory;
+    }
+
+    public void setWarrantyHistory(WarrantyHistoryDTO[] warrantyHistory) {
+        this.warrantyHistory = warrantyHistory;
+    }
 }

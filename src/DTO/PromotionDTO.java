@@ -1,4 +1,5 @@
 package DTO;
+
 import java.util.Date;
 
 public class PromotionDTO {
@@ -7,13 +8,14 @@ public class PromotionDTO {
     private String programName;
     private Date startDate;
     private Date endDate;
-    private String condition; // điều kiện áp dụng 
-    private double discountPercent;
+    private String condition;       // điều kiện áp dụng
+    private double discountPercent;  // nhập theo số ví dụ như 10 = 10%
 
     public PromotionDTO() {
-
     }
-    public PromotionDTO(String promotionId, String programName, Date startDate, Date endDate, String condition, double discountPercent) {
+
+    public PromotionDTO(String promotionId, String programName, Date startDate, Date endDate,
+                        String condition, double discountPercent) {
         this.promotionId = promotionId;
         this.programName = programName;
         this.startDate = startDate;
@@ -22,51 +24,56 @@ public class PromotionDTO {
         this.discountPercent = discountPercent;
     }
 
-   public String getPromotionId() {
-    return promotionId;
-}
+    public String getPromotionId() {
+        return promotionId;
+    }
 
-public void setPromotionId(String promotionId) {
-    this.promotionId = promotionId;
-}
+    public void setPromotionId(String promotionId) {
+        this.promotionId = promotionId;
+    }
 
-public String getProgramName() {
-    return programName;
-}
+    public String getProgramName() {
+        return programName;
+    }
 
-public void setProgramName(String programName) {
-    this.programName = programName;
-}
+    public void setProgramName(String programName) {
+        this.programName = programName;
+    }
 
-public Date getStartDate() {
-    return startDate;
-}
+    public Date getStartDate() {
+        return startDate;
+    }
 
-public void setStartDate(Date startDate) {
-    this.startDate = startDate;
-}
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
 
-public Date getEndDate() {
-    return endDate;
-}
+    public Date getEndDate() {
+        return endDate;
+    }
 
-public void setEndDate(Date endDate) {
-    this.endDate = endDate;
-}
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
 
-public String getCondition() {
-    return condition;
-}
+    public String getCondition() {
+        return condition;
+    }
 
-public void setCondition(String condition) {
-    this.condition = condition;
-}
+    public void setCondition(String condition) {
+        this.condition = condition;
+    }
 
-public double getDiscountPercent() {
-    return discountPercent;
-}
+    public double getDiscountPercent() {
+        return discountPercent;
+    }
 
-public void setDiscountPercent(double discountPercent) {
-    this.discountPercent = discountPercent;
-}
+    public void setDiscountPercent(double discountPercent) {
+        this.discountPercent = discountPercent;
+    }
+
+    
+    public double applyDiscount(double amount) {
+        return amount * (1 - discountPercent / 100.0);
+    }
 }

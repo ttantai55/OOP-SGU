@@ -1,26 +1,30 @@
 package DTO;
+
 import java.util.Date;
+
 
 public class InvoiceDTO {
 
     private String invoiceId;
-    private CustomerDTO customer;
-    private EmployeeDTO employee;
+    private Customer customer;
+    private Employee employee;
     private Date createdDate;
     private boolean status;
-    private double finalTotalAmount; // tổng tiền cuối cùng trên hóa đơn
     private InvoiceDetailDTO[] invoiceDetailList;
+    private PaymentDTO payment;
+
     public InvoiceDTO() {
     }
 
-    public InvoiceDTO(String invoiceId, CustomerDTO customer, EmployeeDTO employee, Date createdDate, boolean status, double finalTotalAmount, InvoiceDetailDTO[] invoiceDetailList) {
-    this.invoiceId = invoiceId;
-    this.customer = customer;
-    this.employee = employee;
-    this.createdDate = createdDate;
-    this.status = status;
-    this.finalTotalAmount = finalTotalAmount;
-    this.invoiceDetailList = invoiceDetailList;
+    public InvoiceDTO(String invoiceId, Customer customer, Employee employee,
+                      Date createdDate, boolean status, PaymentDTO payment) {
+        this.invoiceId = invoiceId;
+        this.customer = customer;
+        this.employee = employee;
+        this.createdDate = createdDate;
+        this.status = status;
+        this.payment = payment;
+        this.invoiceDetailList = new InvoiceDetailDTO[0]; 
     }
 
     public String getInvoiceId() {
@@ -31,20 +35,38 @@ public class InvoiceDTO {
         this.invoiceId = invoiceId;
     }
 
-    public CustomerDTO getCustomer() {
-        return customer;
-    }
 
-    public void setCustomer(CustomerDTO customer) {
+    public void setCustomer(Customer customer) {
         this.customer = customer;
     }
 
-    public EmployeeDTO getEmployee() {
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
+
+    // lấy Id khách và tên khách
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public String getCustomerId(){
+        return customer.getCustomerId();
+    }
+
+    public String getCustomerName(){
+        return customer.getFullName();
+    }
+    // lấy id nhân viên và tên nhân viên
+    public Employee getEmployee() {
         return employee;
     }
 
-    public void setEmployee(EmployeeDTO employee) {
-        this.employee = employee;
+    public String getEmployeeId(){
+        return employee.getEmployeeId();
+    }
+
+    public String getEmployeeName(){
+        return employee.getFullName();
     }
 
     public Date getCreatedDate() {
@@ -63,19 +85,7 @@ public class InvoiceDTO {
         this.status = status;
     }
 
-
-    // tính tổng tất cả trên hóa đơn, tui chưa code phần tự tính nên để như này
-    // tổng tiền hóa đơn
-    public double getFinalTotalAmount() {
-    return finalTotalAmount;
-    }
-    public void setFinalTotalAmount(double finalTotalAmount) {
-    this.finalTotalAmount = finalTotalAmount;
-    }
-
-
-
-    public InvoiceDetailDTO[] getInvoiceDetailList() {
+public InvoiceDetailDTO[] getInvoiceDetailList() {
          return invoiceDetailList;
     }
 
@@ -83,4 +93,20 @@ public class InvoiceDTO {
     this.invoiceDetailList = invoiceDetailList;
     }
 
+
+   // tính tổng tiền trên hóa đơn, tui cho chạy vòng lặp 0 đến độ dài của InvoiceDetalList rồi sum các SubTotal lại
+    public double getFinalTotalAmount() {
+        double FinalTotalAmount = 0;
+        for (int i = 0; i < invoiceDetailList.length; i++) {
+            FinalTotalAmount += invoiceDetailList[i].getSubTotal();
+        }
+        return FinalTotalAmount;
+    }
+    
+    public PaymentDTO getPayment() { 
+        return payment; 
+    }
+    public void setPayment(PaymentDTO payment) { 
+        this.payment = payment; 
+    }
 }
