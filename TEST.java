@@ -46,7 +46,6 @@ public class TEST {
         System.out.println("\n--- MENU QUẢN TRỊ ---");
         System.out.println("1. Quản lý Tài khoản");
         System.out.println("2. Quản lý Nhà cung cấp");
-        System.out.println("3. Quản lý Kho hàng");
         System.out.println("0. Đăng xuất");
         // Gọi Scanner để chọn menu ở đây...
     }
