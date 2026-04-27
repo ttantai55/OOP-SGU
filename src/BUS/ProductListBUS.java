@@ -52,7 +52,7 @@ public class ProductListBUS {
         // Vòng lặp duyệt qua từng sản phẩm trong kho
         for (int i = 0; i < pList.length; i++) {
             // Bỏ qua nếu là khoảng trống (null) hoặc sản phẩm này đã được đếm ở nhóm trước đó
-            if (pList[i] == null || counted[i]) {
+            if (pList[i] == null || counted[i] || pList[i].isStatus()) {
                 continue;
             }
 
@@ -65,7 +65,8 @@ public class ProductListBUS {
 
             // Lục lọi các sản phẩm nằm phía sau xem có anh em sinh đôi (cùng ProductID) không
             for (int j = i + 1; j < pList.length; j++) {
-                if (pList[j] != null && !counted[j]) {
+                //Phai kiem tra trang thai = true ms thao tac 
+                if (pList[j] != null && !counted[j] && pList[i].isStatus()) {
                     // Nếu trùng mã ProductID -> Cùng một dòng máy
                     if (pList[j].getProductID().equals(productIDPresent)) {
                         amount++; // Tăng số lượng
@@ -108,7 +109,7 @@ public class ProductListBUS {
         // Bước 1: Đếm số lượng sản phẩm thuộc danh mục để tạo mảng
         int count = 0;
         for (ProductsDTO product : pList) {
-            if (product != null) {
+            if (product != null && product.isStatus()) {
                 if ((option == 1 && product instanceof LaptopDTO) || (option == 2 && product instanceof AccessoryDTO)) {
                     count++;
                 }
@@ -125,7 +126,7 @@ public class ProductListBUS {
         ProductsDTO[] filteredList = new ProductsDTO[count];
         int index = 0;
         for (ProductsDTO product : pList) {
-            if (product != null) {
+            if (product != null && product.isStatus()) {
                 if ((option == 1 && product instanceof LaptopDTO) || (option == 2 && product instanceof AccessoryDTO)) {
                     filteredList[index] = product;
                     index++;
@@ -159,7 +160,7 @@ public class ProductListBUS {
         System.out.println("-------------------------------------------------------------------------");
 
         for (ProductsDTO product : pList) {
-            if (product != null) {
+            if (product != null && product.isStatus()) { //Kiem tra trang thai cua san pham
                 //Lay ID SP va Ten SP, chuyen het ve dang chu thuong
                 String id = product.getProductID();
                 String name = product.getProductName().toLowerCase();
