@@ -2,7 +2,7 @@ package DTO;
 
 import java.util.Scanner;
 
-public class SupplierDTO {
+public class Supplier {
     
 
     private String supplierId;
@@ -12,10 +12,10 @@ public class SupplierDTO {
 
     static Scanner sc = new Scanner(System.in);
 
-    public SupplierDTO() {
+    public Supplier() {
     }
 
-    public SupplierDTO(String supplierId, String supplierName, String contactPhone, String email) {
+    public Supplier(String supplierId, String supplierName, String contactPhone, String email) {
         this.supplierId = supplierId;
         this.supplierName = supplierName;
         this.contactPhone = contactPhone;
@@ -46,7 +46,7 @@ public class SupplierDTO {
         this.contactPhone = contactPhone;
     }
     
-    public String getemail() {
+    public String getEmail() {
         return email;
     }
 

@@ -2,17 +2,17 @@ package BUS;
 
 import java.util.Scanner;
 
-import DTO.SupplierDTO;
+import DTO.Supplier;
 
 public class SupplierListBUS {
-    public SupplierDTO sList[];
+    public Supplier sList[];
 
     static Scanner sc = new Scanner(System.in);
 
     public void inputList(){
         System.out.println("Moi nhap so luong nha cung cap:");
         int amount = Integer.parseInt(sc.nextLine());
-        sList = new SupplierDTO[amount];
+        sList = new Supplier[amount];
 
         for (int i=0; i<sList.length; i++){
             sList[i].input();
