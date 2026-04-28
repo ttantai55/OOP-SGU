@@ -16,17 +16,18 @@ public class GoodsReceiptDTO {
     private Employee receiver;        // nhân viên nhận hàng
     private GoodsReceiptItemDTO[] items;
     private int itemCount; 
+    private boolean status;
    
 
     public GoodsReceiptDTO() {
-        this.items = new GoodsReceiptItemDTO[100]; // tối đa 100 items
+        this.items = new GoodsReceiptItemDTO[0];
         this.itemCount = 0;
     }
 
     public GoodsReceiptDTO(String receiptId, Date createdDate, String creator, String note,
                            String courier, String consignee,
                            String phoneOfCourier, String phoneOfConsignee,
-                           Supplier supplier, Employee receiver) {
+                           Supplier supplier, Employee receiver, boolean status) {
         this.receiptId = receiptId;
         this.createdDate = createdDate;
         this.creator = creator;
@@ -37,6 +38,7 @@ public class GoodsReceiptDTO {
         this.phoneOfConsignee = phoneOfConsignee;
         this.supplier = supplier;
         this.receiver = receiver;
+        this.status = true;
     }
 
     public String getReceiptId() {
@@ -141,5 +143,12 @@ public class GoodsReceiptDTO {
         this.items = items;
     }
 
-    
+   
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
 }

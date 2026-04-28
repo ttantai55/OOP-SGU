@@ -14,7 +14,7 @@ public class InvoiceDTO {
 
   // mặc định tạo mẳng ở Invocie tại InvoiceItem nằm trong Invoice
     public InvoiceDTO() {
-        this.invoiceItemList = new InvoiceItemDTO[100]; 
+        this.invoiceItemList = new InvoiceItemDTO[0];
         this.itemCount = 0; 
         this.status = true; // mặc định là true 
     }
@@ -26,8 +26,9 @@ public class InvoiceDTO {
         this.employee = employee;
         this.createdDate = createdDate;
         this.payment = payment;
-        this.invoiceItemList = new InvoiceItemDTO[100]; // tối đa 100 items
+        this.invoiceItemList = new InvoiceItemDTO[0];
         this.itemCount = 0;
+        this.status = true;
     }
 
     public String getInvoiceId() {

@@ -15,7 +15,7 @@ public class WarrantyDTO {
     private int repairCount;
 
     public WarrantyDTO() { 
-        this.repairRecordList = new RepairRecordDTO[50]; 
+        this.repairRecordList = new RepairRecordDTO[0];
         this.repairCount = 0;
     }
 
@@ -27,7 +27,7 @@ public class WarrantyDTO {
         this.startDate = startDate;
         this.endDate = endDate;
         this.status = status;
-        this.repairRecordList = new RepairRecordDTO[50];
+        this.repairRecordList = new RepairRecordDTO[0];
         this.repairCount = 0;
     }
 

@@ -1,6 +1,6 @@
 package DTO;
 
-import DTO.PaymentDTO;
+
 import java.util.Date;
 
 public class Installment extends PaymentDTO {
