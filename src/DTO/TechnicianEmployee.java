@@ -54,10 +54,10 @@ public class TechnicianEmployee extends Employee {
 
     @Override
     public String toString() {
-        return super.toString() + String.format("|%-10d | %-15.2f | %-15.2f |",
+        return super.toString() + String.format(" | %-10d | %,12.0f | %,15.0f",
                 repairCount, expenditure, calculateSalary());
     }
-    public void displayInfo(){
+    public void displayInfo() {
         System.out.println(toString());
     }
 }

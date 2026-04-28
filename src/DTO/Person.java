@@ -66,10 +66,11 @@ public class Person {
 
     @Override
     public String toString() {
-        return String.format("%-30s | %-15s | %-25s | %-45s",
+        return String.format("%-30s | %-13s | %-25s | %-45s",
                 fullName, phoneNumber, email, address.hienThiDiaChi());
     }
-    public void displayInfo(){
+    public void displayInfo() {
         System.out.println(toString());
     }
 }
+

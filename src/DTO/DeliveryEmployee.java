@@ -74,13 +74,13 @@ public class DeliveryEmployee extends Employee{
     public String getRole(){
         return "nhan vien giao hang";
     }
-//***
+    //***
     @Override
     public String toString() {
-        return super.toString() + String.format("|%-20s | %-20s | %-10d | %-15.2f |-15.2f |"
-        , licensePlate, deliveryArea, deliveryCount, feePerOrder,calculateSalary());
+        return super.toString() + String.format(" | %-15s | %-20s | %-10d | %,12.0f | %,15.0f",
+                licensePlate, deliveryArea, deliveryCount, feePerOrder, calculateSalary());
     }
-    public void displayInfo(){
+    public void displayInfo() {
         System.out.println(toString());
     }
 }

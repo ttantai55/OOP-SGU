@@ -80,6 +80,7 @@ public class CustomerDAO implements IRepository<Customer> {
             java.io.BufferedReader br = new java.io.BufferedReader(
                     new java.io.FileReader(filePath));
             String line;
+            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy");
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",");
                 Customer c = new Customer();
@@ -87,8 +88,16 @@ public class CustomerDAO implements IRepository<Customer> {
                 c.setFullName(parts[1]);
                 c.setPhoneNumber(parts[2]);
                 c.setEmail(parts[3]);
-                c.setLoyaltyPoints(Integer.parseInt(parts[4]));
-                c.setCustomerType(parts[5]);
+                DTO.Address addr = new DTO.Address();
+                addr.setHouseNumber(parts[4]);
+                addr.setStreet(parts[5]);
+                addr.setWard(parts[6]);
+                addr.setDistrict(parts[7]);
+                addr.setCity(parts[8]);
+                c.setAddress(addr);
+                c.setLoyaltyPoints(Integer.parseInt(parts[9]));
+                c.setCustomerType(parts[10]);
+                c.setRegisteredDate(sdf.parse(parts[11]));
                 add(c);
             }
             br.close();
@@ -102,14 +111,21 @@ public class CustomerDAO implements IRepository<Customer> {
         try {
             java.io.BufferedWriter bw = new java.io.BufferedWriter(
                     new java.io.FileWriter(filePath));
+            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy");
             for (int i = 0; i < count; i++) {
                 Customer c = customers[i];
                 bw.write(c.getCustomerId() + ","
                         + c.getFullName() + ","
                         + c.getPhoneNumber() + ","
                         + c.getEmail() + ","
+                        + c.getAddress().getHouseNumber() + ","
+                        + c.getAddress().getStreet() + ","
+                        + c.getAddress().getWard() + ","
+                        + c.getAddress().getDistrict() + ","
+                        + c.getAddress().getCity() + ","
                         + c.getLoyaltyPoints() + ","
-                        + c.getCustomerType());
+                        + c.getCustomerType() + ","
+                        + sdf.format(c.getRegisteredDate()));
                 bw.newLine();
             }
             bw.close();
@@ -127,7 +143,22 @@ public class CustomerDAO implements IRepository<Customer> {
         for (int i = 0; i < count; i++) result[i] = customers[i];
         return result;
     }
+    public void hienThiDanhSach() {
+        if (this.count == 0) {
+            System.out.println("Danh sach khach hang rong.");
+        } else {
+            System.out.println("=".repeat(140));
+            System.out.printf("%-10s | %-25s | %-13s | %-25s | %-40s | %6s | %-8s | %-12s%n", "Ma KH", "Ho Ten", "So DT", "Email", "Dia Chi", "Diem", "Loai", "Ngay DK");
+            System.out.println("=".repeat(140));
 
+            for(int var1 = 0; var1 < this.count; ++var1) {
+                this.customers[var1].toString();
+            }
+
+            System.out.println("=".repeat(140));
+            System.out.println("Tong so: " + this.count + " khach hang.");
+        }
+    }
     // Sắp xếp theo tên A-Z (bubble sort)
     public void sortByName() {
         for (int i = 0; i < count - 1; i++) {
@@ -169,5 +200,19 @@ public class CustomerDAO implements IRepository<Customer> {
         System.out.println("VIP : " + VIP);
         System.out.println("thuong  : " +  thuong);
         System.out.println("moi     : " + moi);
+    }
+    //
+    public void sapXepTheoTen() {
+        for(int var1 = 0; var1 < this.count - 1; ++var1) {
+            for(int var2 = 0; var2 < this.count - var1 - 1; ++var2) {
+                if (this.customers[var2].getFullName().compareToIgnoreCase(this.customers[var2 + 1].getFullName()) > 0) {
+                    Customer var3 = this.customers[var2];
+                    this.customers[var2] = this.customers[var2 + 1];
+                    this.customers[var2 + 1] = var3;
+                }
+            }
+        }
+
+        System.out.println("Da sap xep theo ten.");
     }
 }

@@ -52,10 +52,10 @@ public class Manager extends Employee{
     //***
     @Override
     public String toString() {
-        return super.toString() + String.format("| %-15.2f | %-10s | %-20.2f | ",
-                allowance, department, calculateSalary());
+        return super.toString() + String.format(" | %-15s | %,12.0f | %,15.0f",
+                department, allowance, calculateSalary());
     }
-    public void displayInfo(){
+    public void displayInfo() {
         System.out.println(toString());
     }
 }

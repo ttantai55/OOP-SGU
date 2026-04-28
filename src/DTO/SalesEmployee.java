@@ -51,13 +51,11 @@ public class SalesEmployee extends Employee {
 
     @Override
     public String toString() {
-        return super.toString() + String.format("|%-15.2f | %-15.2f | %-20.2f |",
+        return super.toString() + String.format(" | %,12.0f | %,15.0f | %,15.0f",
                 bonus, commissionAmount, calculateSalary());
     }
-
     @Override
-
-    public void displayInfo(){
+    public void displayInfo() {
         System.out.println(toString());
     }
 }

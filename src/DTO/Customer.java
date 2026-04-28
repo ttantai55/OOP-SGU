@@ -1,5 +1,4 @@
 package DTO;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
@@ -73,11 +72,10 @@ public class Customer extends Person {
     @Override
     public String toString() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        return super.toString() + String.format("|%-15s | %-10d | %-10s | %-20s",
-
+        return super.toString() + String.format(" | %-10s | %-10d | %-10s | %-12s",
                 customerId, loyaltyPoints, customerType, sdf.format(registeredDate));
     }
-    public void displayInfo(){
+    public void displayInfo() {
         System.out.println(toString());
     }
 }
