@@ -108,10 +108,17 @@ public class LaptopDTO extends ProductsDTO {
     public void displayInfo(){
         System.out.println(toString());
     }
+
     @Override
     // Thong so tom tat
     public String getSpecSummary(){
         return cpu.getShortSummary() + "|" +gpu.getShortSummary() + "|" + ram.getShortSummary() + "|" + screen.getShortSummary() +"|" + storage.getShortSummary();
     }
+
+    @Override
+    public String toFileString() {
+        return "Laptop," + super.toFileString() + "," + cpu.toFileString() + "," + gpu.toFileString() + "," + ram.toFileString() + "," + screen.toFileString() + "," + storage.toFileString() + "," + battery ;
+    }
+
     
 }

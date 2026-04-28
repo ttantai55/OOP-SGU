@@ -61,4 +61,8 @@ public class BrandDTO {
         System.out.println(toString());
     }
 
+    public String toFileString() {
+        return brandID + "," + brandName + "," + manufacturingYear;
+    }
+
 }

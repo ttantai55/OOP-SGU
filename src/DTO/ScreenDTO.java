@@ -54,5 +54,9 @@ public class ScreenDTO {
     public String getShortSummary(){
         return this.size + " inch (" + resolution + ")";
     }
-    
+
+    public String toFileString() {
+        return size + "," + resolution;
+    }
+        
 }

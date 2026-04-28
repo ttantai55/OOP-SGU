@@ -51,4 +51,8 @@ public class CategoryDTO {
     public void displayInfo() {
         System.out.println(toString());
     }
+
+    public String toFileString() {
+        return categoryID + "," + categoryName;
+    }
 }

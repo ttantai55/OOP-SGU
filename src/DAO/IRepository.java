@@ -8,6 +8,6 @@ public interface IRepository<T> {
     T findById(String id);
     Object[] findByName(String name);   // trả Object[] thay vì T[]
     void displayAll();
-    void readFile(String filePath);
-    void writeFile(String filePath);
+  //  void readFile(String filePath);
+   // void writeFile(String filePath);
 }

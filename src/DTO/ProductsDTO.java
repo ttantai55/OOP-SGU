@@ -101,14 +101,14 @@ public abstract class ProductsDTO {
     }
 
     public void setStatus(boolean status) {
-        this.status = status;
+        this.status = true;
     }
   
     
     
     public void input(){
         System.out.println("Moi nhap Thong tin cho san pham: ");
-        System.out.println("Moi nhap ma IMEI:");
+        System.out.println("Moi nhap ma IMEI:"); 
         setProductIMEI(sc.nextLine());
         System.out.println("Moi nhap ma San Pham:");
         setProductID(sc.nextLine());
@@ -127,10 +127,11 @@ public abstract class ProductsDTO {
     
     @Override
     public String toString() {
-        String productsFormat = "%-8s|%-8s|%-11s|%-10s|%-20s|%,15.2f|%8d|%-10s|";
+        String statusText = this.status ? "Dang ban" : "Tam ngung";
+        String productsFormat = "%-8s|%-8s|%-11s|%-10s|%-20s|%,15.2f|%8d|%-10s|%-10s";
         // Dùng %,15.2f cho price (double) và %10d cho warrantyPeriod (int)
         return String.format(productsFormat, 
-                productIMEI, productID, getCategory().getCategoryName(), getBrand().getBrandName(), productName, price, warrantyPeriod, origin);
+                productIMEI, productID, getCategory().getCategoryName(), getBrand().getBrandName(), productName, price, warrantyPeriod, origin, statusText);
     }
 
     public void displayInfo(){
@@ -139,6 +140,12 @@ public abstract class ProductsDTO {
 
     // Class cha ch co thong so
     public abstract String getSpecSummary();
+
+    // Noi chuoi de Doc hoac Xuat File
+    public String toFileString() {
+        String statusText = this.status ? "Dang ban" : "Tam ngung";
+        return productIMEI + "," + productID + "," + category.toFileString() + "," + brand.toFileString() + "," + productName + "," + price + "," + warrantyPeriod + "," + origin + "," + statusText;
+    }
 
    
 }

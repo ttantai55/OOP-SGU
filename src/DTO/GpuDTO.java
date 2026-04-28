@@ -67,5 +67,9 @@ public class GpuDTO {
     public String getShortSummary(){
         return this.brand + " "+ this.model;
     }
+
+    public String toFileString() {
+        return brand + "," + model + "," + vram;
+    }
 }
     

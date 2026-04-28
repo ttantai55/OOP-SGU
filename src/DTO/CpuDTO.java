@@ -86,5 +86,8 @@ public class CpuDTO {
         return this.brand + " " +this.model;
     }
 
+    public String toFileString() {
+        return brand + "," + model + "," + coreCount + "," + threadCount;
+    }
   
 }

@@ -59,4 +59,10 @@ public class AccessoryDTO extends ProductsDTO {
     public String getSpecSummary(){
         return this.type +"-"+ this.description;
     }
+
+    @Override
+    public String toFileString() {
+        // Chữ "Accessory" ở đầu tiên chính là Cờ hiệu phân loại
+        return "Accessory," + super.toFileString() + "," + type + "," + description;
+    }
 }

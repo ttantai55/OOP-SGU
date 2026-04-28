@@ -52,6 +52,10 @@ public class StorageDTO {
     }
 
     public String getShortSummary() {
-    return this.capacity + "GB " + this.type; // VD: "512GB SSD NVMe"
+        return this.capacity + "GB " + this.type; // VD: "512GB SSD NVMe"    
+    }
+    
+    public String toFileString() {
+        return type + "," + capacity;
     }
 }

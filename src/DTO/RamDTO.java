@@ -55,4 +55,8 @@ public class RamDTO {
     public String getShortSummary(){
         return this.capacity + "GB";
     }
+
+    public String toFileString() {
+        return capacity + "," + type;
+    }
 }
