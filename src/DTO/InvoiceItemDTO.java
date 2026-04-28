@@ -3,6 +3,7 @@ package DTO;
 public class InvoiceItemDTO {
 
     private ProductsDTO product;
+    private String invoiceId;
     private int quantity;
     private WarrantyDTO warranty;
     private PromotionDTO promotion; 
@@ -10,9 +11,10 @@ public class InvoiceItemDTO {
     public InvoiceItemDTO() {
     }
 
-    public InvoiceItemDTO(ProductsDTO product, int quantity,
+    public InvoiceItemDTO(ProductsDTO product, String invoiceId, int quantity,
                             WarrantyDTO warranty, PromotionDTO promotion) {
         this.product = product;
+        this.invoiceId = invoiceId;
         this.quantity = quantity;
         this.warranty = warranty;
         this.promotion = promotion;
@@ -36,6 +38,12 @@ public class InvoiceItemDTO {
         return product.getProductID();
     }
 
+    public String getInvoiceId(){
+        return invoiceId;
+    }
+    public void setInvoiceId(String invoiceId){
+        this.invoiceId = invoiceId;
+    }
 
     // số lượng của chi tiết đó
     public int getQuantity() {
