@@ -1,16 +1,11 @@
 package DTO;
 
-import java.util.Scanner;
-
 public class Supplier {
     
-
     private String supplierId;
     private String supplierName;
     private String contactPhone;
     private String email;
-
-    static Scanner sc = new Scanner(System.in);
 
     public Supplier() {
     }
@@ -64,15 +59,13 @@ public class Supplier {
     }
 
     public void input(){
-        System.out.println("Moi nhap thong tin nha cung cap:");
-        System.out.println("Moi nhap ID nha cung cap:");    
-        setSupplierId(sc.nextLine());
-        System.out.println("Moi nhap ten nha cung cap:");
-        setSupplierName(sc.nextLine());
-        System.out.println("Moi nhap so dien thoai nha cung cap:");
-        setContactPhone(sc.nextLine());
-        System.out.println("Moi nhap email nha cung cap:");
-        setEmail(sc.nextLine());
+        System.out.println("\n--- NHẬP THÔNG TIN NHÀ CUNG CẤP ---");
+        
+        // Dùng Validation để ép người dùng không được bỏ trống và nhập đúng định dạng
+        setSupplierId(BUS.Validation.getNonEmptyString("Mời nhập ID nhà cung cấp: "));
+        setSupplierName(BUS.Validation.getNonEmptyString("Mời nhập tên nhà cung cấp: "));
+        setContactPhone(BUS.Validation.getValidPhone("Mời nhập số điện thoại (10 hoặc 11 số): "));
+        setEmail(BUS.Validation.getValidEmail("Mời nhập email (Bắt buộc đuôi @gmail.com): "));
     }
 
 }

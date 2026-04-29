@@ -1,40 +1,40 @@
 package DAO;
 
-import DTO.SupplierDTO;
-
+import DTO.Supplier; // Nhớ import đúng tên class Supplier
 import java.util.Arrays;
+import java.io.*;
 
-public class SupplierDAO implements IRepository<SupplierDTO> {
-    // 1. Mảng quản lý Nhà cung cấp
-    private SupplierDTO[] suppliers;
+public class SupplierDAO implements IRepository<Supplier> {
+    private Supplier[] suppliers;
     private int count;
+    private final String defaultPath = "src/data/suppliers.txt";
 
     public SupplierDAO() {
-        this.suppliers = new SupplierDTO[100]; // Khởi tạo mảng chứa tối đa 100 nhà cung cấp
+        this.suppliers = new Supplier[100]; 
         this.count = 0;
+        readFile(defaultPath); // Tải dữ liệu khi khởi động
     }
 
-    // 2. Thao tác THÊM nhà cung cấp
     @Override
-    public void add(SupplierDTO obj) {
+    public void add(Supplier obj) {
         if (count < suppliers.length) {
             suppliers[count++] = obj;
+            writeFile(defaultPath); // Lưu ra file
             System.out.println("Thêm nhà cung cấp thành công!");
         } else {
             System.out.println("Danh sách nhà cung cấp đã đầy!");
         }
     }
 
-    // 3. Thao tác XÓA nhà cung cấp theo ID
     @Override
     public void remove(String id) {
         for (int i = 0; i < count; i++) {
             if (suppliers[i].getSupplierId().equals(id)) {
-                // Dồn mảng để lấp chỗ trống
                 for (int j = i; j < count - 1; j++) {
                     suppliers[j] = suppliers[j + 1];
                 }
                 suppliers[--count] = null;
+                writeFile(defaultPath); // Lưu ra file
                 System.out.println("Đã xóa nhà cung cấp: " + id);
                 return;
             }
@@ -42,12 +42,12 @@ public class SupplierDAO implements IRepository<SupplierDTO> {
         System.out.println("Không tìm thấy nhà cung cấp cần xóa!");
     }
 
-    // 4. Thao tác SỬA nhà cung cấp
     @Override
-    public void update(SupplierDTO obj) {
+    public void update(Supplier obj) {
         for (int i = 0; i < count; i++) {
             if (suppliers[i].getSupplierId().equals(obj.getSupplierId())) {
-                suppliers[i] = obj; // Ghi đè thông tin mới
+                suppliers[i] = obj;
+                writeFile(defaultPath); // Lưu ra file
                 System.out.println("Cập nhật nhà cung cấp thành công!");
                 return;
             }
@@ -55,9 +55,8 @@ public class SupplierDAO implements IRepository<SupplierDTO> {
         System.out.println("Không tìm thấy nhà cung cấp để cập nhật!");
     }
 
-    // 5. Hàm tìm kiếm theo ID
     @Override
-    public SupplierDTO findById(String id) {
+    public Supplier findById(String id) {
         for (int i = 0; i < count; i++) {
             if (suppliers[i].getSupplierId().equals(id)) {
                 return suppliers[i];
@@ -66,42 +65,81 @@ public class SupplierDAO implements IRepository<SupplierDTO> {
         return null;
     }
 
-    // 6. Tìm kiếm tương đối theo Tên nhà cung cấp
     @Override
     public Object[] findByName(String name) {
-        SupplierDTO[] result = new SupplierDTO[count];
+        Supplier[] result = new Supplier[count];
         int size = 0;
         for (int i = 0; i < count; i++) {
-            // Tìm những tên nhà cung cấp có chứa chuỗi name (không phân biệt hoa thường)
             if (suppliers[i].getSupplierName().toLowerCase().contains(name.toLowerCase())) {
                 result[size++] = suppliers[i];
             }
         }
-        // Cắt mảng cho vừa khít với số lượng tìm được
         return Arrays.copyOf(result, size); 
     }
 
-    // 7. Hiển thị danh sách
     @Override
     public void displayAll() {
         if (count == 0) {
             System.out.println("Danh sách nhà cung cấp đang trống!");
             return;
         }
+        // In tiêu đề bảng cho đẹp
+        System.out.println("-----------------------------------------------------------------------------------------");
+        System.out.printf("%-10s | %-25s | %-15s | %-30s\n", "Mã NCC", "Tên Nhà Cung Cấp", "Số Điện Thoại", "Email");
+        System.out.println("-----------------------------------------------------------------------------------------");
         for (int i = 0; i < count; i++) {
-            // Gọi hàm displayInfo() đã được viết sẵn trong file Supplier.java
             suppliers[i].displayInfo(); 
         }
     }
 
-    // 8. Các hàm đọc/ghi file tạm thời để trống
+    // --- CẬP NHẬT HÀM ĐỌC FILE ---
     @Override
     public void readFile(String filePath) {
-        System.out.println("Chức năng đọc file Supplier đang phát triển...");
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                // Cấu trúc file TXT mới: id,name,phone,email
+                String[] data = line.split(",");
+                if (data.length >= 4) { // Đảm bảo đủ 4 trường
+                    Supplier sup = new Supplier(
+                        data[0].trim(), // ID
+                        data[1].trim(), // Tên
+                        data[2].trim(), // SDT
+                        data[3].trim()  // Email (Trường mới thêm)
+                    );
+                    if (count < suppliers.length) {
+                        suppliers[count++] = sup;
+                    }
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("Chưa có file dữ liệu Nhà cung cấp (Sẽ tự tạo khi thêm mới).");
+        } catch (IOException e) {
+            System.out.println("Lỗi khi đọc file Supplier: " + e.getMessage());
+        }
     }
 
+    // --- CẬP NHẬT HÀM GHI FILE ---
     @Override
     public void writeFile(String filePath) {
-        System.out.println("Chức năng ghi file Supplier đang phát triển...");
+        File file = new File(filePath);
+        file.getParentFile().mkdirs(); 
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
+            for (int i = 0; i < count; i++) {
+                Supplier sup = suppliers[i];
+                // Ghi 4 trường dữ liệu, cách nhau bằng dấu phẩy
+                String line = String.format("%s,%s,%s,%s",
+                    sup.getSupplierId(),
+                    sup.getSupplierName(),
+                    sup.getContactPhone(),
+                    sup.getEmail() // Thêm email vào cuối
+                );
+                bw.write(line);
+                bw.newLine();
+            }
+        } catch (IOException e) {
+            System.out.println("Lỗi khi ghi file Supplier: " + e.getMessage());
+        }
     }
 }

@@ -8,7 +8,7 @@ public class Account {
     private boolean isActive;
     private Employee employee; // Liên kết 1-1
 
-    // 1. Constructor không tham số (Đã có - Rất tốt)
+    // 1. Constructor không tham số 
     public Account() {
         this.isActive = true; // Mặc định tài khoản mới sẽ hoạt động
     }
