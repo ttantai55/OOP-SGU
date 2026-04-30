@@ -5,37 +5,37 @@ import java.util.Scanner;
 public class Validation {
     static Scanner sc = new Scanner(System.in);
 
-    // 1. Ép nhập số điện thoại chuẩn (10 hoặc 11 số)
+    // 1. Ep nhap so dien thoai chuan (10 hoac 11 so)
     public static String getValidPhone(String prompt) {
         String phone;
         while (true) {
             System.out.print(prompt);
             phone = sc.nextLine().trim();
-            // Biểu thức chính quy (Regex): Chỉ chứa số, độ dài từ 10-11
+            // Bieu thuc chinh quy (Regex): Chi chua so, do dai tu 10-11
             if (phone.matches("^[0-9]{10,11}$")) {
-                return phone; // Thoát vòng lặp, trả về sdt đúng
+                return phone; // Thoat vong lap, tra ve sdt dung
             } else {
-                System.out.println("❌ Lỗi: Số điện thoại phải bao gồm 10 hoặc 11 chữ số! Vui lòng nhập lại.");
+                System.out.println("[Loi] So dien thoai phai bao gom 10 hoac 11 chu so! Vui long nhap lai.");
             }
         }
     }
 
-    // 2. Ép nhập Email chuẩn (@gmail.com)
+    // 2. Ep nhap Email chuan (@gmail.com)
     public static String getValidEmail(String prompt) {
         String email;
         while (true) {
             System.out.print(prompt);
             email = sc.nextLine().trim();
-            // Regex: Ký tự bất kỳ + @gmail.com
+            // Regex: Ky tu bat ky + @gmail.com
             if (email.matches("^[A-Za-z0-9+_.-]+@gmail\\.com$")) {
                 return email; 
             } else {
-                System.out.println("❌ Lỗi: Email không hợp lệ (Phải có đuôi @gmail.com)! Vui lòng nhập lại.");
+                System.out.println("[Loi] Email khong hop le (Phai co duoi @gmail.com)! Vui long nhap lai.");
             }
         }
     }
 
-    // 3. Ép nhập chuỗi không được để trống (Cho Tên, ID...)
+    // 3. Ep nhap chuoi khong duoc de trong (Cho Ten, ID...)
     public static String getNonEmptyString(String prompt) {
         String str;
         while (true) {
@@ -44,7 +44,7 @@ public class Validation {
             if (!str.isEmpty()) {
                 return str;
             } else {
-                System.out.println("❌ Lỗi: Không được để trống! Vui lòng nhập lại.");
+                System.out.println("[Loi] Khong duoc de trong! Vui long nhap lai.");
             }
         }
     }

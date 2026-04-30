@@ -1,18 +1,24 @@
 package DTO;
 
+// [OOP] Class: Ban thiet ke cho cac thuc the Tai khoan trong he thong
 public class Account {
+    
+    // [OOP] Encapsulation: Bao ve du lieu bang access modifier 'private'
     private String accountId;
     private String username;
     private String password;
-    private String role;   // Lấy từ employee.getRole()
+    private String role;   // Lay tu employee.getRole()
     private boolean isActive;
-    private Employee employee; // Liên kết 1-1
+    
+    // [OOP] Association: Moi quan he "Has-A" (Mot tai khoan thuoc ve/lien ket voi mot nhan vien)
+    private Employee employee; 
 
-    // 1. Constructor không tham số 
+    // 1. Constructor khong tham so (Khoi tao doi tuong mac dinh)
     public Account() {
-        this.isActive = true; // Mặc định tài khoản mới sẽ hoạt động
+        this.isActive = true; // Mac dinh tai khoan moi se hoat dong
     }
 
+    // 2. Constructor day du tham so de nap du lieu nhanh
     public Account(String accountId, String username, String password, String role, boolean isActive, Employee employee) {
         this.accountId = accountId;
         this.username = username;
@@ -22,7 +28,7 @@ public class Account {
         this.employee = employee;
     }
 
-    // Getters và Setters
+    // [OOP] Encapsulation: Cac phuong thuc Getter/Setter giao tiep an toan voi thuoc tinh
     public String getAccountId() { return accountId; }
     public void setAccountId(String accountId) { this.accountId = accountId; }
 
@@ -41,27 +47,29 @@ public class Account {
     public Employee getEmployee() { return employee; }
     public void setEmployee(Employee employee) { this.employee = employee; }
 
-    // Phương thức kiểm tra đăng nhập
+    // Phuong thuc kiem tra dang nhap
     public boolean login(String username, String password) {
         return this.username.equals(username) && this.password.equals(password);
     }
 
-    // Đổi mật khẩu
+    // Phuong thuc doi mat khau
     public void changePassword(String newPassword) {
         this.password = newPassword;
     }
 
-    // Kiểm tra quyền
+    // Phuong thuc kiem tra quyen
     public boolean hasPermission(String function) {
         return this.role != null && this.role.equalsIgnoreCase(function);
     }
 
-    // Cập nhật toString theo phong cách bảng của các file khác
+    // [OOP] Polymorphism: Ghi de phuong thuc toString cua lop Object
     @Override
     public String toString() {
-        String status = isActive ? "Hoạt động" : "Bị khóa";
-        String empName = (employee != null) ? employee.getFullName() : "Chưa gán NV";
+        // Chuan hoa thanh khong dau de tranh loi font tren Terminal
+        String status = isActive ? "Hoat dong" : "Bi khoa";
+        String empName = (employee != null) ? employee.getFullName() : "Chua gan NV";
         
+        // Van giu nguyen tinh bao mat bang cach che mat khau "********"
         return String.format("%-15s | %-15s | %-15s | %-15s | %-15s | %-20s",
                 accountId, username, "********", role, status, empName);
     }

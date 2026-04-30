@@ -49,9 +49,9 @@ public class Customer extends Person {
         super.input();
         System.out.println("Nhap ma khach hang: ");
         setCustomerId(sc.nextLine());
-        System.out.println("nhap diem tich luy: ");
+        System.out.println("Nhap diem tich luy: ");
         setLoyaltyPoints(Integer.parseInt(sc.nextLine()));
-        System.out.println("loai khach hang (VIP/thuong/moi): ");
+        System.out.println("Loai khach hang (VIP/thuong/moi): ");
         setCustomerType(sc.nextLine());
         System.out.println("Ngay dang ky: ");
         this.registeredDate = new Date();

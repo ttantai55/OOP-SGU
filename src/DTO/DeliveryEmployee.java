@@ -57,11 +57,11 @@ public class DeliveryEmployee extends Employee{
         super.input();
         System.out.println("Bien so xe: ");
         setLicensePlate(sc.nextLine());
-        System.out.println("khu vuc giao hang: ");
+        System.out.println("Khu vuc giao hang: ");
         setDeliveryArea(sc.nextLine());
-        System.out.println("so don giao: ");
+        System.out.println("So don giao: ");
         setDeliveryCount(Integer.parseInt(sc.nextLine()));
-        System.out.println("phi moi don");
+        System.out.println("Phi moi don:");
         setFeePerOrder(Float.parseFloat(sc.nextLine()));
     }
     //***

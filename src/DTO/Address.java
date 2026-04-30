@@ -66,13 +66,13 @@ public class Address {
     public void inPut(){
         System.out.println("Moi nhap so nha: ");
         setHouseNumber(sc.nextLine());
-        System.out.println("Moi nhap ten duong");
+        System.out.println("Moi nhap ten duong: ");
         setStreet(sc.nextLine());
         System.out.println("Moi nhap ten phuong/xa: ");
         setWard(sc.nextLine());
         System.out.println("Moi nhap quan/huyen: ");
         setDistrict(sc.nextLine());
-        System.out.println("moi nhap tinh: ");
+        System.out.println("Moi nhap tinh: ");
         setCity(sc.nextLine());
     }
     //****

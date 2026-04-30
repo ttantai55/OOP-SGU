@@ -4,7 +4,10 @@ import DTO.Account;
 import java.util.Arrays;
 import java.io.*; 
 
+// [OOP] Tinh Truu tuong (Abstraction) & Da hinh (Polymorphism): Implement interface IRepository
 public class AccountDAO implements IRepository<Account> {
+    
+    // [OOP] Tinh Dong goi (Encapsulation): Bao ve du lieu mang bang private
     private Account[] accounts;
     private int count;
     private final String defaultPath = "src/data/accounts.txt"; 
@@ -12,7 +15,7 @@ public class AccountDAO implements IRepository<Account> {
     public AccountDAO() {
         this.accounts = new Account[100];
         this.count = 0;
-        readFile(defaultPath);
+        readFile(defaultPath); // Tu dong tai du lieu khi khoi tao
     }
 
     @Override
@@ -20,9 +23,9 @@ public class AccountDAO implements IRepository<Account> {
         if (count < accounts.length) {
             accounts[count++] = obj;
             writeFile(defaultPath); 
-            System.out.println("Thêm tài khoản thành công!");
+            System.out.println("[Thong bao] Them tai khoan thanh cong!");
         } else {
-            System.out.println("Danh sách tài khoản đã đầy!");
+            System.out.println("[Loi] Danh sach tai khoan da day!");
         }
     }
 
@@ -30,16 +33,17 @@ public class AccountDAO implements IRepository<Account> {
     public void remove(String id) {
         for (int i = 0; i < count; i++) {
             if (accounts[i].getAccountId().equals(id)) {
+                // Thuat toan don mang: Dich cac phan tu sang trai 1 vi tri
                 for (int j = i; j < count - 1; j++) {
                     accounts[j] = accounts[j + 1];
                 }
-                accounts[--count] = null;
+                accounts[--count] = null; // Xoa phan tu cuoi, giam so luong
                 writeFile(defaultPath); 
-                System.out.println("Đã xóa tài khoản: " + id);
+                System.out.println("[Thong bao] Da xoa tai khoan: " + id);
                 return;
             }
         }
-        System.out.println("Không tìm thấy tài khoản cần xóa!");
+        System.out.println("[Loi] Khong tim thay tai khoan can xoa!");
     }
 
     @Override
@@ -48,11 +52,11 @@ public class AccountDAO implements IRepository<Account> {
             if (accounts[i].getAccountId().equals(obj.getAccountId())) {
                 accounts[i] = obj;
                 writeFile(defaultPath); 
-                System.out.println("Cập nhật tài khoản thành công!");
+                System.out.println("[Thong bao] Cap nhat tai khoan thanh cong!");
                 return;
             }
         }
-        System.out.println("Không tìm thấy tài khoản để cập nhật!");
+        System.out.println("[Loi] Khong tim thay tai khoan de cap nhat!");
     }
 
     @Override
@@ -83,13 +87,13 @@ public class AccountDAO implements IRepository<Account> {
                 result[size++] = accounts[i];
             }
         }
-        return Arrays.copyOf(result, size); 
+        return Arrays.copyOf(result, size); // Tra ve mang vua khit voi ket qua
     }
 
     @Override
     public void displayAll() {
         if (count == 0) {
-            System.out.println("Danh sách tài khoản đang trống!");
+            System.out.println("[Thong bao] Danh sach tai khoan dang trong!");
             return;
         }
         for (int i = 0; i < count; i++) {
@@ -102,7 +106,7 @@ public class AccountDAO implements IRepository<Account> {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = br.readLine()) != null) {
-                // Cấu trúc file: id,user,pass,role,isActive
+                // Cau truc file: id,user,pass,role,isActive
                 String[] data = line.split(",");
                 if (data.length >= 5) {
                     Account acc = new Account(
@@ -119,17 +123,18 @@ public class AccountDAO implements IRepository<Account> {
                 }
             }
         } catch (FileNotFoundException e) {
-            System.out.println("Chưa có file dữ liệu. Sẽ tự tạo khi có tài khoản mới.");
+            System.out.println("[Thong bao] Chua co file du lieu. He thong se tu tao khi co tai khoan moi.");
         } catch (IOException e) {
-            System.out.println("Lỗi khi đọc file: " + e.getMessage());
+            System.out.println("[Loi] Xay ra loi khi doc file: " + e.getMessage());
         }
     }
 
     @Override
     public void writeFile(String filePath) {
-        // Tạo thư mục nếu chưa có
         File file = new File(filePath);
-        file.getParentFile().mkdirs(); 
+        if (file.getParentFile() != null) {
+            file.getParentFile().mkdirs(); // Tao thu muc neu chua co
+        }
 
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
             for (int i = 0; i < count; i++) {
@@ -145,7 +150,7 @@ public class AccountDAO implements IRepository<Account> {
                 bw.newLine();
             }
         } catch (IOException e) {
-            System.out.println("Lỗi khi ghi file: " + e.getMessage());
+            System.out.println("[Loi] Xay ra loi khi ghi file: " + e.getMessage());
         }
     }
 }
