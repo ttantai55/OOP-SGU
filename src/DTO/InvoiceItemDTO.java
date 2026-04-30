@@ -59,30 +59,40 @@ public class InvoiceItemDTO {
         return product.getPrice();
     }
 
-
-
     // phần bảo hành sẽ lấy theo Id của mã bảo hành 
+
     public WarrantyDTO getWarranty() {
         return warranty;
-
+    }
+    public void setWarranty(WarrantyDTO warranty){
+        this.warranty = warranty;
     }
 
-    public String getWarrantyId() {
-        return warranty.getWarrantyId();
+    public String getWarrantyId(){
+        if (this.warranty != null) {
+            return this.warranty.getWarrantyId();
+        }
+        return "N/A";
     }
 
-
-    // phần này tương tự mã bảo hành ( khuyến mãi)
-    public PromotionDTO getPromotion() {
-        return promotion;
+   public PromotionDTO getPromotion(){
+    return promotion;
+   }
+   public void setPromotion(PromotionDTO promotion){
+    this.promotion = promotion;
+   }
+   public String getPromotionId(){
+    if (this.promotion != null) {
+        return this.promotion.getPromotionId();
     }
-
-    public String getPromotionId() {
-        return promotion.getPromotionId();
-    }
+    return "N/A";
+   }
 
     public double getDiscountPercent(){
-        return promotion.getDiscountPercent();
+        if (promotion != null) {
+            return promotion.getDiscountPercent();
+        }
+        return 0;
     }
     
 

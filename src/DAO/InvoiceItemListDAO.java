@@ -2,12 +2,14 @@ package DAO;
 
 import DTO.InvoiceItemDTO;
 import java.util.Arrays;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class InvoiceItemListDAO implements IRepository<InvoiceItemDTO> {
-    private InvoiceItemDTO[] itemList;
+    private static InvoiceItemDTO[] itemList = new InvoiceItemDTO[0];
 
     public InvoiceItemListDAO() {
-        this.itemList = new InvoiceItemDTO[0];
     }
 
     @Override
@@ -72,8 +74,15 @@ public class InvoiceItemListDAO implements IRepository<InvoiceItemDTO> {
 
     @Override
     public InvoiceItemDTO findById(String productId) {
+        System.out.println("Hãy sử dụng hàm findDetail(invoiceId, productId).");
+        return null;
+    }
+
+    public InvoiceItemDTO findDetail(String invoiceId, String productId) {
         for (InvoiceItemDTO item : itemList) {
-            if (item != null && item.getProductId().equals(productId)) {
+            if (item != null
+                && item.getInvoiceId().equals(invoiceId)
+                && item.getProductId().equals(productId)) {
                 return item;
             }
         }
@@ -92,23 +101,14 @@ public class InvoiceItemListDAO implements IRepository<InvoiceItemDTO> {
         return result;
     }
 
-    @Override
-    public InvoiceItemDTO[] getAll() {
-        return Arrays.copyOf(itemList, itemList.length);
-    }
-
-    // tính thành tiền của một chi tiết hóa đơn
+    // tính thành tiền của một chi tiết hóa đơn (tính cả chương trình khuyến mãi nếu có)
     public static double calculateSubTotal(InvoiceItemDTO item) {
-        return item.getQuantity() * item.getUnitPrice();
-    }
-
-    // tính tổng tiền toàn bộ chi tiết hóa đơn
-    public double getTotalValue() {
-        double total = 0;
-        for (InvoiceItemDTO item : itemList) {
-            if (item != null) total += calculateSubTotal(item);
+        double subTotal = item.getQuantity() * item.getUnitPrice();
+        if (item.getPromotion() != null) {
+            double discount = subTotal * (item.getDiscountPercent() / 100.0);
+            subTotal -= discount;
         }
-        return total;
+        return subTotal; // tiền của 1 sản phẩm 
     }
 
     @Override
@@ -118,7 +118,43 @@ public class InvoiceItemListDAO implements IRepository<InvoiceItemDTO> {
 
     @Override
     public void writeFile(String filePath) {
-        // Sẽ bổ sung sau
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
+
+            for (InvoiceItemDTO item : itemList) {
+                if (item != null) {
+                    String promotionId;
+                    if (item.getPromotion() != null) {
+                        promotionId = item.getPromotion().getPromotionId();
+                    } else {
+                        promotionId = "N/A";
+                    }
+
+                    String warrantyId;
+                    if (item.getWarranty() != null) {
+                        warrantyId = item.getWarranty().getWarrantyId();
+                    } else {
+                        warrantyId = "N/A";
+                    }
+
+                    String line = item.getInvoiceId() + "," +
+                                 item.getProductId() + "," +
+                                 item.getProductName() + "," +
+                                 item.getQuantity() + "," +
+                                 item.getUnitPrice() + "," +
+                                 promotionId + "," +
+                                 warrantyId + "," +
+                                 calculateSubTotal(item);
+
+                    bw.write(line);
+                    bw.newLine();
+                }
+            }
+
+            System.out.println("Ghi dữ liệu vào file " + filePath + " thành công!");
+
+        } catch (IOException e) {
+            System.err.println("Lỗi khi ghi file: " + e.getMessage());
+        }
     }
 
     @Override

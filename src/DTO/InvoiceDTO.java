@@ -9,14 +9,12 @@ public class InvoiceDTO {
     private Date createdDate;
     private boolean status;
     private InvoiceItemDTO[] invoiceItemList; // tạo mảng này là mảng để xuất các item đi kèm, không phải mảng lưu trữ các hóa đơn
-    private int itemCount; 
     private PaymentDTO payment;
 
   // mặc định tạo mẳng ở Invocie tại InvoiceItem nằm trong Invoice
     public InvoiceDTO() {
         this.invoiceItemList = new InvoiceItemDTO[0];
-        this.itemCount = 0; 
-        this.status = true; // mặc định là true 
+        this.status = true; // mặc định là true
     }
 
     public InvoiceDTO(String invoiceId, Customer customer, Employee employee,
@@ -27,7 +25,6 @@ public class InvoiceDTO {
         this.createdDate = createdDate;
         this.payment = payment;
         this.invoiceItemList = new InvoiceItemDTO[0];
-        this.itemCount = 0;
         this.status = true;
     }
 
@@ -53,12 +50,18 @@ public class InvoiceDTO {
     }
 
     public String getCustomerId(){
-        return customer.getCustomerId();
+        if (this.customer != null) {
+            return this.customer.getCustomerId();
+        }
+        return "N/A"; // nếu tìm không thấy id khách thì để là N/a
     }
 
     public String getCustomerName(){
-        return customer.getFullName();
+        if (this.customer != null) {
+        return this.customer.getFullName();
     }
+    return "N/A"; // nếu tìm không thấy tên khách thì để là N/a
+}
     
     // Lấy id nhân viên và tên nhân viên
     public Employee getEmployee() {
@@ -66,12 +69,18 @@ public class InvoiceDTO {
     }
 
     public String getEmployeeId(){
-        return employee.getEmployeeId();
+        if (this.employee != null) {
+            return this.employee.getEmployeeId();
+        }
+        return "N/A"; // nếu tìm không thấy id nhân viên thì để là N/a
     }
 
-    public String getEmployeeName(){
-        return employee.getFullName();
+    public String getEmployeeName() {
+    if (this.employee != null) {
+        return this.employee.getFullName();
     }
+    return "N/A";
+}
 
     public Date getCreatedDate() {
         return createdDate;
@@ -97,15 +106,7 @@ public class InvoiceDTO {
         this.invoiceItemList = invoiceItemList;
     }
 
-    public int getItemCount() {
-        return itemCount;
-    }
-
-    public void setItemCount(int itemCount) {
-        this.itemCount = itemCount;
-    }
-
-    public PaymentDTO getPayment() { 
+    public PaymentDTO getPayment() {
         return payment; 
     }
     

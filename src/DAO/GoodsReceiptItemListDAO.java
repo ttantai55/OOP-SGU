@@ -2,12 +2,14 @@ package DAO;
 
 import DTO.GoodsReceiptItemDTO;
 import java.util.Arrays;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 
-public class GoodsReceiptItemDAO implements IRepository<GoodsReceiptItemDTO> {
-    private GoodsReceiptItemDTO[] details;
+public class GoodsReceiptItemListDAO implements IRepository<GoodsReceiptItemDTO> {
+    private static GoodsReceiptItemDTO[] details = new GoodsReceiptItemDTO[0];
 
-    public GoodsReceiptItemDAO() {
-        details = new GoodsReceiptItemDTO[0];
+    public GoodsReceiptItemListDAO() {
     }
 
     @Override
@@ -49,7 +51,9 @@ public class GoodsReceiptItemDAO implements IRepository<GoodsReceiptItemDTO> {
     @Override
     public void update(GoodsReceiptItemDTO obj) {
         for (int i = 0; i < details.length; i++) {
-            if (details[i] != null && details[i].getProductId().equals(obj.getProductId())) {
+            if (details[i] != null
+                && details[i].getReceiptId().equals(obj.getReceiptId())
+                && details[i].getProductId().equals(obj.getProductId())) {
                 details[i] = obj;
                 return;
             }
@@ -57,13 +61,33 @@ public class GoodsReceiptItemDAO implements IRepository<GoodsReceiptItemDTO> {
     }
 
     @Override
+    // nên dùng hàm findDetail(receiptId, productId) để tránh trả nhầm chi tiết của phiếu nhập khác
     public GoodsReceiptItemDTO findById(String productId) {
+        System.out.println("Hãy sử dụng hàm findDetail(receiptId, productId).");
+        return null;
+    }
+
+    public GoodsReceiptItemDTO findDetail(String receiptId, String productId) {
         for (GoodsReceiptItemDTO d : details) {
-            if (d != null && d.getProductId().equals(productId)) {
+            if (d != null
+                && d.getReceiptId().equals(receiptId)
+                && d.getProductId().equals(productId)) {
                 return d;
             }
         }
         return null;
+    }
+
+    // tìm kiếm các chi tiết theo mã phiếu nhập
+    public GoodsReceiptItemDTO[] findByReceiptId(String receiptId) {
+        GoodsReceiptItemDTO[] result = new GoodsReceiptItemDTO[0];
+        for (GoodsReceiptItemDTO d : details) {
+            if (d != null && d.getReceiptId().equals(receiptId)) {
+                result = Arrays.copyOf(result, result.length + 1);
+                result[result.length - 1] = d;
+            }
+        }
+        return result;
     }
 
     @Override
@@ -82,32 +106,50 @@ public class GoodsReceiptItemDAO implements IRepository<GoodsReceiptItemDTO> {
     public void displayAll() {
         for (GoodsReceiptItemDTO d : details) {
             if (d != null) {
-                System.out.println("San pham: " + d.getProductName()
-                        + " | So luong: " + d.getQuantity()
-                        + " | Gia nhap: " + d.getImportPrice()
-                        + " | Thanh tien: " + calculateSubTotal(d));
+                System.out.println("Sản phẩm: " + d.getProductName()
+                        + " | Số lượng: " + d.getQuantity()
+                        + " | Giá nhập: " + d.getImportPrice()
+                        + " | Thành tiền: " + calculateSubTotal(d));
             }
         }
     }
 
     // Tính thành tiền của một chi tiết nhập
-    public static double calculateSubTotal(GoodsReceiptItemDTO d) {
-        return d.getQuantity() * d.getImportPrice();
+    public static double calculateSubTotal(GoodsReceiptItemDTO gr) {
+        double subTotal = gr.getQuantity() * gr.getImportPrice();
+        return subTotal;
     }
 
-  // thiếu readFile, writeFile ( bổ sung sau)
-    public GoodsReceiptItemDTO[] getAll() {
-        return Arrays.copyOf(details, details.length);
+    @Override
+    public void readFile(String filePath) {
+        // Sẽ bổ sung sau
     }
 
-    // tính tổng tiền toàn bộ chi tiết nhập
-    public double getTotalValue() {
-        double total = 0;
-        for (GoodsReceiptItemDTO d : details) {
-            if (d != null) total += calculateSubTotal(d);
+    @Override
+    public void writeFile(String filePath) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
+
+            for (GoodsReceiptItemDTO d : details) {
+                if (d != null) {
+                    String productId = d.getProductId();
+                    String productName = d.getProductName();
+
+                    String line = d.getReceiptId() + "," +
+                                 productId + "," +
+                                 productName + "," +
+                                 d.getQuantity() + "," +
+                                 d.getImportPrice() + "," +
+                                 calculateSubTotal(d);
+
+                    bw.write(line);
+                    bw.newLine();
+                }
+            }
+
+            System.out.println("Ghi dữ liệu vào file " + filePath + " thành công!");
+
+        } catch (IOException e) {
+            System.err.println("Lỗi khi ghi file: " + e.getMessage());
         }
-        return total;
     }
-
-    
 }

@@ -15,13 +15,12 @@ public class GoodsReceiptDTO {
     private Supplier supplier;
     private Employee receiver;        // nhân viên nhận hàng
     private GoodsReceiptItemDTO[] items;
-    private int itemCount; 
     private boolean status;
-   
+
 
     public GoodsReceiptDTO() {
-        this.items = new GoodsReceiptItemDTO[0];
-        this.itemCount = 0;
+        this.items = new GoodsReceiptItemDTO[0]; // một chi tiết Sẽ là 1 phần tử trong mảng
+        this.status = true;
     }
 
     public GoodsReceiptDTO(String receiptId, Date createdDate, String creator, String note,
@@ -38,7 +37,8 @@ public class GoodsReceiptDTO {
         this.phoneOfConsignee = phoneOfConsignee;
         this.supplier = supplier;
         this.receiver = receiver;
-        this.status = true;
+        this.status = status;
+        this.items = new GoodsReceiptItemDTO[0];
     }
 
     public String getReceiptId() {
@@ -105,7 +105,7 @@ public class GoodsReceiptDTO {
         this.phoneOfConsignee = phoneOfConsignee;
     }
 
-    // nhà cung cấp
+    // nhà cung cấp ( lây id , tên)
     public Supplier getSupplier() {
         return supplier;
     }
@@ -122,7 +122,7 @@ public class GoodsReceiptDTO {
         return supplier.getSupplierName();
     }
 
-    // nhân viên nhận hàng
+    // nhân viên nhận hàng (id và tên)
     public Employee getReceiver() {
         return receiver;
     }
@@ -135,6 +135,12 @@ public class GoodsReceiptDTO {
         return receiver.getEmployeeId();
     }
 
+    public String getReceiverName(){
+        return receiver.getEmployeeName();
+    }
+
+
+    // danh sách các mặt hàng nhập vào
     public GoodsReceiptItemDTO[] getItems() {
         return items;
     }
@@ -143,7 +149,6 @@ public class GoodsReceiptDTO {
         this.items = items;
     }
 
-   
     public boolean isStatus() {
         return status;
     }

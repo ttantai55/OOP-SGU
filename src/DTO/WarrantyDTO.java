@@ -8,26 +8,22 @@ public class WarrantyDTO {
     private ProductsDTO product;
     private Date startDate;
     private Date endDate;
-    private String status;
-    private RepairRecordDTO[] repairRecordList; 
-    //số lần bảo hành. 
-    // Cái này cũng giống như Invoice, tạo 1 mảng để lưu nhiều lần bảo hành, không phải list quản lí Warranty
+    private boolean status;
     private int repairCount;
 
-    public WarrantyDTO() { 
-        this.repairRecordList = new RepairRecordDTO[0];
+    public WarrantyDTO() {
         this.repairCount = 0;
+        this.status = true;
     }
 
     public WarrantyDTO(String warrantyId, String invoiceId, ProductsDTO product,
-                       Date startDate, Date endDate, String status) {
+                       Date startDate, Date endDate, boolean status) {
         this.warrantyId = warrantyId;
         this.invoiceId = invoiceId;
         this.product = product;
         this.startDate = startDate;
         this.endDate = endDate;
         this.status = status;
-        this.repairRecordList = new RepairRecordDTO[0];
         this.repairCount = 0;
     }
 
@@ -55,11 +51,11 @@ public class WarrantyDTO {
         this.product = product;
     }
 
-    public String getStatus() {
+    public boolean isStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(boolean status) {
         this.status = status;
     }
 
@@ -77,14 +73,6 @@ public class WarrantyDTO {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
-    }
-
-    public RepairRecordDTO[] getRepairRecordList() {
-        return repairRecordList;
-    }
-
-    public void setRepairRecordList(RepairRecordDTO[] repairRecordList) {
-        this.repairRecordList = repairRecordList;
     }
 
     public int getRepairCount() {

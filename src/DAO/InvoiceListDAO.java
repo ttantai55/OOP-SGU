@@ -1,17 +1,20 @@
 package DAO;
 
 import DTO.InvoiceDTO;
+import DTO.InvoiceItemDTO;
 import java.util.Arrays;
+import java.text.SimpleDateFormat;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 
 
 public class InvoiceListDAO implements IRepository<InvoiceDTO> {
    
-    private InvoiceDTO[] invoiceList;
-    private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy"); // Định dạng ngày
+    private static InvoiceDTO[] invoiceList = new InvoiceDTO[0];
+    private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     public InvoiceListDAO() {
-        this.invoiceList = new InvoiceDTO[0];
-
     }
 
     @Override
@@ -19,7 +22,7 @@ public class InvoiceListDAO implements IRepository<InvoiceDTO> {
     public void add(InvoiceDTO invoice) {
         invoiceList = Arrays.copyOf(invoiceList, invoiceList.length + 1);
         invoiceList[invoiceList.length - 1] = invoice;
-        System.out.println("Da them thanh cong hoa don: " + invoice.getInvoiceId());
+        System.out.println("Đã thêm hóa đơn thành công: " + invoice.getInvoiceId() + ".");
     }
 
     @Override
@@ -33,9 +36,9 @@ public class InvoiceListDAO implements IRepository<InvoiceDTO> {
             }
         }
         if (found) {
-            System.out.println("Da huy hoa don: " + invoiceId);
+            System.out.println("Đã hủy hóa đơnq: " + invoiceId + ".");
         } else {
-            System.out.println("Khong tim thay hoa don: " + invoiceId);
+            System.out.println("Không tìm thấy hóa đơn: " + invoiceId + ".");
         }
     }
 
@@ -50,9 +53,9 @@ public class InvoiceListDAO implements IRepository<InvoiceDTO> {
             }
         }
         if (found) {
-            System.out.println("Da cap nhat thanh cong hoa don: " + updatedInvoice.getInvoiceId());
+            System.out.println("Đã cập nhật hóa đơn thành công: " + updatedInvoice.getInvoiceId() + ".");
         } else {
-            System.out.println("Khong tim thay hoa don de cap nhat!");
+            System.out.println("Không tìm thấy hóa đơn để cập nhật!");
         }
     }
 
@@ -68,11 +71,11 @@ public class InvoiceListDAO implements IRepository<InvoiceDTO> {
     }
 
     @Override
-    // tìm hóa đơn theo mã khách hàng
+ // tìm hóa đơn theo tên khách hàng
     public InvoiceDTO[] findByName(String customerName) {
         InvoiceDTO[] result = new InvoiceDTO[0];
         for (InvoiceDTO inv : invoiceList) {
-            if (inv != null && inv.getCustomerName().equals(customerName)) {
+            if (inv != null && inv.getCustomerName().toLowerCase().contains(customerName.toLowerCase())) {
                 result = Arrays.copyOf(result, result.length + 1);
                 result[result.length - 1] = inv;
             }
@@ -80,9 +83,6 @@ public class InvoiceListDAO implements IRepository<InvoiceDTO> {
         return result;
     }
 
-    public InvoiceDTO[] getAll() {
-        return Arrays.copyOf(invoiceList, invoiceList.length);
-    }
 
     @Override
     public void displayAll() {
@@ -99,8 +99,63 @@ public class InvoiceListDAO implements IRepository<InvoiceDTO> {
         }
     }
 
-// còn thiếu WriteFile và ReadFile
+// còn thiếu ReadFile
+@Override
+public void writeFile(String filePath) {
+    try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
+        
+        for (InvoiceDTO inv : invoiceList) {
+            if (inv != null) {
+                String customerId = inv.getCustomerId();
+                String employeeId = inv.getEmployeeId();
+                
+                String paymentId;
+                if (inv.getPayment() != null) {
+                    paymentId = inv.getPayment().getPaymentId();
+                } else {
+                    paymentId = "N/A";
+                }
+                
+                double totalPrice = calculateTotalPrice(inv);
+                
+                String status;
+                if (inv.isStatus()) {
+                    status = "Active";
+                } else {
+                    status = "Cancelled";
+                }
+                
+                String line = inv.getInvoiceId() + "," +
+                             customerId + "," +
+                             employeeId + "," +
+                             sdf.format(inv.getCreatedDate()) + "," +
+                             status + "," +
+                             totalPrice + "," +
+                             paymentId;
+                
+                bw.write(line);
+                bw.newLine();
+            }
+        }
+        
+        System.out.println("Ghi dữ liệu vào file " + filePath + " thành công!");
+        
+    } catch (IOException e) {
+        System.err.println("Lỗi khi ghi file: " + e.getMessage());
+    }
+}
 
+
+
+ public static double calculateTotalPrice(InvoiceDTO invoice) {
+    if (invoice.getInvoiceItemList() == null || invoice.getInvoiceItemList().length == 0)
+        return 0;
+        double total = 0;
+        for (InvoiceItemDTO item : invoice.getInvoiceItemList()) {
+            if (item != null) total += InvoiceItemListDAO.calculateSubTotal(item);
+        }
+        return total;
+    }
 
 
 }

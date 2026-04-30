@@ -2,12 +2,16 @@ package DAO;
 
 import DTO.PromotionDTO;
 import java.util.Arrays;
+import java.text.SimpleDateFormat;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class PromotionListDAO implements IRepository<PromotionDTO> {
-    private PromotionDTO[] promotionList;
+    private static PromotionDTO[] promotionList = new PromotionDTO[0];
+    private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     public PromotionListDAO() {
-        this.promotionList = new PromotionDTO[0];
     }
 
     @Override
@@ -16,30 +20,16 @@ public class PromotionListDAO implements IRepository<PromotionDTO> {
         promotionList[promotionList.length - 1] = promotion;
     }
 
-    // PromotionDTO không có status -> xây mảng mới bỏ phần tử cần xóa
     @Override
     public void remove(String promotionId) {
-        boolean found = false;
-        PromotionDTO[] temp = new PromotionDTO[0]; // tạo mảng temp để giữ lại các phần tử không bị xóa
-
         for (PromotionDTO p : promotionList) {
-            if (p != null) {
-                if (p.getPromotionId().equals(promotionId)) {
-                    found = true; // bỏ qua phần tử cần xóa
-                } else {
-                    temp = Arrays.copyOf(temp, temp.length + 1); // giữ lại phần tử không bị xóa
-                    temp[temp.length - 1] = p;
-                }
+            if (p != null && p.getPromotionId().equals(promotionId)) {
+                p.setStatus(false);
+                System.out.println("Đã hủy khuyến mãi: " + promotionId + ".");
+                return;
             }
         }
-
-        this.promotionList = temp; // mảng chỉ còn lại các khuyến mãi không bị xóa
-
-        if (found) {
-            System.out.println("Đã xóa khuyến mãi: " + promotionId);
-        } else {
-            System.out.println("Không tìm thấy khuyến mãi: " + promotionId);
-        }
+        System.out.println("Không tìm thấy khuyến mãi: " + promotionId + ".");
     }
 
     @Override
@@ -88,9 +78,6 @@ public class PromotionListDAO implements IRepository<PromotionDTO> {
         return result;
     }
 
-    public PromotionDTO[] getAll() {
-        return Arrays.copyOf(promotionList, promotionList.length);
-    }
 
     @Override
     public void readFile(String filePath) {
@@ -99,7 +86,33 @@ public class PromotionListDAO implements IRepository<PromotionDTO> {
 
     @Override
     public void writeFile(String filePath) {
-        // Sẽ bổ sung sau
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
+            for (PromotionDTO p : promotionList) {
+                if (p != null) {
+                    String status;
+                    if (p.isStatus()) {
+                        status = "Active";
+                    } else {
+                        status = "Cancelled";
+                    }
+
+                    String line = p.getPromotionId() + "," +
+                                 p.getProgramName() + "," +
+                                 p.getProductID() + "," +
+                                 sdf.format(p.getStartDate()) + "," +
+                                 sdf.format(p.getEndDate()) + "," +
+                                 p.getCondition() + "," +
+                                 p.getDiscountPercent() + "," +
+                                 status;
+
+                    bw.write(line);
+                    bw.newLine();
+                }
+            }
+            System.out.println("Ghi dữ liệu vào file " + filePath + " thành công!");
+        } catch (IOException e) {
+            System.err.println("Lỗi khi ghi file: " + e.getMessage());
+        }
     }
 
     @Override
@@ -119,8 +132,8 @@ public class PromotionListDAO implements IRepository<PromotionDTO> {
                         p.getPromotionId(),
                         p.getProgramName(),
                         p.getProductID(),
-                        p.getStartDate(),
-                        p.getEndDate(),
+                        sdf.format(p.getStartDate()),
+                        sdf.format(p.getEndDate()),
                         p.getDiscountPercent());
             }
         }

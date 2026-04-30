@@ -5,7 +5,7 @@ public class GoodsReceiptItemDTO {
     private ProductsDTO product;
     private String receiptId;
     private int quantity;
-    private double importPrice; // giá nhập
+    private double importPrice; // giá nhập # giá bán
 
     public GoodsReceiptItemDTO() {
     }
@@ -25,7 +25,7 @@ public class GoodsReceiptItemDTO {
         this.product = product;
     }
 
-    // lấy thông tin từ ProductsDTO
+    // lấy id và tên sản phẩm từ Product
     public String getProductId() {
         return product.getProductID();
     }

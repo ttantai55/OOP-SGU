@@ -11,12 +11,14 @@ public class PromotionDTO {
     private Date endDate;
     private String condition;       // điều kiện áp dụng
     private double discountPercent;  // nhập theo số ví dụ như 10 = 10%
+    private boolean status;
 
     public PromotionDTO() {
+        this.status = true;
     }
 
     public PromotionDTO(String promotionId, String programName, String productID, Date startDate, Date endDate,
-                        String condition, double discountPercent) {
+                        String condition, double discountPercent, boolean status) {
         this.promotionId = promotionId;
         this.programName = programName;
         this.productID = productID;
@@ -24,6 +26,7 @@ public class PromotionDTO {
         this.endDate = endDate;
         this.condition = condition;
         this.discountPercent = discountPercent;
+        this.status = status;
     }
 
     public String getPromotionId() {
@@ -80,6 +83,14 @@ public class PromotionDTO {
 
     public void setDiscountPercent(double discountPercent) {
         this.discountPercent = discountPercent;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 
 }

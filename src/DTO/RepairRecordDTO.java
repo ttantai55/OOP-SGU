@@ -15,13 +15,15 @@ public class RepairRecordDTO {
     private String note;             // ghi chú
     private TechnicianEmployee technician; // nhân viên kĩ thuật
     private String processStatus;    // trạng thái
+    private boolean status;
 
     public RepairRecordDTO() {
+        this.status = true;
     }
 
     public RepairRecordDTO(String warrantyId, String repairId, Date repairDate, int attemptNumber,
                               String errorDescription, String solution, String replacedParts,
-                              double repairCost, String note, TechnicianEmployee technician, String processStatus) {
+                              double repairCost, String note, TechnicianEmployee technician, String processStatus, boolean status) {
         this.warrantyId = warrantyId;
         this.repairId = repairId;
         this.repairDate = repairDate;
@@ -33,6 +35,7 @@ public class RepairRecordDTO {
         this.note = note;
         this.technician = technician;
         this.processStatus = processStatus;
+        this.status = status;
     }
 
     // Cập nhật Getter/Setter
@@ -122,5 +125,13 @@ public class RepairRecordDTO {
 
     public void setProcessStatus(String processStatus) {
         this.processStatus = processStatus;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 }
