@@ -18,41 +18,20 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Scanner;
 
-public abstract class ProductListDAO  implements IRepository<ProductsDTO> {
+public class ProductListDAO  implements IProductManage<ProductsDTO> {
     private ProductsDTO[] pList;
 
-    private final String filePath = "productlist.txt";
+    private final String filePath = "data/product.txt";
 
     static Scanner sc = new Scanner(System.in);
 
     // Phải có Constructor để khởi tạo mảng, tránh NullPointerException
     public ProductListDAO() {
-       this.pList = new ProductsDTO[0]; 
-        // Sau này bạn sẽ gọi hàm đọc File ở đây để nạp dữ liệu vào pList
-        if (this.pList == null) {
-            this.pList = new ProductsDTO[0]; 
-        }
+        // Khởi tạo mảng rỗng trước để tránh Null
+        this.pList = new ProductsDTO[0]; 
+         
     }
 
-    public void inputList(){
-        int temp;
-        System.out.println("Moi nhap so luong San Pham can nhap:");
-        int amount = Integer.parseInt(sc.nextLine());
-        pList = new ProductsDTO[amount];
-        
-        for (int i = 0; i < pList.length; i++) {
-            System.out.println("Moi chon Danh Muc cho San pham: \n1.Laptop \n2.Phu kien");
-            temp = Integer.parseInt(sc.nextLine());
-            if(temp == 1) { 
-                pList[i] = new LaptopDTO();
-            }
-            if (temp == 2) {
-                pList[i] = new AccessoryDTO();
-            }
-            pList[i].input();
-            System.out.println(" Da nhap thanh cong San pham thu " + (i + 1));
-        }
-    }
 
     public void displayGroupedProducts(ProductsDTO[] pList) {
         // kiem tra mang 
@@ -158,7 +137,8 @@ public abstract class ProductListDAO  implements IRepository<ProductsDTO> {
         displayGroupedProducts(filteredList);
     }
 
-    public void findAtProducts(){
+    //Vua tim kiem theo ten hoac ID
+    public void searchInList(){
         String keyword;
         System.out.println("Moi nhap ten san pham hoac ma san pham (ID) can tim: ");
         while(true){
@@ -208,7 +188,6 @@ public abstract class ProductListDAO  implements IRepository<ProductsDTO> {
         pList[pList.length-1] = product;
         System.out.println("Da them thanh cong san pham");
 
-        saveDataToFile();
     }
 
     @Override
@@ -227,7 +206,6 @@ public abstract class ProductListDAO  implements IRepository<ProductsDTO> {
         }
         else System.out.println("Khong tim thay San Pham de xoa!");
 
-        saveDataToFile();
     }
 
     @Override
@@ -249,13 +227,22 @@ public abstract class ProductListDAO  implements IRepository<ProductsDTO> {
             System.out.println("Khong tim thay san pham can cap nhat!");
         }
 
-        saveDataToFile();
-
     // nen co 1 ham ở main để cho ng dùng thoải mái chọn thuộc tính mà họ muốn thay đổi sau đó thì chỉ cần 1 thao tác update là đủ. 
     }
 
+    @Override
+    public ProductsDTO findById(String imei) {
+        for (ProductsDTO product : pList) {
+           if (product != null && product.isStatus() && product.getProductID().equalsIgnoreCase(imei)) {
+                return product;
+            }
+        }
+        return null;
+    }
+
+    @Override
     //--- Ghi du lieu--
-    public void saveDataToFile() {
+    public void writeFile(String filePath) {
         try {
             FileWriter fw = new FileWriter(filePath);
             BufferedWriter bw = new BufferedWriter(fw);
@@ -274,22 +261,31 @@ public abstract class ProductListDAO  implements IRepository<ProductsDTO> {
         }
     }
 
+    @Override
     //---Doc du lieu---
-    public ProductsDTO[] loadDataFromFile(){
+    public void readFile(String filePath){
         ProductsDTO[] tempArr = new ProductsDTO[0];
         try {
-            FileReader fr = new FileReader(filePath);
+            // Nhớ giữ lại đoạn kiểm tra File.exists() này nhé để không bị lỗi lần chạy đầu
+            java.io.File file = new java.io.File(filePath);
+            if (!file.exists()) {
+                this.pList = tempArr; // File trống thì gán mảng rỗng cho hệ thống
+                return; // Dừng hàm
+            }
+
+
+            FileReader fr = new FileReader(file);
             BufferedReader br = new BufferedReader(fr);
 
             String line;
             String[] data;
-            while (true) { 
+            while ((line = br.readLine()) != null) { 
+
+                if (line.trim().isEmpty()) continue; // Bo qua dong trang
+
                 // Moi lan di vao vong lap reset product = null
                 ProductsDTO product = null;
-                line = br.readLine();
-                if (line == null) {
-                    break;
-                }
+        
                 // tach du lieu thanh tung cot  = dau ","
                 data = line.split(",");
 
@@ -311,7 +307,10 @@ public abstract class ProductListDAO  implements IRepository<ProductsDTO> {
         } catch (Exception e) {
             System.out.println("Loi khi doc File: "+ e.getMessage());
         }
-        return tempArr;
+        // CỰC KỲ QUAN TRỌNG:
+        // Vì hàm này là 'void' (không trả về), nên ta phải nạp trực tiếp 
+        // cái mảng vừa đọc được (tempArr) vào biến gốc (pList) của hệ thống
+        this.pList = tempArr;
     }
 
      //Ham lap rap Data vao mang 
@@ -368,6 +367,17 @@ public abstract class ProductListDAO  implements IRepository<ProductsDTO> {
             System.out.println("Loi du lieu dong Accessory: " + Arrays.toString(data));
             return null;
         }
+    }
+
+    //Dem so luong sp con trong kho
+    public int countAvailableStock(String productID) {
+        int count = 0;
+        for (ProductsDTO product : pList) {
+            if (product != null && product.isStatus() && product.getProductID().equalsIgnoreCase(productID)) {
+                count++;
+            }
+        }
+        return count;
     }
 
 }

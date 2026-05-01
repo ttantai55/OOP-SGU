@@ -1,7 +1,7 @@
 package DTO;
 import java.util.Scanner;
 
-public abstract class ProductsDTO {
+public class ProductsDTO {
     private String productIMEI; // duy nhat 
     private String productID;   // quan ly dong may
     private CategoryDTO category;
@@ -138,8 +138,10 @@ public abstract class ProductsDTO {
         System.out.println(toString());
     }
 
-    // Class cha ch co thong so
-    public abstract String getSpecSummary();
+
+    public String getSpecSummary() {
+        return "Khong co thong tin!";
+    }
 
     // Noi chuoi de Doc hoac Xuat File
     public String toFileString() {
