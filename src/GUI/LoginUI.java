@@ -31,12 +31,6 @@ public class LoginUI {
     public void start() {
         int choice = -1;
         do {
-            try {
-                // Xoa man hinh truoc khi in Menu (Neu thay da co lop ConsoleUtils)
-            } catch (Exception e) {
-                // Bo qua neu he thong chua ho tro xoa man hinh
-            }
-
             System.out.println("\n" + "=".repeat(41));
             System.out.println("     HE THONG QUAN LY CUA HANG LAPTOP    ");
             System.out.println("=".repeat(41));
@@ -116,7 +110,6 @@ public class LoginUI {
         }
     }
 
-    // [OOP] Encapsulation: Ham dang ky tich hop OTP ma chung ta da xay dung
     private void registerCustomerAccount() {
         AccountDAO accountDAO = new AccountDAO();
         CustomerDAO customerDAO = new CustomerDAO();
