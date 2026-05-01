@@ -3,9 +3,12 @@ package DAO;
 import DTO.WarrantyDTO;
 import java.util.Arrays;
 import java.text.SimpleDateFormat;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Date;
 
 // quản lí các bảo hành
 public class WarrantyListDAO implements IRepository<WarrantyDTO> {
@@ -27,9 +30,11 @@ public class WarrantyListDAO implements IRepository<WarrantyDTO> {
         for (WarrantyDTO w : warranties) {
             if (w != null && w.getWarrantyId().equals(id)) {
                 w.setStatus(false);
+                System.out.println("Da huy bao hanh: " + id + ".");
                 return;
             }
         }
+        System.out.println("Khong tim thay bao hanh: " + id + ".");
     }
 
     @Override
@@ -57,8 +62,8 @@ public class WarrantyListDAO implements IRepository<WarrantyDTO> {
     public WarrantyDTO[] findByName(String productName) {
         WarrantyDTO[] temp = new WarrantyDTO[0];
         for (WarrantyDTO w : warranties) {
-            if (w != null && w.getProduct().getProductName()
-                    .toLowerCase().contains(productName.toLowerCase())) {
+            if (w != null && w.getProduct() != null &&
+                    w.getProduct().getProductName().toLowerCase().contains(productName.toLowerCase())) {
                 temp = Arrays.copyOf(temp, temp.length + 1);
                 temp[temp.length - 1] = w;
             }
@@ -77,9 +82,10 @@ public class WarrantyListDAO implements IRepository<WarrantyDTO> {
                     trangThai = "Het hieu luc";
                 }
 
+                String tenSP = (w.getProduct() != null) ? w.getProduct().getProductName() : "N/A";
                 System.out.println("Ma bao hanh : " + w.getWarrantyId()
                         + " | Hoa don   : " + w.getInvoiceId()
-                        + " | San pham  : " + w.getProduct().getProductName()
+                        + " | San pham  : " + tenSP
                         + " | Tu        : " + sdf.format(w.getStartDate())
                         + " | Den       : " + sdf.format(w.getEndDate())
                         + " | Trang thai: " + trangThai);
@@ -89,7 +95,49 @@ public class WarrantyListDAO implements IRepository<WarrantyDTO> {
 
     @Override
     public void readFile(String filePath) {
-        // Sẽ bổ sung sau
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(filePath));
+            String line = br.readLine();
+
+            while (line != null) {
+                String[] parts = line.split(",");
+
+                WarrantyDTO w = new WarrantyDTO();
+
+                w.setWarrantyId(parts[0]);
+                w.setInvoiceId(parts[1]);
+                // parts[2] là productId - bỏ qua vì cần đối tượng ProductsDTO đầy đủ
+
+                try {
+                    Date ngayBatDau = sdf.parse(parts[3]);
+                    w.setStartDate(ngayBatDau);
+                    Date ngayKetThuc = sdf.parse(parts[4]);
+                    w.setEndDate(ngayKetThuc);
+                } catch (Exception e) {
+                    // bỏ qua nếu không đọc được ngày
+                }
+
+                if (parts[5].equals("Active")) {
+                    w.setStatus(true);
+                } else {
+                    w.setStatus(false);
+                }
+
+                w.setRepairCount(Integer.parseInt(parts[6]));
+
+                int viTri = warranties.length;
+                warranties = Arrays.copyOf(warranties, viTri + 1);
+                warranties[viTri] = w;
+
+                line = br.readLine();
+            }
+
+            br.close();
+            System.out.println("Đọc dữ liệu từ file " + filePath + " thành công!");
+
+        } catch (IOException e) {
+            System.err.println("Lỗi khi đọc file: " + e.getMessage());
+        }
     }
 
     @Override

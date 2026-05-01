@@ -76,8 +76,9 @@ public class WarrantyListBUS {
         System.out.println("\n" + "=".repeat(90));
         System.out.println("                    CHI TIET BAO HANH                      ");
         System.out.printf(" Ma BH: %-20s | HD: %s%n", warranty.getWarrantyId(), warranty.getInvoiceId());
+        String tenSP = (warranty.getProduct() != null) ? warranty.getProduct().getProductName() : "N/A";
         System.out.printf(" San pham: %-15s | Tu: %s | Den: %s%n",
-                warranty.getProduct().getProductName(),
+                tenSP,
                 sdf.format(warranty.getStartDate()),
                 sdf.format(warranty.getEndDate()));
         String trangThai;
@@ -181,8 +182,7 @@ public class WarrantyListBUS {
             Employee emp = employeeDAO.findById(techId);
             if (emp instanceof TechnicianEmployee) {
                 technician = (TechnicianEmployee) emp;
-            }
-            if (technician == null) {
+            } else {
                 System.out.println("Loi: Khong tim thay ky thuat vien. Vui long nhap lai!");
             }
         }

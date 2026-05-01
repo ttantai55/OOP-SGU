@@ -4,9 +4,12 @@ import DTO.GoodsReceiptDTO;
 import DTO.GoodsReceiptItemDTO;
 import java.util.Arrays;
 import java.text.SimpleDateFormat;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Date;
 
 public class GoodsReceiptListDAO implements IRepository<GoodsReceiptDTO> {
     private static GoodsReceiptDTO[] receiptList = new GoodsReceiptDTO[0];
@@ -137,7 +140,48 @@ public class GoodsReceiptListDAO implements IRepository<GoodsReceiptDTO> {
 
     @Override
     public void readFile(String filePath) {
-        // Sẽ bổ sung sau
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(filePath));
+            String line = br.readLine();
+
+            while (line != null) {
+                String[] parts = line.split(",");
+
+                GoodsReceiptDTO rec = new GoodsReceiptDTO();
+
+                rec.setReceiptId(parts[0]);
+
+                try {
+                    Date ngayNhap = sdf.parse(parts[1]);
+                    rec.setCreatedDate(ngayNhap);
+                } catch (Exception e) {
+                    // bỏ qua nếu không đọc được ngày
+                }
+
+                // parts[2] là supplierId - cần đối tượng Supplier đầy đủ
+                // parts[3] là receiverId - cần đối tượng Employee đầy đủ
+
+                if (parts[4].equals("Active")) {
+                    rec.setStatus(true);
+                } else {
+                    rec.setStatus(false);
+                }
+
+                // parts[5] là totalPrice - tính toán tự động, không cần đọc
+
+                int viTri = receiptList.length;
+                receiptList = Arrays.copyOf(receiptList, viTri + 1);
+                receiptList[viTri] = rec;
+
+                line = br.readLine();
+            }
+
+            br.close();
+            System.out.println("Đọc dữ liệu từ file " + filePath + " thành công!");
+
+        } catch (IOException e) {
+            System.err.println("Lỗi khi đọc file: " + e.getMessage());
+        }
     }
 
     @Override

@@ -2,6 +2,8 @@ package DAO;
 
 import DTO.GoodsReceiptItemDTO;
 import java.util.Arrays;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -39,7 +41,7 @@ public class GoodsReceiptItemListDAO implements IRepository<GoodsReceiptItemDTO>
             }
         }
 
-        this.details = temp; // mảng chỉ còn lại các item không bị xóa
+        details = temp; // mảng chỉ còn lại các item không bị xóa
 
         if (found) {
             System.out.println("Đã xóa sản phẩm " + productId + " khỏi phiếu nhập " + receiptId);
@@ -122,7 +124,34 @@ public class GoodsReceiptItemListDAO implements IRepository<GoodsReceiptItemDTO>
 
     @Override
     public void readFile(String filePath) {
-        // Sẽ bổ sung sau
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(filePath));
+            String line = br.readLine();
+
+            while (line != null) {
+                String[] parts = line.split(",");
+
+                GoodsReceiptItemDTO item = new GoodsReceiptItemDTO();
+
+                item.setReceiptId(parts[0]);
+                // parts[1] là productId, parts[2] là productName - cần đối tượng ProductsDTO đầy đủ
+                item.setQuantity(Integer.parseInt(parts[3]));
+                item.setImportPrice(Double.parseDouble(parts[4]));
+                // parts[5] là subTotal - tính toán tự động, không cần đọc
+
+                int viTri = details.length;
+                details = Arrays.copyOf(details, viTri + 1);
+                details[viTri] = item;
+
+                line = br.readLine();
+            }
+
+            br.close();
+            System.out.println("Đọc dữ liệu từ file " + filePath + " thành công!");
+
+        } catch (IOException e) {
+            System.err.println("Lỗi khi đọc file: " + e.getMessage());
+        }
     }
 
     @Override

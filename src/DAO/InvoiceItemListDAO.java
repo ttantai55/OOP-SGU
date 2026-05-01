@@ -2,6 +2,8 @@ package DAO;
 
 import DTO.InvoiceItemDTO;
 import java.util.Arrays;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -39,7 +41,7 @@ public class InvoiceItemListDAO implements IRepository<InvoiceItemDTO> {
             }
         }
 
-        this.itemList = temp; // mảng chỉ còn lại sản phẩm ko bị xóa
+        itemList = temp; // mảng chỉ còn lại sản phẩm ko bị xóa
 
         if (found) {
             System.out.println("Đã xóa sản phẩm " + productId + " khỏi hóa đơn " + invoiceId);
@@ -113,7 +115,36 @@ public class InvoiceItemListDAO implements IRepository<InvoiceItemDTO> {
 
     @Override
     public void readFile(String filePath) {
-        // Sẽ bổ sung sau
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(filePath));
+            String line = br.readLine();
+
+            while (line != null) {
+                String[] parts = line.split(",");
+
+                InvoiceItemDTO item = new InvoiceItemDTO();
+
+                item.setInvoiceId(parts[0]);
+                // parts[1] là productId, parts[2] là productName - cần đối tượng ProductsDTO đầy đủ
+                item.setQuantity(Integer.parseInt(parts[3]));
+                // parts[4] là unitPrice - lấy từ ProductsDTO, bỏ qua
+                // parts[5] là promotionId - cần đối tượng PromotionDTO đầy đủ
+                // parts[6] là warrantyId - cần đối tượng WarrantyDTO đầy đủ
+                // parts[7] là subTotal - tính toán tự động, không cần đọc
+
+                int viTri = itemList.length;
+                itemList = Arrays.copyOf(itemList, viTri + 1);
+                itemList[viTri] = item;
+
+                line = br.readLine();
+            }
+
+            br.close();
+            System.out.println("Đọc dữ liệu từ file " + filePath + " thành công!");
+
+        } catch (IOException e) {
+            System.err.println("Lỗi khi đọc file: " + e.getMessage());
+        }
     }
 
     @Override

@@ -27,11 +27,13 @@ public class GoodsReceiptItemDTO {
 
     // lấy id và tên sản phẩm từ Product
     public String getProductId() {
-        return product.getProductID();
+        if (this.product != null) return product.getProductID();
+        return "N/A";
     }
 
     public String getProductName() {
-        return product.getProductName();
+        if (this.product != null) return product.getProductName();
+        return "N/A";
     }
 
     public String getReceiptId(){
