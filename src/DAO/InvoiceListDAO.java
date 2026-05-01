@@ -9,7 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 
-public class InvoiceListDAO implements IRepository<InvoiceDTO> {
+public class InvoiceListDAO implements IInvoiceManage<InvoiceDTO> {
    
     private static InvoiceDTO[] invoiceList = new InvoiceDTO[0];
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");

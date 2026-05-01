@@ -6,7 +6,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class InvoiceItemListDAO implements IRepository<InvoiceItemDTO> {
+public class InvoiceItemListDAO implements IInvoiceManage<InvoiceItemDTO> {
     private static InvoiceItemDTO[] itemList = new InvoiceItemDTO[0];
 
     public InvoiceItemListDAO() {
@@ -73,12 +73,7 @@ public class InvoiceItemListDAO implements IRepository<InvoiceItemDTO> {
     }
 
     @Override
-    public InvoiceItemDTO findById(String productId) {
-        System.out.println("Hãy sử dụng hàm findDetail(invoiceId, productId).");
-        return null;
-    }
-
-    public InvoiceItemDTO findDetail(String invoiceId, String productId) {
+    public InvoiceItemDTO findById(String invoiceId, String productId) {
         for (InvoiceItemDTO item : itemList) {
             if (item != null
                 && item.getInvoiceId().equals(invoiceId)
