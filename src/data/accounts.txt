@@ -1,2 +1,7 @@
 ACC01,LHTCoder,240795,quan ly,true
 ACC02,TTTCoder,SV2005,khach hang,true
+KH001,LHTShopping,12345678,Khach hang,true
+ACC01,LHTCoder,240795,quan ly,true
+ACC02,TTTCoder,SV2005,khach hang,true
+KH001,LHTShopping,12345678,Khach hang,true
+KH002,LHTShopping2,12345678,Khach hang,true

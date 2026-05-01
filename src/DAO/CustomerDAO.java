@@ -193,13 +193,13 @@ public class CustomerDAO implements IRepository<Customer> {
         for (int i = 0; i < count; i++) {
             switch (customers[i].getCustomerType().toUpperCase()) {
                 case "VIP": VIP++; break;
-                case "thuong":  thuong++;  break;
-                case "moi":     moi++;     break;
+                case "Thuong":  thuong++;  break;
+                case "Moi":     moi++;     break;
             }
         }
         System.out.println("VIP : " + VIP);
-        System.out.println("thuong  : " +  thuong);
-        System.out.println("moi     : " + moi);
+        System.out.println("Thuong  : " +  thuong);
+        System.out.println("Moi     : " + moi);
     }
     //
     public void sapXepTheoTen() {
