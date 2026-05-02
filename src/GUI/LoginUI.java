@@ -15,19 +15,18 @@ import java.util.Date;
 import java.util.Random;
 import java.util.Scanner;
 
-// [OOP] Class: Giao dien xu ly Dang nhap, Dang ky va dieu huong he thong
 public class LoginUI {
     
-    // [OOP] Association: Lien ket voi AccountService de xu ly logic nghiep vu
     private AccountService accountService;
     private Scanner sc;
 
     public LoginUI() {
         this.accountService = new AccountService();
         this.sc = new Scanner(System.in);
+        // [ĐÃ SỬA LỖI] Ra lệnh nạp dữ liệu 1 lần duy nhất khi khởi động ứng dụng
+        this.accountService.loadFromFile();
     }
 
-    // [OOP] Method: Diem vao (Entry point) cua giao dien khoi dong
     public void start() {
         int choice = -1;
         do {
@@ -43,33 +42,31 @@ public class LoginUI {
             try {
                 choice = Integer.parseInt(sc.nextLine().trim());
             } catch (NumberFormatException e) {
-                choice = -1; // Bat loi neu nhap chuoi thay vi so
+                choice = -1; 
             }
 
             switch (choice) {
                 case 1:
-                    handleLogin(); // Goi tuc tien trinh dang nhap
+                    handleLogin(); 
                     break;
                 case 2:
-                    registerCustomerAccount(); // Goi tien trinh dang ky
+                    registerCustomerAccount(); 
                     break;
                 case 0:
                     System.out.println("\n[Thong bao] Cam on ban da su dung he thong. Tam biet!");
-                    System.exit(0); // [OOP] Tuong tac voi JVM de tat phan mem
+                    System.exit(0); 
                     break;
                 default:
                     System.out.println("\n[Loi] Lua chon khong hop le. Vui long thu lai!");
                     System.out.print("Nhan Enter de tiep tuc...");
                     sc.nextLine();
             }
-        // Vong lap giup he thong luon song, cho phep dang nhap/dang ky lien tuc
         } while (choice != 0); 
     }
 
-    // [OOP] Encapsulation: Tach logic dang nhap thanh ham private
     private void handleLogin() {
         int attempts = 0;
-        final int MAX_ATTEMPTS = 5; // Gioi han 5 lan nhap sai
+        final int MAX_ATTEMPTS = 5; 
 
         System.out.println("\n--- DANG NHAP HE THONG ---");
         while (attempts < MAX_ATTEMPTS) {
@@ -80,17 +77,13 @@ public class LoginUI {
 
             System.out.println("[Thong bao] Dang kiem tra du lieu...");
             
-            // Goi ham xu ly dang nhap tu AccountService
             String role = accountService.loginAndGetRole(username, password);
 
             if (role != null) {
                 System.out.println("\n[Thong bao] DANG NHAP THANH CONG!");
                 System.out.println("Xin chao, " + username + " | Chuc vu: " + role.toUpperCase());
                 
-                // Dieu huong Menu dua tren quyen (Role)
                 routeToMenu(role);
-                
-                // [Quan trong]: Khi thoat Menu ben trong (Dang xuat), dung return de quay tro lai Menu ngoai cung (start)
                 return; 
             } else {
                 attempts++;
@@ -99,13 +92,12 @@ public class LoginUI {
                 }
             }
 
-            // Neu nhap sai qua gioi han
             if (attempts >= MAX_ATTEMPTS) {
                 System.out.println("\n[Loi] HE THONG BAO MAT: Nhap sai qua " + MAX_ATTEMPTS + " lan!");
                 System.out.println("Huy thao tac dang nhap de bao ve du lieu.");
                 System.out.print("Nhan Enter de quay lai Menu...");
                 sc.nextLine();
-                return; // Tra ve Menu chinh thay vi tat luon chuong trinh
+                return; 
             }
         }
     }
@@ -114,6 +106,7 @@ public class LoginUI {
         AccountDAO accountDAO = new AccountDAO();
         CustomerDAO customerDAO = new CustomerDAO();
         
+        // [ĐÃ SỬA LỖI] Vì DAO đã thụ động, ta phải ra lệnh cho nó đọc file tại đây
         accountDAO.readFile("src/data/accounts.txt");
         customerDAO.readFile("src/data/customers.txt");
 
@@ -121,7 +114,6 @@ public class LoginUI {
         System.out.println("   DANG KY TAI KHOAN KHACH HANG MOI");
         System.out.println("=".repeat(50));
 
-        // --- BUOC 1: THU THAP THONG TIN TAI KHOAN ---
         String username;
         while (true) {
             username = Validation.getNonEmptyString("1. Nhap ten dang nhap: ");
@@ -133,7 +125,6 @@ public class LoginUI {
         }
         String password = Validation.getNonEmptyString("2. Nhap mat khau: ");
 
-        // --- BUOC 2: THU THAP THONG TIN KHACH HANG ---
         System.out.println("\n--- THONG TIN CA NHAN ---");
         String customerId = "KH" + String.format("%03d", customerDAO.getCount() + 1);
         
@@ -141,7 +132,8 @@ public class LoginUI {
         String phone = Validation.getValidPhone("4. So dien thoai: ");
         String email = Validation.getValidEmail("5. Email: ");
 
-        Account newAcc = new Account(customerId, username, password, "Khach hang", true, null);
+        String accountId = "ACC_" + customerId;
+        Account newAcc = new Account(accountId, username, password, "Khach hang", true, customerId);
         
         Customer newCus = new Customer();
         newCus.setCustomerId(customerId);
@@ -152,7 +144,6 @@ public class LoginUI {
         newCus.setCustomerType("Moi");
         newCus.setRegisteredDate(new Date());
 
-        // Tu dong khoi tao dia chi rong de tranh NullPointerException khi luu file
         Address emptyAddress = new Address();
         emptyAddress.setHouseNumber("Chua cap nhat");
         emptyAddress.setStreet("Chua cap nhat");
@@ -161,7 +152,6 @@ public class LoginUI {
         emptyAddress.setCity("Chua cap nhat");
         newCus.setAddress(emptyAddress);
 
-        // --- BUOC 3: TAO VA LUU OTP RA FILE ---
         String generatedOTP = String.format("%06d", new Random().nextInt(999999));
         try (BufferedWriter bw = new BufferedWriter(new FileWriter("src/data/OTP.txt"))) {
             bw.write("Ma OTP dang ky cua khach hang '" + fullName + "' la: " + generatedOTP);
@@ -172,7 +162,6 @@ public class LoginUI {
             return;
         }
 
-        // --- BUOC 4: XAC THUC OTP ---
         System.out.println("\n[He thong] Da gui yeu cau dang ky!");
         System.out.println(">>> VUI LONG GAP NHAN VIEN QUAY DE LAY MA OTP XAC NHAN <<<");
         
@@ -192,15 +181,16 @@ public class LoginUI {
             }
         }
 
-        // --- BUOC 5: XU LY KET QUA ---
         if (isVerified) {
-            // [OOP] Delegation: Uy quyen luu tru cho DAO
             accountDAO.add(newAcc);
-            accountDAO.writeFile("src/data/accounts.txt");
-            
             customerDAO.add(newCus);
+            
+            accountDAO.writeFile("src/data/accounts.txt");
             customerDAO.writeFile("src/data/customers.txt");
             
+            // [QUAN TRỌNG] Tải lại dữ liệu vào accountService chính để Khách hàng có thể đăng nhập ngay
+            this.accountService.loadFromFile();
+
             System.out.println("\n[Thong bao] CHUC MUNG! Dang ky tai khoan thanh cong.");
             System.out.println("Ban co the dang nhap ngay bay gio.");
         } else {
@@ -211,7 +201,6 @@ public class LoginUI {
         sc.nextLine();
     }
 
-    // Ham dieu huong Menu dua tren chuc vu
     private void routeToMenu(String role) {
         String userRole = role.toLowerCase();
         
