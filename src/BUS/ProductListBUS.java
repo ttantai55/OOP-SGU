@@ -17,26 +17,7 @@ public class ProductListBUS {
         //loadFile();
     }
 
-    /*public void inputList(){
-        int temp;
-        System.out.println("Moi nhap so luong San Pham can nhap:");
-        int amount = Integer.parseInt(sc.nextLine());
-        pList = new ProductsDTO[amount];
-        
-        for (int i = 0; i < pList.length; i++) {
-            System.out.println("Moi chon Danh Muc cho San pham: \n1.Laptop \n2.Phu kien");
-            temp = Integer.parseInt(sc.nextLine());
-            if(temp == 1) { 
-                pList[i] = new LaptopDTO();
-            }
-            if (temp == 2) {
-                pList[i] = new AccessoryDTO();
-            }
-            pList[i].input();
-            System.out.println(" Da nhap thanh cong San pham thu " + (i + 1));
-        }
-    }*/
-    
+
     //=========LOAD / SAVE ========
 
     public void loadFile(){
@@ -62,13 +43,16 @@ public class ProductListBUS {
             return;
         }
         
-        if (choice == 1) { 
-            product = new LaptopDTO();
-        } else if (choice == 2) {
-            product = new AccessoryDTO();
-        } else {
-            System.out.println("Lua chon khong hop le. Huy thao tac!");
-            return;
+        switch (choice) {
+            case 1:
+                product = new LaptopDTO();
+                break;
+            case 2:
+                product = new AccessoryDTO();
+                break;
+            default:
+                System.out.println("Lua chon khong hop le. Huy thao tac!");
+                return;
         }
         product.input();
         productDAO.add(product);

@@ -8,7 +8,7 @@ import java.io.*;
 public class AccountDAO implements IRepository<Account> {
     
     // [OOP] Tinh Dong goi (Encapsulation): Bao ve du lieu mang bang private
-    private Account[] accounts;
+    private final Account[] accounts;
     private int count;
     private final String defaultPath = "src/data/accounts.txt"; 
 
@@ -79,7 +79,7 @@ public class AccountDAO implements IRepository<Account> {
     }
 
     @Override
-    public Object[] findByName(String name) {
+    public Account[] findByName(String name) {
         Account[] result = new Account[count];
         int size = 0;
         for (int i = 0; i < count; i++) {

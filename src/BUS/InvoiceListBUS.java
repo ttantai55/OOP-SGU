@@ -20,6 +20,7 @@ import DTO.Transfer;
 import DTO.Installment;
 import java.text.SimpleDateFormat;
 import DAO.InvoiceItemListDAO;
+import DTO.CartItemDTO;
 
 import java.util.Arrays;
 import java.util.Calendar;
@@ -29,13 +30,13 @@ import java.util.Scanner;
 public class InvoiceListBUS {
     Scanner sc = new Scanner(System.in);
 
-    private InvoiceListDAO invDAO = new InvoiceListDAO();
-    private InvoiceItemListDAO invItemDAO = new InvoiceItemListDAO();
-    private CustomerDAO customerDAO = new CustomerDAO();
-    private EmployeeDAO employeeDAO = new EmployeeDAO();
-    private ProductListDAO productsDAO = new ProductListDAO();
-    private PromotionListDAO promotionDAO = new PromotionListDAO();
-    private WarrantyListDAO warrantyDAO = new WarrantyListDAO();
+    private final InvoiceListDAO invDAO = new InvoiceListDAO();
+    private final InvoiceItemListDAO invItemDAO = new InvoiceItemListDAO();
+    private final CustomerDAO customerDAO = new CustomerDAO();
+    private final EmployeeDAO employeeDAO = new EmployeeDAO();
+    private final ProductListDAO productsDAO = new ProductListDAO();
+    private final PromotionListDAO promotionDAO = new PromotionListDAO();
+    private final WarrantyListDAO warrantyDAO = new WarrantyListDAO();
 
 
 
@@ -99,7 +100,7 @@ invoice.setEmployee(emp);
         InvoiceItemDTO detail = new InvoiceItemDTO();
 
         System.out.print("  Mã IMEI: ");
-        ProductsDTO product = productsDAO.findByIMEI(sc.nextLine());
+        ProductsDTO product = productsDAO.findById(sc.nextLine());
         if (product == null) {
             System.out.println("  Không tìm thấy sản phẩm! Vui lòng nhập lại.");
             continue;
@@ -247,7 +248,7 @@ public void printInvoice(String invoiceId) {
         System.out.println(" Trạng thái hóa đơn: " + invoice.isStatus());
         System.out.println("-".repeat(115));
         System.out.printf("%-4s | %-10s | %-20s | %-4s | %-13s | %-8s | %-15s | %-15s%n",
-                "STT", "Mã SP", "Tên SP", "SL", "Đơn Giá", "KM(%)", "Mã BH", "Thành Tiền");
+                "STT", "Mã SP", "Tên SP", "SL", "Đơn Giá", "KM(%)", "Bảo Hành", "Thành Tiền");
         System.out.println("-".repeat(115));
 
         double tongCong = 0;
@@ -264,6 +265,7 @@ public void printInvoice(String invoiceId) {
                 kmInfo = "N/A";
             }
 
+            String thoiGianBH = item.getProduct().getWarrantyPeriod() + "thang";
             System.out.printf("%-4d | %-10s | %-20s | %-4d | %-13.0f | %-8s | %-15s | %,15.0f VNĐ%n",
                     (i + 1),
                     item.getProductId(),
@@ -271,7 +273,7 @@ public void printInvoice(String invoiceId) {
                     item.getQuantity(),
                     item.getUnitPrice(),
                     kmInfo,
-                    item.getWarrantyId(),
+                    thoiGianBH,
                     thanhTien);
 
             tongCong += thanhTien;
@@ -326,5 +328,133 @@ System.out.println("=".repeat(115) + "\n");
         System.out.print("Nhập mã hóa đơn cần hủy: ");
         String id = sc.nextLine();
         invDAO.remove(id);
+    }
+
+    // =======Ham thanh toan======= 
+
+    public void checkoutFromCart(String username, CartItemDTO[] myCart, CartBUS cartBUS) {
+        // Kiem tra 
+
+        if (myCart == null || myCart.length == 0) {
+            System.out.println("Gio hang cua ban dang trong, moi quay lai mua hang");
+            return;
+        }
+        // Vi khi xuat hoa don can lay thong tin chi tiet nen tao 1 doi tuong de lay thong tin
+        Customer cus = customerDAO.findByUsername(username);
+        if (cus == null) {
+            System.out.println("Khong tim thay du lieu khach hang");
+            return;
+        }
+
+        //==== Khoi tao hoa don====
+        String newInvoiceId = "HD" + System.currentTimeMillis();//ham nay tu tao ma hoa don ngay tai thoi diem bam tao
+        InvoiceDTO invoice = new InvoiceDTO();
+        invoice.setInvoiceId(newInvoiceId);
+        invoice.setCreatedDate(createdDate);
+        invoice.setCustomer(cus); 
+
+
+        //Tao 1 ham lay thong tin nhan vien dang ban hang
+
+        Employee emp = employeeDAO.findById("NV01"); //  tam thoi de nhu vay
+        invoice.setEmployee(emp);
+
+        // Lay du lieu tu gio hang mang sang Chi tiet Hoa don 
+        myCart = cartBUS.getMyCartItems();
+        InvoiceItemDTO[] invoiceDetail = new InvoiceItemDTO[myCart.length];
+        
+        for (int i = 0 ; invoiceDetail.length ; i++) {
+            CartItemDTO cartItem = myCart[i];
+
+            InvoiceItemDTO item = new InvoiceItemDTO();
+            item.setInvoiceId(newInvoiceId);
+            item.setQuantity(cartItem.getQuantity());
+
+            ProductsDTO product = productsDAO.findById(cartItem.getProductID());
+            item.setProduct(product);
+
+            item.setPromotion(null); // de tam 
+            item.setWarranty(null); // de tam
+
+            invoiceDetail[i] = item;
+
+        }
+
+        //===Tinh tien===
+        double total = InvoiceListDAO.calculateTotalPrice(invoice);
+        System.out.printf("\n---> TONG CAN THANH TOAN: %,.0f VND <---\n", total);
+
+        PaymentDTO payment = paymentMethod(newInvoiceId, total);
+
+        if (payment != null) {
+            // Luu hoa don
+            invoice.setPayment(payment);
+            invDAO.add(invoice); // Hinh nhu file nay ch dc save 
+
+            for (InvoiceItemDTO item : invoice.getInvoiceItemList()) {
+                invItemDAO.add(item);
+                // productBus.deductStock(item.getProductId(), item.getQuantity()); <-- CODE TRỪ KHO ĐỂ Ở ĐÂY
+            }
+
+            //Don dep gio hang sau khi thanh toan xong
+            cartBUS.clearMyCart();
+            System.out.println("Thanh toan thanh cong!");
+        }
+        else {
+            System.out.println("Thanh toan that bai! Vui long thu lai sau");
+        }
+    }
+
+    public PaymentDTO paymentMethod(String invoiceID, double total) {
+        System.out.println("Chon phuong thuc thanh toan:");
+        System.out.println(" 1. Tien mat (Cash)");
+        System.out.println(" 2. The tin dung (Credit)");
+        System.out.println(" 3. Chuyen khoan (Transfer)");
+        System.out.println(" 4. Tra gop (Installment)");
+        System.out.print("-> Lua chon (1-4, hoac phim khac de Huy): ");
+
+        int choice;
+            choice = Integer.parseInt(sc.nextLine());
+        
+        String paymentId = invoiceID + "-Pay";
+        Date paymentDate = new Date();
+
+        switch (choice) {
+            case 1:
+                System.out.println("So tien phai tra:");
+                double cashReceived = Double.parseDouble(sc.next());
+                if (cashReceived < total) {
+                    System.out.println("Loi: Thanh toan that bai!");
+                    return null;
+                }
+                return new Cash(paymentId, paymentDate, cashReceived);
+            case 2:
+                System.out.println("Ngan hang: ");
+                String bankCredit = sc.nextLine();
+                System.out.println("So the: ");
+                String numId = sc.nextLine();
+                System.out.println("Ten chu the: ");
+                String nameCard = sc.nextLine();
+                return new Credit(paymentId, paymentDate, numId, nameCard, bankCredit);
+            case 3:
+                System.out.print("Ngan hang: ");
+                String bankTrans = sc.nextLine();
+                System.out.print("So tai khoan: ");
+                String accNum = sc.nextLine();
+                System.out.print("Ten chu tai khoan: ");
+                String accName = sc.nextLine();
+                return new Transfer(paymentId, paymentDate, accNum, accName, bankTrans);    
+            case 4:
+                System.out.print("Cong ty tai chinh: ");
+                String company = sc.nextLine();
+                System.out.print("So thang tra gop: ");
+                int months = Integer.parseInt(sc.nextLine());
+                System.out.print("Tien tra truoc: ");
+                double downPayment = Double.parseDouble(sc.nextLine());
+                return new Installment(paymentId, paymentDate, company, "HD-GOP", months, downPayment);
+            default:
+                System.out.println("Da huy thanh toan!");
+                return null;
+        }
     }
 }

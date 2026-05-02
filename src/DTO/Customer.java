@@ -8,6 +8,7 @@ public class Customer extends Person {
     private int loyaltyPoints; // điểm tích lũy
     private String customerType; // loại khách hàng (Kim cương , bạch kim, vàng)
     private Date registeredDate; //ngày đăng ký
+    private String username;
     static Scanner sc = new Scanner(System.in);
     public Customer(){}
     public Customer(String customerId, int loyaltyPoints, String customerType, Date registeredDate) {
@@ -39,6 +40,14 @@ public class Customer extends Person {
     }
     public void setRegisteredDate(Date registeredDate){
         this.registeredDate = registeredDate;
+    }
+    
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
 

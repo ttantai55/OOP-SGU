@@ -72,6 +72,7 @@ public class CartBUS {
 
     public void updateCartItem(CartItemDTO item){
         cartDAO.update(item);
+        saveFile();
     }
 
     public void clearMyCart() {
@@ -85,6 +86,50 @@ public class CartBUS {
         cartDAO.displayProduct(username);
     }
 
-    
+    // Lay DS sp trong gio hang cua khach hien tai
+
+    public CartItemDTO[] getMyCartItems() {
+        CartItemDTO[] cartList = cartDAO.getAllCarts();
+        int count = 0;
+
+        //Dem xem khach co bao nhieu mon
+        for(CartItemDTO item : cartList) {
+            if(item != null  && item.getUsername().equals(username)) {
+                count++;
+            }
+        }
+
+        //Tao mang moi chi chua sp ma khach da chon 
+        CartItemDTO[] myCart = new CartItemDTO[count];
+        int index = 0;
+        for (CartItemDTO item : cartList) {
+            if(item != null && item.getUsername().equals(username))
+                myCart[index] = item;
+                index++;
+        }
+        return myCart;
+    }
+
+    //Ham sua so luong cua 1 mon trong gio
+
+    public void updateQuantity(String productID) {
+        System.out.println("Moi nhap so luong moi cho san pham ban muon thay doi :");
+        int newQuantity = Integer.parseInt(sc.nextLine());
+        if(newQuantity <= 0) {
+            //Neu khach sua so luong thanh 0 hoac nho hon thi coi nhu Xoa san pham
+            removeCartItem(productID);
+            return;
+        }
+
+        CartItemDTO item = cartDAO.findItem(username, productID);
+        if (item != null) {
+            item.setQuantity(newQuantity);
+            cartDAO.update(item);
+            System.out.println("Da cap nhat so luong thanh cong!");
+        }
+        else {
+            System.out.println("Khong tim thay san pham nay trong gio hang!");
+        }
+    }
 
 }

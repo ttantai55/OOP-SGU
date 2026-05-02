@@ -67,6 +67,16 @@ public class CustomerDAO implements IRepository<Customer> {
         return result;
     }
 
+    public Customer findByUsername (String username) {
+        for (Customer cus : customers) {
+            if(cus != null && cus.getUsername().equals(username)) {
+                found = true;
+                return cus;
+            }
+        }
+        return null;
+    }
+
     @Override
     public void displayAll() {
         for (int i = 0; i < count; i++) {

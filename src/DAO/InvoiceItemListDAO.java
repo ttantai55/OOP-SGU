@@ -20,11 +20,7 @@ public class InvoiceItemListDAO implements IInvoiceManage<InvoiceItemDTO> {
 
     // khi xóa 1 chi tiết thì nên nhập cả mã hóa đơn(invoiceId) và mã sản phẩm(productId) để tránh xóa nhầm 1 chi tiết của hóa đơn khác
     @Override
-    public void remove(String id) {
-        System.out.println("Hãy sử dụng hàm removeDetails(invoiceId, productId).");
-    }
-
-    public void removeDetails(String invoiceId, String productId) {
+    public void remove(String invoiceId, String productId) {
         boolean found = false;
         InvoiceItemDTO[] temp = new InvoiceItemDTO[0]; // tạo mảng temp để duyệt và chuyển các item cần giữ lại
 
