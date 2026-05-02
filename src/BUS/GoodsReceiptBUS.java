@@ -19,11 +19,11 @@ import java.text.SimpleDateFormat;
 public class GoodsReceiptBUS {
     Scanner sc = new Scanner(System.in);
 
-    private final GoodsReceiptListDAO grDAO = new GoodsReceiptListDAO();
-    private final GoodsReceiptItemListDAO grItemDAO = new GoodsReceiptItemListDAO();
-    private final EmployeeDAO employeeDAO = new EmployeeDAO();
-    private final ProductListDAO productsDAO = new ProductListDAO();
-    private final SupplierDAO supplierDAO = new SupplierDAO();
+    private GoodsReceiptListDAO grDAO = new GoodsReceiptListDAO();
+    private GoodsReceiptItemListDAO grItemDAO = new GoodsReceiptItemListDAO();
+    private EmployeeDAO employeeDAO = new EmployeeDAO();
+    private ProductListDAO productsDAO = new ProductListDAO();
+    private SupplierDAO supplierDAO = new SupplierDAO();
 
     // --- NHẬP PHIẾU NHẬP HÀNG ---
     public void inputReceipt() {
@@ -80,7 +80,7 @@ public class GoodsReceiptBUS {
             GoodsReceiptItemDTO item = new GoodsReceiptItemDTO();
 
             System.out.print("  Ma IMEI: ");
-            ProductsDTO product = productsDAO.findById(sc.nextLine());
+            ProductsDTO product = productsDAO.findByIMEI(sc.nextLine());
             if (product == null) {
                 System.out.println("  Khong tim thay san pham! Vui long nhap lai.");
                 continue;
@@ -141,9 +141,9 @@ public class GoodsReceiptBUS {
         System.out.printf(" Ma phieu: %-15s | Ngay: %s%n", 
                 rec.getReceiptId(), 
                 new SimpleDateFormat("dd/MM/yyyy").format(rec.getCreatedDate()));
-        System.out.printf(" NCC     : %-15s | NV Nhan: %s%n", 
-                rec.getSupplier().getSupplierName(), 
-                rec.getReceiver().getFullName());
+        System.out.printf(" NCC     : %-15s | NV Nhan: %s%n",
+                rec.getSupplierName(),
+                rec.getReceiverName());
         System.out.printf(" Giao    : %-15s | Nhan   : %s%n", 
                 rec.getCourier(), rec.getConsignee());
         System.out.println("-".repeat(85));
@@ -153,26 +153,28 @@ public class GoodsReceiptBUS {
                 "STT", "Ma SP", "Ten SP", "SL", "Gia nhap", "Thanh tien");
         System.out.println("-".repeat(85));
 
+        double tongPhieu = 0;
         if (items == null || items.length == 0) {
             System.out.println(" (Khong co chi tiet mat hang.)");
         } else {
             for (int j = 0; j < items.length; j++) {
                 GoodsReceiptItemDTO item = items[j];
                 if (item == null) continue;
-                
+
                 double subTotal = item.getQuantity() * item.getImportPrice();
+                tongPhieu += subTotal;
                 System.out.printf("%-5d | %-15s | %-20s | %8d | %,15.0f | %,15.0f%n",
-                        j + 1, 
-                        item.getProduct().getProductID(), 
-                        item.getProduct().getProductName(),
-                        item.getQuantity(), 
+                        j + 1,
+                        item.getProductId(),
+                        item.getProductName(),
+                        item.getQuantity(),
                         item.getImportPrice(),
                         subTotal);
             }
         }
 
         System.out.println("-".repeat(85));
-        System.out.printf("%-63s TONG PHIEU: %,15.0f VNĐ%n", "", GoodsReceiptListDAO.calculateTotalPrice(rec));
+        System.out.printf("%-63s TONG PHIEU: %,15.0f VNĐ%n", "", tongPhieu);
         System.out.println("=".repeat(85) + "\n");
     }
 

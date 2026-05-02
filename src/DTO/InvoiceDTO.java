@@ -13,8 +13,8 @@ public class InvoiceDTO {
 
   // mặc định tạo mẳng ở Invocie tại InvoiceItem nằm trong Invoice
     public InvoiceDTO() {
-       this.invoiceItemList = new InvoiceItemDTO[0];
-       this.status = true; // mặc định là true
+        this.invoiceItemList = new InvoiceItemDTO[0];
+        this.status = true; // mặc định là true
     }
 
     public InvoiceDTO(String invoiceId, Customer customer, Employee employee,
@@ -24,7 +24,7 @@ public class InvoiceDTO {
         this.employee = employee;
         this.createdDate = createdDate;
         this.payment = payment;
-      //  this.invoiceItemList = new InvoiceItemDTO[0];
+        this.invoiceItemList = new InvoiceItemDTO[0];
         this.status = true;
     }
 
@@ -103,7 +103,7 @@ public class InvoiceDTO {
     }
 
     public void setInvoiceItemList(InvoiceItemDTO[] invoiceItemList) {
-       this.invoiceItemList = invoiceItemList;
+        this.invoiceItemList = invoiceItemList;
     }
 
     public PaymentDTO getPayment() {

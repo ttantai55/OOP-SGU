@@ -4,18 +4,20 @@ import DTO.InvoiceDTO;
 import DTO.InvoiceItemDTO;
 import java.util.Arrays;
 import java.text.SimpleDateFormat;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Date;
 
 
-public abstract class InvoiceListDAO implements IRepository<InvoiceDTO> {
+public class InvoiceListDAO implements IRepository<InvoiceDTO> {
    
     private static InvoiceDTO[] invoiceList = new InvoiceDTO[0];
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     public InvoiceListDAO() {
-        
     }
 
     @Override
@@ -37,7 +39,7 @@ public abstract class InvoiceListDAO implements IRepository<InvoiceDTO> {
             }
         }
         if (found) {
-            System.out.println("Đã hủy hóa đơnq: " + invoiceId + ".");
+            System.out.println("Đã hủy hóa đơn: " + invoiceId + ".");
         } else {
             System.out.println("Không tìm thấy hóa đơn: " + invoiceId + ".");
         }
@@ -100,7 +102,47 @@ public abstract class InvoiceListDAO implements IRepository<InvoiceDTO> {
         }
     }
 
-// còn thiếu ReadFile
+@Override
+public void readFile(String filePath) {
+    try {
+        BufferedReader br = new BufferedReader(new FileReader(filePath));
+        String line = br.readLine();
+
+        while (line != null) {
+            String[] parts = line.split(",");
+
+            InvoiceDTO inv = new InvoiceDTO();
+
+            inv.setInvoiceId(parts[0]);
+
+            try {
+                Date ngay = sdf.parse(parts[3]);
+                inv.setCreatedDate(ngay);
+            } catch (Exception e) {
+                // bỏ qua nếu không đọc được ngày
+            }
+
+            if (parts[4].equals("Active")) {
+                inv.setStatus(true);
+            } else {
+                inv.setStatus(false);
+            }
+
+            int viTri = invoiceList.length;
+            invoiceList = Arrays.copyOf(invoiceList, viTri + 1);
+            invoiceList[viTri] = inv;
+
+            line = br.readLine();
+        }
+
+        br.close();
+        System.out.println("Đọc dữ liệu từ file " + filePath + " thành công!");
+
+    } catch (IOException e) {
+        System.err.println("Lỗi khi đọc file: " + e.getMessage());
+    }
+}
+
 @Override
 public void writeFile(String filePath) {
     try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {

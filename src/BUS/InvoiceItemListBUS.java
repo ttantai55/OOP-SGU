@@ -1,7 +1,7 @@
 package BUS;
 
-import DAO.InvoiceItemListDAO;
 import DAO.InvoiceListDAO;
+import DAO.InvoiceItemListDAO;
 import DAO.ProductListDAO;
 import DAO.PromotionListDAO;
 import DAO.WarrantyListDAO;
@@ -10,6 +10,7 @@ import DTO.InvoiceItemDTO;
 import DTO.ProductsDTO;
 import DTO.PromotionDTO;
 import DTO.WarrantyDTO;
+import java.text.SimpleDateFormat;
 import java.util.Scanner;
 
 public class InvoiceItemListBUS {
@@ -32,7 +33,7 @@ public class InvoiceItemListBUS {
         }
 
         System.out.print("Nhap ma IMEI san pham: ");
-        ProductsDTO product = productsDAO.findById(sc.nextLine());
+        ProductsDTO product = productsDAO.findByIMEI(sc.nextLine());
 
         if (product == null) {
             System.out.println("Loi: Khong tim thay san pham.");

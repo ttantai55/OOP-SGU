@@ -3,9 +3,12 @@ package DAO;
 import DTO.RepairRecordDTO;
 import java.util.Arrays;
 import java.text.SimpleDateFormat;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Date;
 
 public class RepairRecordListDAO implements IRepository<RepairRecordDTO> {
     private static RepairRecordDTO[] records = new RepairRecordDTO[0];
@@ -60,7 +63,7 @@ public class RepairRecordListDAO implements IRepository<RepairRecordDTO> {
     public RepairRecordDTO[] findByWarrantyId(String warrantyId) {
         RepairRecordDTO[] result = new RepairRecordDTO[0];
         for (RepairRecordDTO record : records) {
-            if (record != null && record.getWarrantyId().equals(warrantyId)) {
+            if (record != null && record.isStatus() && record.getWarrantyId().equals(warrantyId)) {
                 result = Arrays.copyOf(result, result.length + 1);
                 result[result.length - 1] = record;
             }
@@ -71,6 +74,10 @@ public class RepairRecordListDAO implements IRepository<RepairRecordDTO> {
     @Override
     public RepairRecordDTO[] findByName(String name) {
         return new RepairRecordDTO[0];
+    }
+
+    public RepairRecordDTO[] getAll() {
+        return Arrays.copyOf(records, records.length);
     }
 
 
@@ -86,7 +93,7 @@ public class RepairRecordListDAO implements IRepository<RepairRecordDTO> {
         System.out.println("-".repeat(130));
 
         for (RepairRecordDTO record : records) {
-            if (record != null) {
+            if (record != null && record.isStatus()) {
                 System.out.printf("%-10s | %-10s | %-12s | %-8d | %-20s | %,15.0f | %-15s%n",
                         record.getRepairId(),
                         record.getWarrantyId(),
@@ -102,7 +109,47 @@ public class RepairRecordListDAO implements IRepository<RepairRecordDTO> {
 
     @Override
     public void readFile(String filePath) {
-        // Sẽ bổ sung sau
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(filePath));
+            String line = br.readLine();
+
+            while (line != null) {
+                String[] parts = line.split(",");
+
+                RepairRecordDTO r = new RepairRecordDTO();
+
+                r.setRepairId(parts[0]);
+                r.setWarrantyId(parts[1]);
+
+                try {
+                    Date ngaySuaChua = sdf.parse(parts[2]);
+                    r.setRepairDate(ngaySuaChua);
+                } catch (Exception e) {
+                    // bỏ qua nếu không đọc được ngày
+                }
+
+                r.setAttemptNumber(Integer.parseInt(parts[3]));
+                r.setErrorDescription(parts[4]);
+                r.setSolution(parts[5]);
+                r.setReplacedParts(parts[6]);
+                r.setRepairCost(Double.parseDouble(parts[7]));
+                r.setNote(parts[8]);
+                r.setProcessStatus(parts[9]);
+                // technician bỏ qua vì cần đối tượng TechnicianEmployee đầy đủ
+
+                int viTri = records.length;
+                records = Arrays.copyOf(records, viTri + 1);
+                records[viTri] = r;
+
+                line = br.readLine();
+            }
+
+            br.close();
+            System.out.println("Đọc dữ liệu từ file " + filePath + " thành công!");
+
+        } catch (IOException e) {
+            System.err.println("Lỗi khi đọc file: " + e.getMessage());
+        }
     }
 
     @Override
