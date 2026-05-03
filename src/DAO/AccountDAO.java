@@ -15,7 +15,7 @@ public class AccountDAO implements IRepository<Account> {
     public AccountDAO() {
         this.accounts = new Account[100];
         this.count = 0;
-         // Chi doc du lieu len khi he thong khoi dong
+        // Chi doc du lieu len khi he thong khoi dong
         readFile(defaultPath); 
     }
 
@@ -52,8 +52,8 @@ public class AccountDAO implements IRepository<Account> {
         for (int i = 0; i < count; i++) {
             if (accounts[i].getAccountId().equals(obj.getAccountId())) {
                 accounts[i] = obj;
-                writeFile(defaultPath); 
-                System.out.println("[Thong bao] Cap nhat tai khoan thanh cong!");
+                // writeFile(defaultPath); // [KIEN TRUC 3 LOP] Khong luu tu dong tai day
+                System.out.println("[Thong bao] Cap nhat tai khoan trong bo nho thanh cong!");
                 return;
             }
         }
@@ -80,7 +80,7 @@ public class AccountDAO implements IRepository<Account> {
     }
 
     @Override
-    public Account[] findByName(String name) {
+    public Object[] findByName(String name) {
         Account[] result = new Account[count];
         int size = 0;
         for (int i = 0; i < count; i++) {
