@@ -206,13 +206,18 @@ public class LoginUI {
         
         if (userRole.contains("khach hang")) {
             System.out.println("[Thong bao] Dang mo Menu danh cho Khach Hang...");
-            GUI.CustomerMainMenu customerMenu = new GUI.CustomerMainMenu();
+            GUI.CustomerMainMenu customerMenu = new GUI.CustomerMainMenu(); // Cập nhật menu khách hàng trong CustomerMainMenu.java
             customerMenu.showMenu();
-        } else if (userRole.contains("nhan vien") || userRole.contains("quan ly")) {
-            System.out.println("[Thong bao] Dang mo Menu Quan Tri He Thong...");
-            GUI.ManagerMainMenu adminMenu = new GUI.ManagerMainMenu();
-            adminMenu.showMenu();
-        } else {
+        } else if (userRole.contains("nhan vien")) {
+            System.out.println("[Thong bao] Dang mo Menu danh cho Nhan vien...");
+            GUI.EmployeeMainMenu employeeMenu = new GUI.EmployeeMainMenu(); //Cập nhật menu nhân viên trong EmployeeMainMenu.java
+            employeeMenu.showMenu();
+        } else if (userRole.contains("quan ly")) {
+            System.out.println("[Thong bao] Dang mo Menu danh cho Quan ly...");
+            GUI.ManagerMainMenu managerMenu = new GUI.ManagerMainMenu(); //Cập nhật menu quản lý trong ManagerMainMenu.java
+            managerMenu.showMenu();
+        } 
+        else {
             System.out.println("[Loi] Quyen han khong xac dinh, vui long lien he truc tiep voi cua hang de duoc xu ly!");
         }
     }
