@@ -8,22 +8,23 @@ import java.io.*;
 public class AccountDAO implements IRepository<Account> {
     
     // [OOP] Tinh Dong goi (Encapsulation): Bao ve du lieu mang bang private
-    private final Account[] accounts;
+    private Account[] accounts;
     private int count;
     private final String defaultPath = "src/data/accounts.txt"; 
 
     public AccountDAO() {
         this.accounts = new Account[100];
         this.count = 0;
-        readFile(defaultPath); // Tu dong tai du lieu khi khoi tao
+         // Chi doc du lieu len khi he thong khoi dong
+        readFile(defaultPath); 
     }
 
     @Override
     public void add(Account obj) {
         if (count < accounts.length) {
             accounts[count++] = obj;
-            writeFile(defaultPath); 
-            System.out.println("[Thong bao] Them tai khoan thanh cong!");
+            // writeFile(defaultPath); // [KIEN TRUC 3 LOP] Khong luu tu dong tai day
+            System.out.println("[Thong bao] Them tai khoan vao bo nho thanh cong!");
         } else {
             System.out.println("[Loi] Danh sach tai khoan da day!");
         }
@@ -38,8 +39,8 @@ public class AccountDAO implements IRepository<Account> {
                     accounts[j] = accounts[j + 1];
                 }
                 accounts[--count] = null; // Xoa phan tu cuoi, giam so luong
-                writeFile(defaultPath); 
-                System.out.println("[Thong bao] Da xoa tai khoan: " + id);
+                // writeFile(defaultPath); // [KIEN TRUC 3 LOP] Khong luu tu dong tai day
+                System.out.println("[Thong bao] Da xoa tai khoan khoi bo nho: " + id);
                 return;
             }
         }
