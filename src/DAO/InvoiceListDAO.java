@@ -12,13 +12,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 
-public abstract class InvoiceListDAO implements IRepository<InvoiceDTO> {
+public class InvoiceListDAO implements IRepository<InvoiceDTO> {
    
     private static InvoiceDTO[] invoiceList = new InvoiceDTO[0];
     private final String filePath = "data/invoice.txt";
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     public InvoiceListDAO() {
+        loadFile();
     }
 
     public void loadFile() {

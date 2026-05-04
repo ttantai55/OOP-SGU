@@ -14,6 +14,7 @@ public class GoodsReceiptListDAO implements IRepository<GoodsReceiptDTO> {
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     public GoodsReceiptListDAO() {
+        loadFile();
     }
 
     public void loadFile() {
@@ -201,7 +202,7 @@ public class GoodsReceiptListDAO implements IRepository<GoodsReceiptDTO> {
         // Nạp mảng vào biến gốc
         this.receiptList = tempArr;
     }
-    }
+
 
     @Override
     public void writeFile(String filePath) {

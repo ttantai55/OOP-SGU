@@ -13,6 +13,7 @@ public class RepairRecordListDAO implements IRepository<RepairRecordDTO> {
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     public RepairRecordListDAO() {
+        loadFile();
     }
 
     public void loadFile() {

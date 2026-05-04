@@ -27,7 +27,7 @@ public class GoodsReceiptItemListBUS {
         }
 
         System.out.print("Nhap ma IMEI san pham: ");
-        ProductsDTO product = productsDAO.findByIMEI(sc.nextLine());
+        ProductsDTO product = productsDAO.findById(sc.nextLine());
 
         if (product == null) {
             System.out.println("Loi: Khong tim thay san pham.");

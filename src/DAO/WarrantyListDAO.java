@@ -15,6 +15,7 @@ public class WarrantyListDAO implements IRepository<WarrantyDTO> {
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     public WarrantyListDAO() {
+        loadFile();
     }
 
     public void loadFile() {

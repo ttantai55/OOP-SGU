@@ -13,6 +13,7 @@ public class PromotionListDAO implements IRepository<PromotionDTO> {
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     public PromotionListDAO() {
+        loadFile();
     }
 
     public void loadFile() {

@@ -1,6 +1,7 @@
 package DAO;
 
 import DTO.GoodsReceiptItemDTO;
+import DTO.ProductsDTO;
 import java.util.Arrays;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -142,7 +143,10 @@ Scanner scanner = new Scanner(System.in);
 
                 try {
                     // Khởi tạo đối tượng ngay lập tức
-                    GoodsReceiptItemDTO item = new GoodsReceiptItemDTO(data[0], data[1], data[2], Integer.parseInt(data[3]), Double.parseDouble(data[4]));
+                    ProductsDTO product = new ProductsDTO();
+                    product.setProductID(data[1]);
+                    product.setProductName(data[2]);
+                    GoodsReceiptItemDTO item = new GoodsReceiptItemDTO(product, data[0], Integer.parseInt(data[3]), Double.parseDouble(data[4]));
                     // Thêm vào mảng
                     tempArr = Arrays.copyOf(tempArr, tempArr.length + 1);
                     tempArr[tempArr.length - 1] = item;

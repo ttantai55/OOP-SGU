@@ -350,7 +350,7 @@ System.out.println("=".repeat(115) + "\n");
         String newInvoiceId = "HD" + System.currentTimeMillis();//ham nay tu tao ma hoa don ngay tai thoi diem bam tao
         InvoiceDTO invoice = new InvoiceDTO();
         invoice.setInvoiceId(newInvoiceId);
-        invoice.setCreatedDate(createdDate);
+        invoice.setCreatedDate(new Date());
         invoice.setCustomer(cus); 
 
 
@@ -363,7 +363,7 @@ System.out.println("=".repeat(115) + "\n");
         myCart = cartBUS.getMyCartItems();
         InvoiceItemDTO[] invoiceDetail = new InvoiceItemDTO[myCart.length];
         
-        for (int i = 0 ; invoiceDetail.length ; i++) {
+        for (int i = 0; i < invoiceDetail.length; i++) {
             CartItemDTO cartItem = myCart[i];
 
             InvoiceItemDTO item = new InvoiceItemDTO();
