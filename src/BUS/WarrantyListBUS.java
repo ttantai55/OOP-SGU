@@ -92,11 +92,11 @@ public class WarrantyListBUS {
                 warranty.getRepairCount());
         System.out.println("-".repeat(90));
 
-        // In danh sách sửa chữa
+        // In danh sách sửa chua
         RepairRecordDTO[] repairs = repairDAO.findByWarrantyId(warrantyId);
 
         if (repairs == null || repairs.length == 0) {
-            System.out.println(" (Khong co lich su sua chữa.)");
+            System.out.println(" (Khong co lich su sua chua.)");
         } else {
             System.out.printf("%-5s | %-10s | %-12s | %-8s | %-20s | %-15s%n",
                     "STT", "Ma SR", "Ngay SR", "Lan", "Loi", "Chi phi");
@@ -104,7 +104,7 @@ public class WarrantyListBUS {
 
             for (int i = 0; i < repairs.length; i++) {
                 if (repairs[i] != null) {
-                    System.out.printf("%-5d | %-10s | %-12s | %-8d | %-20s | %,15.0f VNĐ%n",
+                    System.out.printf("%-5d | %-10s | %-12s | %-8d | %-20s | %,15.0f VND%n",
                             i + 1,
                             repairs[i].getRepairId(),
                             sdf.format(repairs[i].getRepairDate()),
@@ -138,14 +138,14 @@ public class WarrantyListBUS {
             return;
         }
         if (warranty.getRepairCount() >= 10) {
-            System.out.println("Loi: Bao hanh da vuot toi da so lan sua chữa (10 lan).");
+            System.out.println("Loi: Bao hanh da vuot toi da so lan sua chua (10 lan).");
             return;
         }
 
-        // Nhập thông tin sửa chữa
+        // Nhập thông tin sửa chua
         RepairRecordDTO repair = new RepairRecordDTO();
 
-        // Tạo mã sửa chữa (có thể là warrantyId-REP-attemptNumber)
+        // Tạo mã sửa chua (có thể là warrantyId-REP-attemptNumber)
         int attemptNumber = warranty.getRepairCount() + 1;
         String repairId = warrantyId + "-REP-" + attemptNumber;
         repair.setRepairId(repairId);
@@ -163,7 +163,7 @@ public class WarrantyListBUS {
         System.out.print("Nhap linh kien thay the: ");
         repair.setReplacedParts(sc.nextLine());
 
-        System.out.print("Nhap chi phi sua chữa (VND): ");
+        System.out.print("Nhap chi phi sua chua (VND): ");
         double repairCost = Double.parseDouble(sc.nextLine());
         if (repairCost >= 0) {
             repair.setRepairCost(repairCost);
@@ -191,14 +191,14 @@ public class WarrantyListBUS {
         System.out.print("Nhap trang thai xu ly: ");
         repair.setProcessStatus(sc.nextLine());
 
-        // Lưu bản ghi sửa chữa
+        // Lưu bản ghi sửa chua
         repairDAO.add(repair);
 
         // Cập nhật repairCount của warranty
         warranty.setRepairCount(attemptNumber);
         warDAO.update(warranty);
 
-        System.out.println("Da them bản ghi sua chữa [" + repairId + "] thanh cong!");
+        System.out.println("Da them ban ghi sua chua [" + repairId + "] thanh cong!");
     }
 
     public void cancelWarranty() {

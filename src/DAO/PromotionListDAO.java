@@ -174,7 +174,7 @@ public class PromotionListDAO implements IRepository<PromotionDTO> {
         }
         System.out.println("=".repeat(100));
         System.out.printf("%-10s | %-25s | %-10s | %-12s | %-12s | %-8s%n",
-                "Mã KM", "Tên chương trình", "Mã SP", "Ngày bắt đầu", "Ngày kết thúc", "Giảm (%)");
+                "Ma KM", "Ten chuong trinh", "Ma SP", "Ngay bat dau", "Ngay ket thuc", "Giam (%)");
         System.out.println("-".repeat(100));
 
         for (PromotionDTO p : promotionList) {

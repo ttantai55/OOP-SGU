@@ -88,7 +88,7 @@ public class GoodsReceiptItemListBUS {
             GoodsReceiptItemDTO item = items[i];
             if (item != null) {
                 double thanhTien = item.getQuantity() * item.getImportPrice();
-                System.out.printf("%-5d | %-15s | %-20s | %-8d | %-15.0f | %,15.0f VNĐ%n",
+                System.out.printf("%-5d | %-15s | %-20s | %-8d | %-15.0f | %,15.0f VND%n",
                         i + 1,
                         item.getProductId(),
                         item.getProductName(),
@@ -99,7 +99,7 @@ public class GoodsReceiptItemListBUS {
             }
         }
         System.out.println("-".repeat(90));
-        System.out.printf("%-65s TONG PHIEU: %,15.0f VNĐ%n", "", tongCong);
+        System.out.printf("%-65s TONG PHIEU: %,15.0f VND%n", "", tongCong);
         System.out.println("=".repeat(90) + "\n");
     }
 

@@ -108,7 +108,7 @@ public class InvoiceItemListBUS {
             InvoiceItemDTO item = items[i];
             if (item != null) {
                 double thanhTien = InvoiceItemListDAO.calculateSubTotal(item);
-                System.out.printf("%-5d | %-10s | %-20s | %-5d | %-12.0f | %,15.0f VNĐ%n",
+                System.out.printf("%-5d | %-10s | %-20s | %-5d | %-12.0f | %,15.0f VND%n",
                         i + 1,
                         item.getProductId(),
                         item.getProductName(),
@@ -119,7 +119,7 @@ public class InvoiceItemListBUS {
             }
         }
         System.out.println("-".repeat(85));
-        System.out.printf("%-60s TONG CONG: %,15.0f VNĐ%n", "", tongCong);
+        System.out.printf("%-60s TONG CONG: %,15.0f VND%n", "", tongCong);
         System.out.println("=".repeat(85) + "\n");
     }
 

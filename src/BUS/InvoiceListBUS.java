@@ -57,22 +57,22 @@ public class InvoiceListBUS {
     //      + mã bảo hành của sản phẩm n
     //      + tổng tiền của sản phẩm n
     // Tổng tiền tất cả (n1 + n2 + ... +nn)
-    // phương thức thanh toán 
+    // phương thức thanh toán
 
 public void inputInvoice() {
     InvoiceDTO invoice = new InvoiceDTO();
 
-    System.out.print("Nhập mã hóa đơn: ");
+    System.out.print("Nhap ma hoa don: ");
     invoice.setInvoiceId(sc.nextLine());
 
     Customer cus = null;
 while (cus == null) {
-    System.out.print("Nhập mã khách hàng: ");
+    System.out.print("Nhap ma khach hang: ");
     String cusId = sc.nextLine();
     cus = customerDAO.findById(cusId);
-    
+
     if (cus == null) {
-        System.out.println("Lỗi: Không tìm thấy khách hàng này. Vui lòng nhập lại!");
+        System.out.println("Loi: Khong tim thay khach hang nay. Vui long nhap lai!");
     }
 }
 invoice.setCustomer(cus);
@@ -80,12 +80,12 @@ invoice.setCustomer(cus);
 
 Employee emp = null;
 while (emp == null) {
-    System.out.print("Nhập mã nhân viên: ");
+    System.out.print("Nhap ma nhan vien: ");
     String empId = sc.nextLine();
     emp = employeeDAO.findById(empId);
-    
+
     if (emp == null) {
-        System.out.println("Lỗi: Không tìm thấy nhân viên. Vui lòng nhập lại!");
+        System.out.println("Loi: Khong tim thay nhan vien. Vui long nhap lai!");
     }
 }
 invoice.setEmployee(emp);
@@ -96,21 +96,21 @@ invoice.setEmployee(emp);
     String themTiep = "y";
     int soThuTu = 1;
     while (themTiep.equals("y")) {
-        System.out.println("Mặt hàng thứ: " + soThuTu);
+        System.out.println("Mat hang thu: " + soThuTu);
         InvoiceItemDTO detail = new InvoiceItemDTO();
 
-        System.out.print("  Mã IMEI: ");
+        System.out.print("  Ma IMEI: ");
         ProductsDTO product = productsDAO.findById(sc.nextLine());
         if (product == null) {
-            System.out.println("  Không tìm thấy sản phẩm! Vui lòng nhập lại.");
+            System.out.println("  Khong tim thay san pham! Vui long nhap lai.");
             continue;
         }
         detail.setProduct(product);
 
-        System.out.print("  Số lượng: ");
+        System.out.print("  So luong: ");
         int quantity = Integer.parseInt(sc.nextLine());
         if (quantity <= 0) {
-            System.out.println("  Số lượng không hợp lệ! Vui lòng nhập lại.");
+            System.out.println("  So luong khong hop le! Vui long nhap lai.");
             continue;
         }
         detail.setQuantity(quantity);
@@ -125,15 +125,15 @@ invoice.setEmployee(emp);
         warrantyDAO.add(warranty);
         detail.setWarranty(warranty);
 
-        System.out.print("  Có áp dụng khuyến mãi? (y/n): ");
+        System.out.print("  Co ap dung khuyen mai? (y/n): ");
         String promoChoice = sc.nextLine().toLowerCase();
         if (promoChoice.equals("y")) {
-            System.out.print("  Nhập mã khuyến mãi: ");
+            System.out.print("  Nhap ma khuyen mai: ");
             PromotionDTO promotion = promotionDAO.findById(sc.nextLine());
             if (promotion != null) {
                 detail.setPromotion(promotion);
             } else {
-                System.out.println("  Không tìm thấy khuyến mãi, bỏ qua.");
+                System.out.println("  Khong tim thay khuyen mai, bo qua.");
                 detail.setPromotion(null);
             }
         } else {
@@ -144,19 +144,19 @@ invoice.setEmployee(emp);
         details[details.length - 1] = detail;
         soThuTu++;
 
-        System.out.print("Thêm mặt hàng tiếp theo? (y/n): ");
+        System.out.print("Them mat hang tiep theo? (y/n): ");
         themTiep = sc.nextLine().toLowerCase();
     }
     invoice.setInvoiceItemList(details);
 
 
     System.out.println("--------------------------------------------");
-    System.out.println("Chọn phương thức thanh toán:");
-    System.out.println("  1. Tiền mặt (Cash)");
-    System.out.println("  2. Thẻ tín dụng (Credit)");
-    System.out.println("  3. Chuyển khoản (Transfer)");
-    System.out.println("  4. Trả góp (Installment)");
-    System.out.print("Lựa chọn (1-4): ");
+    System.out.println("Chon phuong thuc thanh toan:");
+    System.out.println("  1. Tien mat (Cash)");
+    System.out.println("  2. The tin dung (Credit)");
+    System.out.println("  3. Chuyen khoan (Transfer)");
+    System.out.println("  4. Tra gop (Installment)");
+    System.out.print("Lua chon (1-4): ");
     int choice = Integer.parseInt(sc.nextLine());
 
     String paymentId = invoice.getInvoiceId() + "-PAY";
@@ -165,51 +165,51 @@ invoice.setEmployee(emp);
 
     if (choice == 1) {
         // Cần tính tổng tiền trước khi hỏi tiền khách đưa
-        double total = InvoiceListDAO.calculateTotalPrice(invoice); 
-        System.out.printf("Tổng cần thanh toán: %,.0f VND%n", total);
-        System.out.print("Số tiền khách đưa: ");
+        double total = InvoiceListDAO.calculateTotalPrice(invoice);
+        System.out.printf("Tong can thanh toan: %,.0f VND%n", total);
+        System.out.print("So tien khach dua: ");
         double cashReceived = Double.parseDouble(sc.nextLine());
 
         if (cashReceived < total) {
-            System.out.println("Số tiền khách đưa không đủ!");
+            System.out.println("So tien khach dua khong du!");
             return;
         }
         payment = new Cash(paymentId, paymentDate, cashReceived);
 
     } else if (choice == 2) {
-        System.out.print("Số thẻ: ");
+        System.out.print("So the: ");
         String numberId = sc.nextLine();
-        System.out.print("Tên chủ thẻ: ");
+        System.out.print("Ten chu the: ");
         String nameOnCard = sc.nextLine();
-        System.out.print("Ngân hàng: ");
+        System.out.print("Ngan hang: ");
         String bank = sc.nextLine();
         payment = new Credit(paymentId, paymentDate, numberId, nameOnCard, bank);
 
     } else if (choice == 3) {
-        System.out.print("Số tài khoản: ");
+        System.out.print("So tai khoan: ");
         String accountNumber = sc.nextLine();
-        System.out.print("Tên chủ tài khoản: ");
+        System.out.print("Ten chu tai khoan: ");
         String accountName = sc.nextLine();
-        System.out.print("Ngân hàng: ");
+        System.out.print("Ngan hang: ");
         String bank = sc.nextLine();
         payment = new Transfer(paymentId, paymentDate, accountNumber, accountName, bank);
 
     } else if (choice == 4) {
-        System.out.print("Công ty tài chính: ");
+        System.out.print("Cong ty tai chinh: ");
         String company = sc.nextLine();
-        System.out.print("Mã hợp đồng: ");
+        System.out.print("Ma hop dong: ");
         String contractNum = sc.nextLine();
-        System.out.print("Số tháng trả góp: ");
+        System.out.print("So thang tra gop: ");
         int months = Integer.parseInt(sc.nextLine());
-        System.out.print("Tiền trả trước: ");
+        System.out.print("Tien tra truoc: ");
         double downPayment = Double.parseDouble(sc.nextLine());
         payment = new Installment(paymentId, paymentDate, company, contractNum, months, downPayment);
 
     } else {
-        System.out.println("Lựa chọn không hợp lệ!");
+        System.out.println("Lua chon khong hop le!");
     }
 
-  
+
     if (payment != null) {
         invoice.setPayment(payment);
         invDAO.add(invoice);
@@ -222,33 +222,33 @@ invoice.setEmployee(emp);
                 }
             }
         }
-        System.out.println("Đã thêm hóa đơn " + invoice.getInvoiceId() + " thành công!");
+        System.out.println("Da them hoa don " + invoice.getInvoiceId() + " thanh cong!");
     } else {
-        System.out.println("Thanh toán thất bại. Hóa đơn không được lưu.");
+        System.out.println("Thanh toan that bai. Hoa don khong duoc luu.");
     }
 }
 
 public void printInvoice(String invoiceId) {
     InvoiceDTO invoice = invDAO.findById(invoiceId);
     if ( invoice == null ){
-        System.out.println("Không tìm thấy hóa đơn: " + invoiceId + ".");
+        System.out.println("Khong tim thay hoa don: " + invoiceId + ".");
             return;
     }
 
     InvoiceItemDTO[] items = invItemDAO.findByInvoiceId(invoiceId);
 
     System.out.println("\n" + "=".repeat(115));
-        System.out.println("            HÓA ĐƠN BÁN HÀNG             ");
-        System.out.println(" Mã HD: " + invoice.getInvoiceId());
-        System.out.println(" ID Khách hàng: " + invoice.getCustomerId()); 
-        System.out.println(" Tên Khách hàng: " + invoice.getCustomerName());
-        System.out.println(" ID Nhân viên: " + invoice.getEmployeeId());
-        System.out.println(" Tên Nhân viên: " + invoice.getEmployeeName());
-        System.out.println(" Ngày tạo: " + new SimpleDateFormat("dd/MM/yyyy").format(invoice.getCreatedDate()));
-        System.out.println(" Trạng thái hóa đơn: " + invoice.isStatus());
+        System.out.println("            HOA DON BAN HANG             ");
+        System.out.println(" Ma HD: " + invoice.getInvoiceId());
+        System.out.println(" ID Khach hang: " + invoice.getCustomerId());
+        System.out.println(" Ten Khach hang: " + invoice.getCustomerName());
+        System.out.println(" ID Nhan vien: " + invoice.getEmployeeId());
+        System.out.println(" Ten Nhan vien: " + invoice.getEmployeeName());
+        System.out.println(" Ngay tao: " + new SimpleDateFormat("dd/MM/yyyy").format(invoice.getCreatedDate()));
+        System.out.println(" Trang thai hoa don: " + invoice.isStatus());
         System.out.println("-".repeat(115));
         System.out.printf("%-4s | %-10s | %-20s | %-4s | %-13s | %-8s | %-15s | %-15s%n",
-                "STT", "Mã SP", "Tên SP", "SL", "Đơn Giá", "KM(%)", "Bảo Hành", "Thành Tiền");
+                "STT", "Ma SP", "Ten SP", "SL", "Don Gia", "KM(%)", "Bao Hanh", "Thanh Tien");
         System.out.println("-".repeat(115));
 
         double tongCong = 0;
@@ -266,7 +266,7 @@ public void printInvoice(String invoiceId) {
             }
 
             String thoiGianBH = item.getProduct().getWarrantyPeriod() + "thang";
-            System.out.printf("%-4d | %-10s | %-20s | %-4d | %-13.0f | %-8s | %-15s | %,15.0f VNĐ%n",
+            System.out.printf("%-4d | %-10s | %-20s | %-4d | %-13.0f | %-8s | %-15s | %,15.0f VND%n",
                     (i + 1),
                     item.getProductId(),
                     item.getProductName(),
@@ -280,44 +280,44 @@ public void printInvoice(String invoiceId) {
         }
 
         System.out.println("-".repeat(115));
-        System.out.printf("%-80s TỔNG CỘNG: %,15.0f VNĐ%n", "", tongCong);
-       
+        System.out.printf("%-80s TONG CONG: %,15.0f VND%n", "", tongCong);
+
         PaymentDTO pay = invoice.getPayment();
 if (pay != null) {
-    System.out.println(" THÔNG TIN THANH TOÁN:");
+    System.out.println(" THONG TIN THANH TOAN:");
     // công dụng của instanceof là:
-    // kiểm tra xem đối tượng pay thực tế thuộc lớp con nào (Cash, Credit, ...) để ép kiểu (casting) về lớp đó 
+    // kiểm tra xem đối tượng pay thực tế thuộc lớp con nào (Cash, Credit, ...) để ép kiểu (casting) về lớp đó
     // và truy cập các hàm getter riêng biệt (như getBank, getCashReceived).
     if (pay instanceof Cash) {
         Cash c = (Cash) pay;
-        System.out.println("  - Hình thức: Tiền mặt");
-        System.out.printf("  - Tiền khách đưa: %,.0f VNĐ%n", c.getCashReceived());
-        System.out.printf("  - Tiền trả lại:   %,.0f VNĐ%n", (c.getCashReceived() - tongCong));
-        
+        System.out.println("  - Hinh thuc: Tien mat");
+        System.out.printf("  - Tien khach dua: %,.0f VND%n", c.getCashReceived());
+        System.out.printf("  - Tien tra lai:   %,.0f VND%n", (c.getCashReceived() - tongCong));
+
     } else if (pay instanceof Credit) {
         Credit cr = (Credit) pay;
-        System.out.println("  - Hình thức: Thẻ tín dụng");
-        System.out.println("  - Ngân hàng: " + cr.getBank());
-        System.out.println("  - Số thẻ:    ****" + cr.getNumberId().substring(Math.max(0, cr.getNumberId().length() - 4))); // In 4 số cuối bảo mật
-        System.out.println("  - Chủ thẻ:   " + cr.getNameOnCard());
-        
+        System.out.println("  - Hinh thuc: The tin dung");
+        System.out.println("  - Ngan hang: " + cr.getBank());
+        System.out.println("  - So the:    ****" + cr.getNumberId().substring(Math.max(0, cr.getNumberId().length() - 4))); // In 4 số cuối bảo mật
+        System.out.println("  - Chu the:   " + cr.getNameOnCard());
+
     } else if (pay instanceof Transfer) {
         Transfer t = (Transfer) pay;
-        System.out.println("  - Hình thức: Chuyển khoản");
-        System.out.println("  - Ngân hàng: " + t.getBank());
-        System.out.println("  - Số TK:     " + t.getAccountNumber());
-        System.out.println("  - Chủ TK:    " + t.getAccountName());
-        
+        System.out.println("  - Hinh thuc: Chuyen khoan");
+        System.out.println("  - Ngan hang: " + t.getBank());
+        System.out.println("  - So TK:     " + t.getAccountNumber());
+        System.out.println("  - Chu TK:    " + t.getAccountName());
+
     } else if (pay instanceof Installment) {
         Installment ins = (Installment) pay;
-        System.out.println("  - Hình thức: Trả góp");
-        System.out.println("  - Công ty TC: " + ins.getFinanceCompanyName());
-        System.out.println("  - Kỳ hạn:     " + ins.getInstallmentMonths() + " tháng");
-        System.out.printf("  - Trả trước:  %,.0f VNĐ%n", ins.getDownPayment());
-        System.out.printf("  - Góp mỗi tháng: %,.0f VNĐ%n", (tongCong - ins.getDownPayment()) / ins.getInstallmentMonths());
+        System.out.println("  - Hinh thuc: Tra gop");
+        System.out.println("  - Cong ty TC: " + ins.getFinanceCompanyName());
+        System.out.println("  - Ky han:     " + ins.getInstallmentMonths() + " thang");
+        System.out.printf("  - Tra truoc:  %,.0f VND%n", ins.getDownPayment());
+        System.out.printf("  - Gop moi thang: %,.0f VND%n", (tongCong - ins.getDownPayment()) / ins.getInstallmentMonths());
     }
 } else {
-    System.out.println("  - Hình thức: Chưa thanh toán");
+    System.out.println("  - Hinh thuc: Chua thanh toan");
 }
 
 System.out.println("=".repeat(115) + "\n");
@@ -325,7 +325,7 @@ System.out.println("=".repeat(115) + "\n");
     }
 
     public void cancelInvoice() {
-        System.out.print("Nhập mã hóa đơn cần hủy: ");
+        System.out.print("Nhap ma hoa don can huy: ");
         String id = sc.nextLine();
         invDAO.remove(id);
     }
@@ -369,10 +369,10 @@ System.out.println("=".repeat(115) + "\n");
         System.out.println("=".repeat(85) + "\n");
     }
 
-    // =======Ham thanh toan======= 
+    // =======Ham thanh toan=======
 
     public void checkoutFromCart(String username, CartItemDTO[] myCart, CartBUS cartBUS) {
-        // Kiem tra 
+        // Kiem tra
 
         if (myCart == null || myCart.length == 0) {
             System.out.println("Gio hang cua ban dang trong, moi quay lai mua hang");
@@ -390,7 +390,7 @@ System.out.println("=".repeat(115) + "\n");
         InvoiceDTO invoice = new InvoiceDTO();
         invoice.setInvoiceId(newInvoiceId);
         invoice.setCreatedDate(new Date());
-        invoice.setCustomer(cus); 
+        invoice.setCustomer(cus);
 
 
         //Tao 1 ham lay thong tin nhan vien dang ban hang
@@ -398,10 +398,10 @@ System.out.println("=".repeat(115) + "\n");
         Employee emp = employeeDAO.findById("NV01"); //  tam thoi de nhu vay
         invoice.setEmployee(emp);
 
-        // Lay du lieu tu gio hang mang sang Chi tiet Hoa don 
+        // Lay du lieu tu gio hang mang sang Chi tiet Hoa don
         myCart = cartBUS.getMyCartItems();
         InvoiceItemDTO[] invoiceDetail = new InvoiceItemDTO[myCart.length];
-        
+
         for (int i = 0; i < invoiceDetail.length; i++) {
             CartItemDTO cartItem = myCart[i];
 
@@ -412,7 +412,7 @@ System.out.println("=".repeat(115) + "\n");
             ProductsDTO product = productsDAO.findById(cartItem.getProductID());
             item.setProduct(product);
 
-            item.setPromotion(null); // de tam 
+            item.setPromotion(null); // de tam
             item.setWarranty(null); // de tam
 
             invoiceDetail[i] = item;
@@ -429,7 +429,7 @@ System.out.println("=".repeat(115) + "\n");
         if (payment != null) {
             // Luu hoa don
             invoice.setPayment(payment);
-            invDAO.add(invoice); // Hinh nhu file nay ch dc save 
+            invDAO.add(invoice); // Hinh nhu file nay ch dc save
 
             for (InvoiceItemDTO item : invoice.getInvoiceItemList()) {
                 invItemDAO.add(item);
@@ -455,7 +455,7 @@ System.out.println("=".repeat(115) + "\n");
 
         int choice;
             choice = Integer.parseInt(sc.nextLine());
-        
+
         String paymentId = invoiceID + "-Pay";
         Date paymentDate = new Date();
 
@@ -483,7 +483,7 @@ System.out.println("=".repeat(115) + "\n");
                 String accNum = sc.nextLine();
                 System.out.print("Ten chu tai khoan: ");
                 String accName = sc.nextLine();
-                return new Transfer(paymentId, paymentDate, accNum, accName, bankTrans);    
+                return new Transfer(paymentId, paymentDate, accNum, accName, bankTrans);
             case 4:
                 System.out.print("Cong ty tai chinh: ");
                 String company = sc.nextLine();
