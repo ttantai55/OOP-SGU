@@ -130,6 +130,6 @@ public class InvoiceItemListBUS {
         System.out.print("Nhap ma san pham can xoa: ");
         String productId = sc.nextLine();
 
-        invItemDAO.removeDetails(invoiceId, productId);
+        invItemDAO.remove(invoiceId, productId);
     }
 }

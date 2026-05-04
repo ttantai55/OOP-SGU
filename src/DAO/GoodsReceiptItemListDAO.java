@@ -10,8 +10,18 @@ import java.util.Scanner;
 
 public class GoodsReceiptItemListDAO implements IRepository<GoodsReceiptItemDTO> {
     private static GoodsReceiptItemDTO[] details = new GoodsReceiptItemDTO[0];
+    private final String filePath = "data/goodsreceiptitem.txt";
 
     public GoodsReceiptItemListDAO() {
+        loadFile();
+    }
+
+    public void loadFile() {
+        readFile(this.filePath);
+    }
+
+    public void saveFile() {
+        writeFile(this.filePath);
     }
 Scanner scanner = new Scanner(System.in);
     @Override

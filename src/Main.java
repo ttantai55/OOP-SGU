@@ -69,8 +69,9 @@ public class main {
             System.out.println("  1. Tao hoa don moi");
             System.out.println("  2. Xem chi tiet hoa don");
             System.out.println("  3. Huy hoa don");
+            System.out.println("  4. Xem hoa don theo khach hang");
             System.out.println("  0. Quay lai");
-            System.out.print("Chon (0-3): ");
+            System.out.print("Chon (0-4): ");
 
             try {
                 choice = Integer.parseInt(sc.nextLine());
@@ -85,6 +86,8 @@ public class main {
                 invoiceBUS.printInvoice(sc.nextLine());
             } else if (choice == 3) {
                 invoiceBUS.cancelInvoice();
+            } else if (choice == 4) {
+                invoiceBUS.printInvoicesByCustomer();
             } else if (choice == 0) {
                 System.out.println("Quay lai menu chinh.");
             } else {

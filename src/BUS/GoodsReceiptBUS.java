@@ -141,9 +141,23 @@ public class GoodsReceiptBUS {
         System.out.printf(" Ma phieu: %-15s | Ngay: %s%n", 
                 rec.getReceiptId(), 
                 new SimpleDateFormat("dd/MM/yyyy").format(rec.getCreatedDate()));
-        System.out.printf(" NCC     : %-15s | NV Nhan: %s%n", 
-                rec.getSupplier().getSupplierName(), 
-                rec.getReceiver().getFullName());
+        String supplierInfo;
+        if (rec.getSupplier() == null) {
+            supplierInfo = "N/A";
+        } else if (rec.getSupplier().getSupplierName() != null) {
+            supplierInfo = rec.getSupplier().getSupplierName();
+        } else {
+            supplierInfo = rec.getSupplier().getSupplierId();
+        }
+        String receiverInfo;
+        if (rec.getReceiver() == null) {
+            receiverInfo = "N/A";
+        } else if (rec.getReceiver().getFullName() != null) {
+            receiverInfo = rec.getReceiver().getFullName();
+        } else {
+            receiverInfo = rec.getReceiver().getEmployeeId();
+        }
+        System.out.printf(" NCC     : %-15s | NV Nhan: %s%n", supplierInfo, receiverInfo);
         System.out.printf(" Giao    : %-15s | Nhan   : %s%n", 
                 rec.getCourier(), rec.getConsignee());
         System.out.println("-".repeat(85));

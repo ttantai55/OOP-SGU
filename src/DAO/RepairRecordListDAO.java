@@ -80,6 +80,10 @@ public class RepairRecordListDAO implements IRepository<RepairRecordDTO> {
         return result;
     }
 
+    public RepairRecordDTO[] getAll() {
+        return java.util.Arrays.copyOf(records, records.length);
+    }
+
     @Override
     public RepairRecordDTO[] findByName(String name) {
         return new RepairRecordDTO[0];

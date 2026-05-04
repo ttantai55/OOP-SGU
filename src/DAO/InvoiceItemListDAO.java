@@ -11,8 +11,18 @@ import java.io.IOException;
 
 public class InvoiceItemListDAO implements IInvoiceManage<InvoiceItemDTO> {
     private static InvoiceItemDTO[] itemList = new InvoiceItemDTO[0];
+    private final String filePath = "data/invoiceitem.txt";
 
     public InvoiceItemListDAO() {
+        loadFile();
+    }
+
+    public void loadFile() {
+        readFile(this.filePath);
+    }
+
+    public void saveFile() {
+        writeFile(this.filePath);
     }
 
     @Override

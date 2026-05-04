@@ -2,6 +2,8 @@ package DAO;
 
 import DTO.GoodsReceiptDTO;
 import DTO.GoodsReceiptItemDTO;
+import DTO.Supplier;
+import DTO.SalesEmployee;
 import java.util.Arrays;
 import java.text.SimpleDateFormat;
 import java.io.BufferedWriter;
@@ -178,14 +180,19 @@ public class GoodsReceiptListDAO implements IRepository<GoodsReceiptDTO> {
                     }
 
                     String receiverId = data[3];
-                    Employee receiver = null;
+                    SalesEmployee receiver = null;
                     if (!receiverId.equalsIgnoreCase("N/A")) {
-                        receiver = new Employee();
+                        receiver = new SalesEmployee();
                         receiver.setEmployeeId(receiverId);
                     }
                     boolean status = data[4].equalsIgnoreCase("Active");
-                    
-                    GoodsReceiptDTO rec = new GoodsReceiptDTO(receiptId, createdDate, supplier, receiver, status);
+
+                    GoodsReceiptDTO rec = new GoodsReceiptDTO();
+                    rec.setReceiptId(receiptId);
+                    rec.setCreatedDate(createdDate);
+                    rec.setSupplier(supplier);
+                    rec.setReceiver(receiver);
+                    rec.setStatus(status);
 
                     // Thêm vào mảng
                     tempArr = Arrays.copyOf(tempArr, tempArr.length + 1);
@@ -249,3 +256,4 @@ public class GoodsReceiptListDAO implements IRepository<GoodsReceiptDTO> {
             System.err.println("Loi khi ghi file: " + e.getMessage());
         }
     }
+}

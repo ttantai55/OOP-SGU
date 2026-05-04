@@ -86,11 +86,23 @@ public class InvoiceListDAO implements IRepository<InvoiceDTO> {
     }
 
     @Override
- // tìm hóa đơn theo tên khách hàng
+    // tìm hóa đơn theo tên khách hàng
     public InvoiceDTO[] findByName(String customerName) {
         InvoiceDTO[] result = new InvoiceDTO[0];
         for (InvoiceDTO inv : invoiceList) {
             if (inv != null && inv.getCustomerName().toLowerCase().contains(customerName.toLowerCase())) {
+                result = Arrays.copyOf(result, result.length + 1);
+                result[result.length - 1] = inv;
+            }
+        }
+        return result;
+    }
+
+    // tìm hóa đơn theo mã khách hàng
+    public InvoiceDTO[] findByCustomerId(String customerId) {
+        InvoiceDTO[] result = new InvoiceDTO[0];
+        for (InvoiceDTO inv : invoiceList) {
+            if (inv != null && inv.getCustomerId().equals(customerId)) {
                 result = Arrays.copyOf(result, result.length + 1);
                 result[result.length - 1] = inv;
             }

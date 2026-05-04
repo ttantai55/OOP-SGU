@@ -330,6 +330,45 @@ System.out.println("=".repeat(115) + "\n");
         invDAO.remove(id);
     }
 
+    public void printInvoicesByCustomer() {
+        System.out.print("Nhap ma khach hang: ");
+        String customerId = sc.nextLine();
+
+        InvoiceDTO[] results = invDAO.findByCustomerId(customerId);
+
+        if (results == null || results.length == 0) {
+            System.out.println("Khong co hoa don nao cua khach hang: " + customerId);
+            return;
+        }
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        System.out.println("\n" + "=".repeat(85));
+        System.out.println("DANH SACH HOA DON - KHACH HANG: " + customerId);
+        System.out.println("-".repeat(85));
+        System.out.printf("%-10s | %-15s | %-15s | %-12s | %-10s | %-15s%n",
+                "Ma HD", "Ma KH", "Ten KH", "Ngay Tao", "Trang Thai", "Tong Tien");
+        System.out.println("-".repeat(85));
+
+        for (InvoiceDTO inv : results) {
+            if (inv != null) {
+                String trangThai;
+                if (inv.isStatus()) {
+                    trangThai = "Hoat dong";
+                } else {
+                    trangThai = "Da huy";
+                }
+                System.out.printf("%-10s | %-15s | %-15s | %-12s | %-10s | %,15.0f VND%n",
+                        inv.getInvoiceId(),
+                        inv.getCustomerId(),
+                        inv.getCustomerName(),
+                        sdf.format(inv.getCreatedDate()),
+                        trangThai,
+                        InvoiceListDAO.calculateTotalPrice(inv));
+            }
+        }
+        System.out.println("=".repeat(85) + "\n");
+    }
+
     // =======Ham thanh toan======= 
 
     public void checkoutFromCart(String username, CartItemDTO[] myCart, CartBUS cartBUS) {
@@ -379,6 +418,7 @@ System.out.println("=".repeat(115) + "\n");
             invoiceDetail[i] = item;
 
         }
+        invoice.setInvoiceItemList(invoiceDetail);
 
         //===Tinh tien===
         double total = InvoiceListDAO.calculateTotalPrice(invoice);
@@ -422,7 +462,7 @@ System.out.println("=".repeat(115) + "\n");
         switch (choice) {
             case 1:
                 System.out.println("So tien phai tra:");
-                double cashReceived = Double.parseDouble(sc.next());
+                double cashReceived = Double.parseDouble(sc.nextLine());
                 if (cashReceived < total) {
                     System.out.println("Loi: Thanh toan that bai!");
                     return null;
