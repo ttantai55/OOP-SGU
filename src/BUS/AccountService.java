@@ -2,13 +2,15 @@ package BUS;
 
 import DAO.AccountDAO;
 import DTO.Account;
+import java.util.Scanner;
 
 // [OOP] Class: Lop nghiep vu (Business Logic Layer) xu ly logic tai khoan
 public class AccountService {
     
     // [OOP] Association (Ket hop) & Delegation (Uy quyen): 
     // Service khong tu ghi file ma giao viec do cho tang DAO
-    private AccountDAO accountDAO;
+    private final AccountDAO accountDAO;
+    static Scanner sc = new Scanner(System.in);
 
     public AccountService() {
         this.accountDAO = new AccountDAO();
@@ -84,5 +86,42 @@ public class AccountService {
     // Lay danh sach hien thi
     public void showAllAccounts() {
         accountDAO.displayAll();
+    }
+    //Thao tac doi mat khau
+
+    public void changePassword(String username) {
+      
+        Account acc = accountDAO.findByUsername(username);
+
+        if(acc == null) {
+            System.out.println("Khong tim thay tai khoan tren he thong!");
+        }
+
+        System.out.println("Moi nhap mat khau hien tai:");
+        String oldPass = sc.nextLine();
+
+        if (!acc.getPassword().equals(oldPass)) {
+            System.out.println("Mat khau hien tai khong chinh xac");
+            return;// co the bat khach hang nhap lai
+        }
+
+        System.out.print("Moi nhap mat khau moi: ");
+        String newPass = sc.nextLine();
+        
+        System.out.print("Xac nhan lai mat khau moi: ");
+        String confirmPass = sc.nextLine();
+        
+        //Kiem tra mk moi va xac nhan mk moi
+        if (!newPass.equals(confirmPass)) {
+            System.out.println("-> Loi: Mat khau xac nhan khong khop!");
+            return;
+        }
+
+        acc.setPassword(newPass);
+        
+        //savefile
+        
+        System.out.println("Doi mat khau thanh cong!");
+
     }
 }
