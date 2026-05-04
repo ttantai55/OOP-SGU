@@ -115,11 +115,13 @@ public class GoodsReceiptDTO {
     }
 
     public String getSupplierId() {
-        return supplier.getSupplierId();
+        if (supplier != null) return supplier.getSupplierId();
+        return "N/A";
     }
 
     public String getSupplierName() {
-        return supplier.getSupplierName();
+        if (supplier != null) return supplier.getSupplierName();
+        return "N/A";
     }
 
     // nhân viên nhận hàng (id và tên)
@@ -132,13 +134,9 @@ public class GoodsReceiptDTO {
     }
 
     public String getReceiverId() {
-        return receiver.getEmployeeId();
+        if (receiver != null) return receiver.getEmployeeId();
+        return "N/A";
     }
-
-    public String getReceiverName(){
-        return receiver.getEmployeeName();
-    }
-
 
     // danh sách các mặt hàng nhập vào
     public GoodsReceiptItemDTO[] getItems() {

@@ -29,6 +29,7 @@ public class InvoiceItemListDAO implements IInvoiceManage<InvoiceItemDTO> {
     public void add(InvoiceItemDTO item) {
         itemList = Arrays.copyOf(itemList, itemList.length + 1);
         itemList[itemList.length - 1] = item;
+        System.out.println("Da them chi tiet hoa don thanh cong: " + item.getProductId() + ".");
     }
 
     // khi xóa 1 chi tiết thì nên nhập cả mã hóa đơn(invoiceId) và mã sản phẩm(productId) để tránh xóa nhầm 1 chi tiết của hóa đơn khác
@@ -64,9 +65,11 @@ public class InvoiceItemListDAO implements IInvoiceManage<InvoiceItemDTO> {
                 itemList[i].getInvoiceId().equals(updatedItem.getInvoiceId()) &&
                 itemList[i].getProductId().equals(updatedItem.getProductId())) {
                 itemList[i] = updatedItem;
+                System.out.println("Da cap nhat chi tiet hoa don thanh cong: " + updatedItem.getProductId() + ".");
                 return;
             }
         }
+        System.out.println("Khong tim thay chi tiet hoa don de cap nhat!");
     }
 
     // hàm riêng, tìm kiếm theo id của hóa đơn
@@ -144,12 +147,13 @@ public class InvoiceItemListDAO implements IInvoiceManage<InvoiceItemDTO> {
                     if (!data[5].equalsIgnoreCase("N/A")) {
                         promotion = new PromotionDTO();
                         promotion.setPromotionId(data[5]);
+                        promotion.setDiscountPercent(Double.parseDouble(data[6]));
                     }
 
                     WarrantyDTO warranty = null;
-                    if (!data[6].equalsIgnoreCase("N/A")) {
+                    if (!data[7].equalsIgnoreCase("N/A")) {
                         warranty = new WarrantyDTO();
-                        warranty.setWarrantyId(data[6]);
+                        warranty.setWarrantyId(data[7]);
                     }
 
                     InvoiceItemDTO item = new InvoiceItemDTO(product, data[0], quantity, warranty, promotion);
@@ -188,12 +192,14 @@ public class InvoiceItemListDAO implements IInvoiceManage<InvoiceItemDTO> {
                         warrantyId = "N/A";
                     }
 
+                    double discountPercent = item.getDiscountPercent();
                     String line = item.getInvoiceId() + "," +
                                  item.getProductId() + "," +
                                  item.getProductName() + "," +
                                  item.getQuantity() + "," +
                                  item.getUnitPrice() + "," +
                                  promotionId + "," +
+                                 discountPercent + "," +
                                  warrantyId + "," +
                                  calculateSubTotal(item);
 

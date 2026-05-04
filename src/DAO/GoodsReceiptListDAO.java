@@ -10,11 +10,13 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class GoodsReceiptListDAO implements IRepository<GoodsReceiptDTO> {
+public class GoodsReceiptListDAO implements IRepository<GoodsReceiptDTO>{
+
     private static GoodsReceiptDTO[] receiptList = new GoodsReceiptDTO[0];
     private final String filePath = "data/goodsreceipt.txt";
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
+// load dữ liệu từ file vào mảng khi khởi tạo đối tượng DAO
     public GoodsReceiptListDAO() {
         loadFile();
     }
@@ -30,6 +32,7 @@ public class GoodsReceiptListDAO implements IRepository<GoodsReceiptDTO> {
     }
 
     @Override
+    // tương tự với cách hoạt động của hóa đơn bán hàng
     public void add(GoodsReceiptDTO receipt) {
         receiptList = Arrays.copyOf(receiptList, receiptList.length + 1);
         receiptList[receiptList.length - 1] = receipt;
@@ -37,40 +40,33 @@ public class GoodsReceiptListDAO implements IRepository<GoodsReceiptDTO> {
     }
 
     @Override
-    public void remove(String receiptId) {
-        boolean found = false;
+    // sử dụng xóa mềm (sort delete)
+    public void remove(String goodsReceiptId) {
         for (GoodsReceiptDTO rec : receiptList) {
-            if (rec != null && rec.getReceiptId().equals(receiptId)) {
-                rec.setStatus(false); 
-                found = true;
-                break;
+            if (rec != null && rec.getReceiptId().equals(goodsReceiptId)) {
+                rec.setStatus(false);
+                System.out.println("Da xoa phieu nhap thanh cong: " + goodsReceiptId + ".");
+                return;
             }
         }
-        if (found) {
-            System.out.println("Da huy phieu nhap: " + receiptId + ".");
-        } else {
-            System.out.println("Khong tim thay phieu nhap: " + receiptId + ".");
-        }
+        System.out.println("Khong tim thay phieu nhap de xoa!");
     }
 
     @Override
+    // tương tự cách code như remove
     public void update(GoodsReceiptDTO updatedReceipt) {
-        boolean found = false;
         for (int i = 0; i < receiptList.length; i++) {
             if (receiptList[i] != null && receiptList[i].getReceiptId().equals(updatedReceipt.getReceiptId())) {
-                receiptList[i] = updatedReceipt;
-                found = true;
-                break;
+                receiptList[i] = updatedReceipt; // ghi đè phiếu nhập mới lên phiếu nhập cũ
+                System.out.println("Da cap nhat phieu nhap thanh cong: " + updatedReceipt.getReceiptId() + ".");
+            return;
             }
         }
-        if (found) {
-            System.out.println("Da cap nhat phieu nhap thanh cong: " + updatedReceipt.getReceiptId() + ".");
-        } else {
             System.out.println("Khong tim thay phieu nhap de cap nhat!");
         }
-    }
 
     @Override
+    // tìm phiếu nhập theo mã phiếu nhập
     public GoodsReceiptDTO findById(String receiptId) {
         for (GoodsReceiptDTO rec : receiptList) {
             if (rec != null && rec.getReceiptId().equals(receiptId)) {
@@ -138,7 +134,7 @@ public class GoodsReceiptListDAO implements IRepository<GoodsReceiptDTO> {
         }
         System.out.println("=".repeat(115));
     }
-
+// tính tổng tiền của phiếu nhập
     public static double calculateTotalPrice(GoodsReceiptDTO rec) {
         if (rec == null || rec.getItems() == null) return 0;
         double total = 0;

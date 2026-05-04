@@ -110,6 +110,6 @@ public class GoodsReceiptItemListBUS {
         System.out.print("Nhap ma san pham can xoa: ");
         String productId = sc.nextLine();
 
-        grItemDAO.removeDetails(receiptId, productId);
+        grItemDAO.remove(receiptId, productId);
     }
 }

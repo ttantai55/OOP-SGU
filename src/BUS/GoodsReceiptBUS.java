@@ -167,26 +167,28 @@ public class GoodsReceiptBUS {
                 "STT", "Ma SP", "Ten SP", "SL", "Gia nhap", "Thanh tien");
         System.out.println("-".repeat(85));
 
+        double tongCong = 0;
         if (items == null || items.length == 0) {
             System.out.println(" (Khong co chi tiet mat hang.)");
         } else {
             for (int j = 0; j < items.length; j++) {
                 GoodsReceiptItemDTO item = items[j];
                 if (item == null) continue;
-                
+
                 double subTotal = item.getQuantity() * item.getImportPrice();
+                tongCong += subTotal;
                 System.out.printf("%-5d | %-15s | %-20s | %8d | %,15.0f | %,15.0f%n",
-                        j + 1, 
-                        item.getProduct().getProductID(), 
+                        j + 1,
+                        item.getProduct().getProductID(),
                         item.getProduct().getProductName(),
-                        item.getQuantity(), 
+                        item.getQuantity(),
                         item.getImportPrice(),
                         subTotal);
             }
         }
 
         System.out.println("-".repeat(85));
-        System.out.printf("%-63s TONG PHIEU: %,15.0f VNĐ%n", "", GoodsReceiptListDAO.calculateTotalPrice(rec));
+        System.out.printf("%-63s TONG PHIEU: %,15.0f VNĐ%n", "", tongCong);
         System.out.println("=".repeat(85) + "\n");
     }
 

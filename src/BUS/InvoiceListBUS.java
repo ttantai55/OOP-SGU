@@ -122,18 +122,17 @@ invoice.setEmployee(emp);
         cal.add(Calendar.MONTH, product.getWarrantyPeriod());
         Date endDate = cal.getTime();
         WarrantyDTO warranty = new WarrantyDTO(warrantyId, invoice.getInvoiceId(), product, startDate, endDate, true);
-        warrantyDAO.add(warranty);
-        detail.setWarranty(warranty);
+        detail.setWarranty(warranty); // chưa lưu vào DAO, chờ thanh toán thành công
 
         System.out.print("  Co ap dung khuyen mai? (y/n): ");
         String promoChoice = sc.nextLine().toLowerCase();
         if (promoChoice.equals("y")) {
             System.out.print("  Nhap ma khuyen mai: ");
             PromotionDTO promotion = promotionDAO.findById(sc.nextLine());
-            if (promotion != null) {
+            if (promotion != null && promotion.isStatus()) {
                 detail.setPromotion(promotion);
             } else {
-                System.out.println("  Khong tim thay khuyen mai, bo qua.");
+                System.out.println("  Khuyen mai khong hop le hoac da bi huy, bo qua.");
                 detail.setPromotion(null);
             }
         } else {
@@ -218,6 +217,9 @@ invoice.setEmployee(emp);
             for (InvoiceItemDTO item : invoice.getInvoiceItemList()) {
                 if (item != null) {
                     item.setInvoiceId(invoice.getInvoiceId());
+                    if (item.getWarranty() != null) {
+                        warrantyDAO.add(item.getWarranty()); // chỉ lưu warranty khi thanh toán thành công
+                    }
                     invItemDAO.add(item);
                 }
             }

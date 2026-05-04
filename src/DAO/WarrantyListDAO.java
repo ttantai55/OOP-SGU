@@ -32,6 +32,7 @@ public class WarrantyListDAO implements IRepository<WarrantyDTO> {
     public void add(WarrantyDTO obj) {
         warranties = Arrays.copyOf(warranties, warranties.length + 1);
         warranties[warranties.length - 1] = obj;
+        System.out.println("Da them bao hanh thanh cong: " + obj.getWarrantyId() + ".");
     }
 
 
@@ -40,9 +41,11 @@ public class WarrantyListDAO implements IRepository<WarrantyDTO> {
         for (WarrantyDTO w : warranties) {
             if (w != null && w.getWarrantyId().equals(id)) {
                 w.setStatus(false);
+                System.out.println("Da huy bao hanh thanh cong: " + id + ".");
                 return;
             }
         }
+        System.out.println("Khong tim thay bao hanh de huy: " + id + ".");
     }
 
     @Override
@@ -50,9 +53,11 @@ public class WarrantyListDAO implements IRepository<WarrantyDTO> {
         for (int i = 0; i < warranties.length; i++) {
             if (warranties[i] != null && warranties[i].getWarrantyId().equals(obj.getWarrantyId())) {
                 warranties[i] = obj;
+                System.out.println("Da cap nhat bao hanh thanh cong: " + obj.getWarrantyId() + ".");
                 return;
             }
         }
+        System.out.println("Khong tim thay bao hanh de cap nhat!");
     }
 
     @Override
@@ -70,8 +75,8 @@ public class WarrantyListDAO implements IRepository<WarrantyDTO> {
     public WarrantyDTO[] findByName(String productName) {
         WarrantyDTO[] temp = new WarrantyDTO[0];
         for (WarrantyDTO w : warranties) {
-            if (w != null && w.getProduct().getProductName()
-                    .toLowerCase().contains(productName.toLowerCase())) {
+            if (w != null && w.getProduct() != null &&
+                w.getProduct().getProductName().toLowerCase().contains(productName.toLowerCase())) {
                 temp = Arrays.copyOf(temp, temp.length + 1);
                 temp[temp.length - 1] = w;
             }
@@ -81,23 +86,36 @@ public class WarrantyListDAO implements IRepository<WarrantyDTO> {
 
     @Override
     public void displayAll() {
-        for (WarrantyDTO w : warranties) {
-            if (w != null) {
-                String trangThai;
-                if (w.isStatus()) {
-                    trangThai = "Con hieu luc";
-                } else {
-                    trangThai = "Het hieu luc";
-                }
+        boolean hasActive = false;
+        System.out.println("=".repeat(95));
+        System.out.printf("%-10s | %-10s | %-10s | %-12s | %-12s | %-13s | %-8s%n",
+                "Ma BH", "Ma HD", "Ma SP", "Ngay bat dau", "Ngay ket thuc", "Trang Thai", "So lan SC");
+        System.out.println("-".repeat(95));
 
-                System.out.println("Ma bao hanh : " + w.getWarrantyId()
-                        + " | Hoa don   : " + w.getInvoiceId()
-                        + " | San pham  : " + w.getProduct().getProductName()
-                        + " | Tu        : " + sdf.format(w.getStartDate())
-                        + " | Den       : " + sdf.format(w.getEndDate())
-                        + " | Trang thai: " + trangThai);
+        for (WarrantyDTO w : warranties) {
+            if (w != null && w.isStatus()) {
+                String productId;
+                if (w.getProduct() != null) {
+                    productId = w.getProduct().getProductID();
+                } else {
+                    productId = "N/A";
+                }
+                System.out.printf("%-10s | %-10s | %-10s | %-12s | %-12s | %-13s | %-8d%n",
+                        w.getWarrantyId(),
+                        w.getInvoiceId(),
+                        productId,
+                        sdf.format(w.getStartDate()),
+                        sdf.format(w.getEndDate()),
+                        "Con hieu luc",
+                        w.getRepairCount());
+                hasActive = true;
             }
         }
+
+        if (!hasActive) {
+            System.out.println("Danh sach bao hanh trong hoac da het hieu luc het!");
+        }
+        System.out.println("=".repeat(95));
     }
 
     @Override

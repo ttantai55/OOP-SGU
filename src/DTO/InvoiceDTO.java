@@ -24,7 +24,7 @@ public class InvoiceDTO {
         this.employee = employee;
         this.createdDate = createdDate;
         this.payment = payment;
-      //  this.invoiceItemList = new InvoiceItemDTO[0];
+        this.invoiceItemList = new InvoiceItemDTO[0];
         this.status = true;
     }
 

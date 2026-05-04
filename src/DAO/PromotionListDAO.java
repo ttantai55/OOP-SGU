@@ -30,6 +30,7 @@ public class PromotionListDAO implements IRepository<PromotionDTO> {
     public void add(PromotionDTO promotion) {
         promotionList = Arrays.copyOf(promotionList, promotionList.length + 1);
         promotionList[promotionList.length - 1] = promotion;
+        System.out.println("Da them khuyen mai thanh cong: " + promotion.getPromotionId() + ".");
     }
 
     @Override
@@ -49,6 +50,7 @@ public class PromotionListDAO implements IRepository<PromotionDTO> {
         for (int i = 0; i < promotionList.length; i++) {
             if (promotionList[i] != null && promotionList[i].getPromotionId().equals(updatedPromotion.getPromotionId())) {
                 promotionList[i] = updatedPromotion;
+                System.out.println("Da cap nhat khuyen mai thanh cong: " + updatedPromotion.getPromotionId() + ".");
                 return;
             }
         }
@@ -168,17 +170,14 @@ public class PromotionListDAO implements IRepository<PromotionDTO> {
 
     @Override
     public void displayAll() {
-        if (promotionList.length == 0) {
-            System.out.println("Danh sach khuyen mai trong!");
-            return;
-        }
+        boolean hasActive = false;
         System.out.println("=".repeat(100));
         System.out.printf("%-10s | %-25s | %-10s | %-12s | %-12s | %-8s%n",
                 "Ma KM", "Ten chuong trinh", "Ma SP", "Ngay bat dau", "Ngay ket thuc", "Giam (%)");
         System.out.println("-".repeat(100));
 
         for (PromotionDTO p : promotionList) {
-            if (p != null) {
+            if (p != null && p.isStatus()) {
                 System.out.printf("%-10s | %-25s | %-10s | %-12s | %-12s | %.0f%%%n",
                         p.getPromotionId(),
                         p.getProgramName(),
@@ -186,7 +185,12 @@ public class PromotionListDAO implements IRepository<PromotionDTO> {
                         sdf.format(p.getStartDate()),
                         sdf.format(p.getEndDate()),
                         p.getDiscountPercent());
+                hasActive = true;
             }
+        }
+
+        if (!hasActive) {
+            System.out.println("Danh sach khuyen mai trong hoac da bi huy het!");
         }
         System.out.println("=".repeat(100));
     }
