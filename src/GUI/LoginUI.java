@@ -107,8 +107,8 @@ public class LoginUI {
         CustomerDAO customerDAO = new CustomerDAO();
 
         // [ĐÃ SỬA LỖI] Vì DAO đã thụ động, ta phải ra lệnh cho nó đọc file tại đây
-        accountDAO.readFile("OOP-SGU/src/data/accounts.txt");
-        customerDAO.readFile("OOP-SGU/src/data/Customer.txt");
+        accountDAO.readFile("src/data/accounts.txt");
+        customerDAO.readFile("src/data/Customer.txt");
 
         System.out.println("\n" + "=".repeat(50));
         System.out.println("   DANG KY TAI KHOAN KHACH HANG MOI");
@@ -153,7 +153,7 @@ public class LoginUI {
         newCus.setAddress(emptyAddress);
 
         String generatedOTP = String.format("%06d", new Random().nextInt(999999));
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter("OOP-SGU/src/data/OTP.txt"))) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter("src/data/OTP.txt"))) {
             bw.write("Ma OTP dang ky cua khach hang '" + fullName + "' la: " + generatedOTP);
             bw.newLine();
             bw.write("Vui long cung cap ma nay cho khach hang de hoan tat dang ky.");
@@ -185,8 +185,8 @@ public class LoginUI {
             accountDAO.add(newAcc);
             customerDAO.add(newCus);
 
-            accountDAO.writeFile("OOP-SGU/src/data/accounts.txt");
-            customerDAO.writeFile("OOP-SGU/src/data/Customer.txt");
+            accountDAO.writeFile("src/data/accounts.txt");
+            customerDAO.writeFile("src/data/Customer.txt");
 
             // [QUAN TRỌNG] Tải lại dữ liệu vào accountService chính để Khách hàng có thể đăng nhập ngay
             this.accountService.loadFromFile();

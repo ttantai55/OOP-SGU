@@ -15,7 +15,7 @@ public class EmployeeService {
     static Scanner sc = new Scanner(System.in);
 
     // Duong dan file
-    private static final String FILE_EMPLOYEES = "OOP-SGU/src/data/Employee.txt";
+    private static final String FILE_EMPLOYEES = "src/data/Employee.txt";
 
     public EmployeeService() {
         employeeDAO = new EmployeeDAO();

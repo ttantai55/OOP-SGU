@@ -20,12 +20,12 @@ public class AccountService {
 
     // [OOP] Delegation: Uy quyen cho DAO doc du lieu
     public void loadFromFile() {
-        accountDAO.readFile("OOP-SGU/src/data/accounts.txt");
+        accountDAO.readFile("src/data/accounts.txt");
     }
 
     // [OOP] Delegation: Uy quyen cho DAO ghi du lieu xuong o cung
     public void saveToFile() {
-        accountDAO.writeFile("OOP-SGU/src/data/accounts.txt");
+        accountDAO.writeFile("src/data/accounts.txt");
     }
 
     // --- CÁC HÀM NGHIỆP VỤ ---

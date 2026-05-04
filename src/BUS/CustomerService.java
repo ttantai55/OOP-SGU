@@ -9,7 +9,7 @@ public class CustomerService {
     private final CustomerDAO customerDAO;
     static Scanner sc = new Scanner(System.in);
 
-    private static final String FILE_CUSTOMERS = "OOP-SGU/src/data/Customer.txt";
+    private static final String FILE_CUSTOMERS = "src/data/Customer.txt";
 
     public CustomerService() {
         customerDAO = new CustomerDAO();
