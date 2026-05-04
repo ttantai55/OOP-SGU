@@ -2,6 +2,9 @@ package DAO;
 
 import DTO.InvoiceDTO;
 import DTO.InvoiceItemDTO;
+import DTO.Customer;
+import DTO.SalesEmployee;
+import DTO.Cash;
 import java.util.Arrays;
 import java.text.SimpleDateFormat;
 import java.io.BufferedWriter;
@@ -12,10 +15,20 @@ import java.io.IOException;
 public abstract class InvoiceListDAO implements IRepository<InvoiceDTO> {
    
     private static InvoiceDTO[] invoiceList = new InvoiceDTO[0];
+    private final String filePath = "data/invoice.txt";
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     public InvoiceListDAO() {
-        
+    }
+
+    public void loadFile() {
+        readFile(this.filePath);
+        System.out.println("Da tai du lieu thanh cong tu file: " + filePath);
+    }
+
+    public void saveFile() {
+        writeFile(this.filePath);
+        System.out.println("Da luu du lieu vao file: " + filePath);
     }
 
     @Override
@@ -23,7 +36,7 @@ public abstract class InvoiceListDAO implements IRepository<InvoiceDTO> {
     public void add(InvoiceDTO invoice) {
         invoiceList = Arrays.copyOf(invoiceList, invoiceList.length + 1);
         invoiceList[invoiceList.length - 1] = invoice;
-        System.out.println("Đã thêm hóa đơn thành công: " + invoice.getInvoiceId() + ".");
+        System.out.println("Da them hoa don thanh cong: " + invoice.getInvoiceId() + ".");
     }
 
     @Override
@@ -37,9 +50,9 @@ public abstract class InvoiceListDAO implements IRepository<InvoiceDTO> {
             }
         }
         if (found) {
-            System.out.println("Đã hủy hóa đơnq: " + invoiceId + ".");
+            System.out.println("Da huy hoa donq: " + invoiceId + ".");
         } else {
-            System.out.println("Không tìm thấy hóa đơn: " + invoiceId + ".");
+            System.out.println("Khong tim thay hoa don: " + invoiceId + ".");
         }
     }
 
@@ -54,9 +67,9 @@ public abstract class InvoiceListDAO implements IRepository<InvoiceDTO> {
             }
         }
         if (found) {
-            System.out.println("Đã cập nhật hóa đơn thành công: " + updatedInvoice.getInvoiceId() + ".");
+            System.out.println("Da cap nhat hoa don thanh cong: " + updatedInvoice.getInvoiceId() + ".");
         } else {
-            System.out.println("Không tìm thấy hóa đơn để cập nhật!");
+            System.out.println("Khong tim thay hoa don de cap nhat!");
         }
     }
 
@@ -88,7 +101,7 @@ public abstract class InvoiceListDAO implements IRepository<InvoiceDTO> {
     @Override
     public void displayAll() {
         boolean hasActive = false;
-        System.out.println("Danh sách hóa đơn hoạt động:");
+        System.out.println("Danh sach hoa don hoat dong:");
         for (InvoiceDTO inv : invoiceList) {
             if (inv != null && inv.isStatus()) {
                 System.out.println(inv.toString());
@@ -96,11 +109,72 @@ public abstract class InvoiceListDAO implements IRepository<InvoiceDTO> {
             }
         }
         if (!hasActive) {
-            System.out.println("Không có hóa đơn nào khả dụng!");
+            System.out.println("Khong co hoa don nao kha dung!");
         }
     }
 
-// còn thiếu ReadFile
+@Override
+public void readFile(String filePath) {
+    InvoiceDTO[] tempArr = new InvoiceDTO[0];
+
+    java.io.File file = new java.io.File(filePath);
+    if (!file.exists()) {
+        this.invoiceList = tempArr;
+        return;
+    }
+
+    try (java.util.Scanner scanner = new java.util.Scanner(file)) {
+        while (scanner.hasNextLine()) {
+            String line = scanner.nextLine();
+            if (line.trim().isEmpty()) continue;
+
+            String[] data = line.split(",");
+
+            try {
+                String invoiceId = data[0];
+
+                String customerId = data[1];
+                Customer customer = null;
+                if (!customerId.equalsIgnoreCase("N/A")) {
+                    customer = new Customer();
+                    customer.setCustomerId(customerId);
+                }
+
+                String employeeId = data[2];
+                SalesEmployee employee = null;
+                if (!employeeId.equalsIgnoreCase("N/A")) {
+                    employee = new SalesEmployee();
+                    employee.setEmployeeId(employeeId);
+                }
+
+                java.util.Date createdDate = sdf.parse(data[3]);
+                boolean status = data[4].equalsIgnoreCase("Active");
+                // data[5] is totalPrice — skip, it is calculated
+
+                String paymentId = data[6];
+                Cash payment = null;
+                if (!paymentId.equalsIgnoreCase("N/A")) {
+                    payment = new Cash();
+                    payment.setPaymentId(paymentId);
+                }
+
+                InvoiceDTO inv = new InvoiceDTO(invoiceId, customer, employee, createdDate, payment);
+                inv.setStatus(status);
+
+                tempArr = Arrays.copyOf(tempArr, tempArr.length + 1);
+                tempArr[tempArr.length - 1] = inv;
+
+            } catch (Exception ex) {
+                System.out.println("Loi du lieu dong: " + line);
+            }
+        }
+    } catch (Exception e) {
+        System.out.println("Loi khi doc File: " + e.getMessage());
+    }
+
+    this.invoiceList = tempArr;
+}
+
 @Override
 public void writeFile(String filePath) {
     try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
@@ -139,10 +213,10 @@ public void writeFile(String filePath) {
             }
         }
         
-        System.out.println("Ghi dữ liệu vào file " + filePath + " thành công!");
+        System.out.println("Ghi du lieu vao file " + filePath + " thanh cong!");
         
     } catch (IOException e) {
-        System.err.println("Lỗi khi ghi file: " + e.getMessage());
+        System.err.println("Loi khi ghi file: " + e.getMessage());
     }
 }
 

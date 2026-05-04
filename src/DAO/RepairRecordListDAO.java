@@ -9,9 +9,20 @@ import java.io.IOException;
 
 public class RepairRecordListDAO implements IRepository<RepairRecordDTO> {
     private static RepairRecordDTO[] records = new RepairRecordDTO[0];
+    private final String filePath = "data/repairrecord.txt";
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     public RepairRecordListDAO() {
+    }
+
+    public void loadFile() {
+        readFile(this.filePath);
+        System.out.println("Da tai du lieu thanh cong tu file: " + filePath);
+    }
+
+    public void saveFile() {
+        writeFile(this.filePath);
+        System.out.println("Da luu du lieu vao file: " + filePath);
     }
 
     @Override
@@ -31,9 +42,9 @@ public class RepairRecordListDAO implements IRepository<RepairRecordDTO> {
             }
         }
         if (found) {
-            System.out.println("Đã hủy bản ghi sửa chữa: " + repairId + ".");
+            System.out.println("Da huy ban ghi sua chua: " + repairId + ".");
         } else {
-            System.out.println("Không tìm thấy bản ghi sửa chữa: " + repairId + ".");
+            System.out.println("Khong tim thay ban ghi sua chua: " + repairId + ".");
         }
     }
 
@@ -77,12 +88,12 @@ public class RepairRecordListDAO implements IRepository<RepairRecordDTO> {
     @Override
     public void displayAll() {
         if (records.length == 0) {
-            System.out.println("Danh sách bản ghi sửa chữa trống!");
+            System.out.println("Danh sach ban ghi sua chua trong!");
             return;
         }
         System.out.println("=".repeat(130));
         System.out.printf("%-10s | %-10s | %-12s | %-8s | %-20s | %-15s | %-15s%n",
-                "Mã SR", "Mã BH", "Ngày SR", "Lần thứ", "Lỗi", "Giá SR", "Trạng thái");
+                "Ma SR", "Ma BH", "Ngay SR", "Lan thu", "Loi", "Gia SR", "Trang thai");
         System.out.println("-".repeat(130));
 
         for (RepairRecordDTO record : records) {
@@ -102,7 +113,49 @@ public class RepairRecordListDAO implements IRepository<RepairRecordDTO> {
 
     @Override
     public void readFile(String filePath) {
-        // Sẽ bổ sung sau
+        RepairRecordDTO[] tempArr = new RepairRecordDTO[0];
+
+        java.io.File file = new java.io.File(filePath);
+        if (!file.exists()) {
+            this.records = tempArr;
+            return;
+        }
+
+        try (java.util.Scanner scanner = new java.util.Scanner(file)) {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                if (line.trim().isEmpty()) continue;
+
+                String[] data = line.split(",");
+
+                try {
+                    String repairId          = data[0];
+                    String warrantyId        = data[1];
+                    java.util.Date repairDate = sdf.parse(data[2]);
+                    int attemptNumber        = Integer.parseInt(data[3]);
+                    String errorDescription  = data[4];
+                    String solution          = data[5];
+                    String replacedParts     = data[6];
+                    double repairCost        = Double.parseDouble(data[7]);
+                    String note              = data[8];
+                    String processStatus     = data[9];
+
+                    RepairRecordDTO r = new RepairRecordDTO(warrantyId, repairId, repairDate,
+                            attemptNumber, errorDescription, solution, replacedParts,
+                            repairCost, note, null, processStatus, true);
+
+                    tempArr = Arrays.copyOf(tempArr, tempArr.length + 1);
+                    tempArr[tempArr.length - 1] = r;
+
+                } catch (Exception ex) {
+                    System.out.println("Loi du lieu dong: " + line);
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Loi khi doc File: " + e.getMessage());
+        }
+
+        this.records = tempArr;
     }
 
     @Override

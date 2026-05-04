@@ -10,16 +10,27 @@ import java.io.IOException;
 
 public class GoodsReceiptListDAO implements IRepository<GoodsReceiptDTO> {
     private static GoodsReceiptDTO[] receiptList = new GoodsReceiptDTO[0];
+    private final String filePath = "data/goodsreceipt.txt";
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     public GoodsReceiptListDAO() {
+    }
+
+    public void loadFile() {
+        readFile(this.filePath);
+        System.out.println("Da tai du lieu thanh cong tu file: " + filePath);
+    }
+
+    public void saveFile() {
+        writeFile(this.filePath);
+        System.out.println("Da luu du lieu vao file: " + filePath);
     }
 
     @Override
     public void add(GoodsReceiptDTO receipt) {
         receiptList = Arrays.copyOf(receiptList, receiptList.length + 1);
         receiptList[receiptList.length - 1] = receipt;
-        System.out.println("Đã thêm phiếu nhập thành công: " + receipt.getReceiptId() + ".");
+        System.out.println("Da them phieu nhap thanh cong: " + receipt.getReceiptId() + ".");
     }
 
     @Override
@@ -33,9 +44,9 @@ public class GoodsReceiptListDAO implements IRepository<GoodsReceiptDTO> {
             }
         }
         if (found) {
-            System.out.println("Đã hủy phiếu nhập: " + receiptId + ".");
+            System.out.println("Da huy phieu nhap: " + receiptId + ".");
         } else {
-            System.out.println("Không tìm thấy phiếu nhập: " + receiptId + ".");
+            System.out.println("Khong tim thay phieu nhap: " + receiptId + ".");
         }
     }
 
@@ -50,9 +61,9 @@ public class GoodsReceiptListDAO implements IRepository<GoodsReceiptDTO> {
             }
         }
         if (found) {
-            System.out.println("Đã cập nhật phiếu nhập thành công: " + updatedReceipt.getReceiptId() + ".");
+            System.out.println("Da cap nhat phieu nhap thanh cong: " + updatedReceipt.getReceiptId() + ".");
         } else {
-            System.out.println("Không tìm thấy phiếu nhập để cập nhật!");
+            System.out.println("Khong tim thay phieu nhap de cap nhat!");
         }
     }
 
@@ -89,7 +100,7 @@ public class GoodsReceiptListDAO implements IRepository<GoodsReceiptDTO> {
         boolean hasActive = false;
         System.out.println("=".repeat(115));
         System.out.printf("%-10s | %-15s | %-20s | %-12s | %-12s | %-15s%n", 
-                "Mã PN", "Nhân Viên", "Nhà Cung Cấp", "Ngày Nhập", "Trạng Thái", "Tổng Tiền");
+                "Ma PN", "Nhan Vien", "Nha Cung Cap", "Ngay Nhap", "Trang Thai", "Tong Tien");
         System.out.println("-".repeat(115));
 
         for (GoodsReceiptDTO rec : receiptList) {
@@ -108,19 +119,19 @@ public class GoodsReceiptListDAO implements IRepository<GoodsReceiptDTO> {
                     tenNCC = "N/A";
                 }
 
-                System.out.printf("%-10s | %-15s | %-20s | %-12s | %-12s | %,15.0f VNĐ%n",
+                System.out.printf("%-10s | %-15s | %-20s | %-12s | %-12s | %,15.0f VND%n",
                         rec.getReceiptId(),
                         tenNV,
                         tenNCC,
                         sdf.format(rec.getCreatedDate()),
-                        "Hoạt động",
+                        "Hoat dong",
                         calculateTotalPrice(rec));
                 hasActive = true;
             }
         }
         
         if (!hasActive) {
-            System.out.println("Danh sách phiếu nhập trống hoặc đã bị hủy hết!");
+            System.out.println("Danh sach phieu nhap trong hoac da bi huy het!");
         }
         System.out.println("=".repeat(115));
     }
@@ -135,9 +146,61 @@ public class GoodsReceiptListDAO implements IRepository<GoodsReceiptDTO> {
         return total;
     }
 
-    @Override
+       @Override
     public void readFile(String filePath) {
-        // Sẽ bổ sung sau
+        GoodsReceiptDTO[] tempArr = new GoodsReceiptDTO[0];
+        
+        // Kiểm tra file tồn tại
+        java.io.File file = new java.io.File(filePath);
+        if (!file.exists()) {
+            this.receiptList = tempArr; 
+            return; 
+        }
+
+        try (java.util.Scanner scanner = new java.util.Scanner(file)) {
+            
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                if (line.trim().isEmpty()) continue;
+
+                String[] data = line.split(",");
+
+                try {
+                    String receiptId = data[0];
+                    java.util.Date createdDate = sdf.parse(data[1]);
+    
+                    String supplierId = data[2];
+                    Supplier supplier = null;
+                    if (!supplierId.equalsIgnoreCase("N/A")) {
+                        supplier = new Supplier();
+                        supplier.setSupplierId(supplierId); 
+                    }
+
+                    String receiverId = data[3];
+                    Employee receiver = null;
+                    if (!receiverId.equalsIgnoreCase("N/A")) {
+                        receiver = new Employee();
+                        receiver.setEmployeeId(receiverId);
+                    }
+                    boolean status = data[4].equalsIgnoreCase("Active");
+                    
+                    GoodsReceiptDTO rec = new GoodsReceiptDTO(receiptId, createdDate, supplier, receiver, status);
+
+                    // Thêm vào mảng
+                    tempArr = Arrays.copyOf(tempArr, tempArr.length + 1);
+                    tempArr[tempArr.length - 1] = rec;
+
+                } catch (Exception ex) {
+                    System.out.println("Loi du lieu dong: " + line);
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Loi khi doc File: " + e.getMessage());
+        }
+        
+        // Nạp mảng vào biến gốc
+        this.receiptList = tempArr;
+    }
     }
 
     @Override
@@ -179,10 +242,9 @@ public class GoodsReceiptListDAO implements IRepository<GoodsReceiptDTO> {
                 }
             }
 
-            System.out.println("Ghi dữ liệu vào file " + filePath + " thành công!");
+            System.out.println("Ghi du lieu vao file " + filePath + " thanh cong!");
 
         } catch (IOException e) {
-            System.err.println("Lỗi khi ghi file: " + e.getMessage());
+            System.err.println("Loi khi ghi file: " + e.getMessage());
         }
     }
-}

@@ -6,8 +6,8 @@ import BUS.RepairRecordListBUS;
 
 import java.util.Scanner;
 
-public class Main {
-// CHƯA HOÀN THIỆN XONG ( DEMO )
+public class main {
+
     static Scanner sc = new Scanner(System.in);
 
     static InvoiceListBUS invoiceBUS;

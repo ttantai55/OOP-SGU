@@ -9,9 +9,20 @@ import java.io.IOException;
 
 public class PromotionListDAO implements IRepository<PromotionDTO> {
     private static PromotionDTO[] promotionList = new PromotionDTO[0];
+    private final String filePath = "data/promotion.txt";
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     public PromotionListDAO() {
+    }
+
+    public void loadFile() {
+        readFile(this.filePath);
+        System.out.println("Da tai du lieu thanh cong tu file: " + filePath);
+    }
+
+    public void saveFile() {
+        writeFile(this.filePath);
+        System.out.println("Da luu du lieu vao file: " + filePath);
     }
 
     @Override
@@ -25,11 +36,11 @@ public class PromotionListDAO implements IRepository<PromotionDTO> {
         for (PromotionDTO p : promotionList) {
             if (p != null && p.getPromotionId().equals(promotionId)) {
                 p.setStatus(false);
-                System.out.println("Đã hủy khuyến mãi: " + promotionId + ".");
+                System.out.println("Da huy khuyen mai: " + promotionId + ".");
                 return;
             }
         }
-        System.out.println("Không tìm thấy khuyến mãi: " + promotionId + ".");
+        System.out.println("Khong tim thay khuyen mai: " + promotionId + ".");
     }
 
     @Override
@@ -40,7 +51,7 @@ public class PromotionListDAO implements IRepository<PromotionDTO> {
                 return;
             }
         }
-        System.out.println("Không tìm thấy khuyến mãi để cập nhật!");
+        System.out.println("Khong tim thay khuyen mai de cap nhat!");
     }
 
     @Override
@@ -81,7 +92,46 @@ public class PromotionListDAO implements IRepository<PromotionDTO> {
 
     @Override
     public void readFile(String filePath) {
-        // Sẽ bổ sung sau
+        PromotionDTO[] tempArr = new PromotionDTO[0];
+
+        java.io.File file = new java.io.File(filePath);
+        if (!file.exists()) {
+            this.promotionList = tempArr;
+            return;
+        }
+
+        try (java.util.Scanner scanner = new java.util.Scanner(file)) {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                if (line.trim().isEmpty()) continue;
+
+                String[] data = line.split(",");
+
+                try {
+                    String promotionId   = data[0];
+                    String programName   = data[1];
+                    String productID     = data[2];
+                    java.util.Date startDate = sdf.parse(data[3]);
+                    java.util.Date endDate   = sdf.parse(data[4]);
+                    String condition         = data[5];
+                    double discountPercent   = Double.parseDouble(data[6]);
+                    boolean status           = data[7].equalsIgnoreCase("Active");
+
+                    PromotionDTO p = new PromotionDTO(promotionId, programName, productID,
+                            startDate, endDate, condition, discountPercent, status);
+
+                    tempArr = Arrays.copyOf(tempArr, tempArr.length + 1);
+                    tempArr[tempArr.length - 1] = p;
+
+                } catch (Exception ex) {
+                    System.out.println("Loi du lieu dong: " + line);
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Loi khi doc File: " + e.getMessage());
+        }
+
+        this.promotionList = tempArr;
     }
 
     @Override
@@ -109,16 +159,16 @@ public class PromotionListDAO implements IRepository<PromotionDTO> {
                     bw.newLine();
                 }
             }
-            System.out.println("Ghi dữ liệu vào file " + filePath + " thành công!");
+            System.out.println("Ghi du lieu vao file " + filePath + " thanh cong!");
         } catch (IOException e) {
-            System.err.println("Lỗi khi ghi file: " + e.getMessage());
+            System.err.println("Loi khi ghi file: " + e.getMessage());
         }
     }
 
     @Override
     public void displayAll() {
         if (promotionList.length == 0) {
-            System.out.println("Danh sách khuyến mãi trống!");
+            System.out.println("Danh sach khuyen mai trong!");
             return;
         }
         System.out.println("=".repeat(100));
