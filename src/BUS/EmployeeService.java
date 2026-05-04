@@ -15,7 +15,7 @@ public class EmployeeService {
     static Scanner sc = new Scanner(System.in);
 
     // Duong dan file
-    private static final String FILE_EMPLOYEES = "data/Employee.txt";
+    private static final String FILE_EMPLOYEES = "OOP-SGU/src/data/Employee.txt";
 
     public EmployeeService() {
         employeeDAO = new EmployeeDAO();
@@ -106,7 +106,7 @@ public class EmployeeService {
 
     private void printHeader(String typeInfo) {
         System.out.println("=".repeat(210));
-        System.out.printf("%-5s | %-30s | %-13s | %-25s | %-45s | %-10s | %-15s | %-15s | %-12s | %s%n",
+        System.out.printf("%-5s | %-30s | %-13s | %-25s | %-70s | %-10s | %-15s | %-15s | %-12s | %s%n",
                 "STT", "Ho Ten", "So DT", "Email", "Dia Chi", "Ma NV", "Chuc Vu", "Luong CB", "Ngay VL", typeInfo);
         System.out.println("=".repeat(210));
     }

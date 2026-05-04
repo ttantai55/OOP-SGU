@@ -52,15 +52,24 @@ public abstract class Employee extends Person {
     @Override
     public void input(){
         super.input();
-        System.out.println(" Ma nhan vien: ");
-        setEmployeeId(sc.nextLine());
-        System.out.println(" Chuc vu: ");
-        setPosition(sc.nextLine());
-        System.out.println("Nhap luong co ban: ");
-        setBaseSalary(Float.parseFloat(sc.nextLine()));
-        System.out.println("Ngay vao lam: ");
+        setEmployeeId(BUS.Validation.getNonEmptyString("Ma nhan vien: "));
+        setPosition(BUS.Validation.getNonEmptyString("Chuc vu: "));
+        while (true) {
+            try {
+                String salaryStr = BUS.Validation.getNonEmptyString("Nhap luong co ban: ");
+                float salary = Float.parseFloat(salaryStr);
+                if (salary < 0) {
+                    System.out.println("[Loi] Luong phai lon hon hoac bang 0!");
+                    continue;
+                }
+                setBaseSalary(salary);
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("[Loi] Luong phai la so! Vui long nhap lai.");
+            }
+        }
+        System.out.println("Ngay vao lam: " + new java.text.SimpleDateFormat("dd/MM/yyyy").format(new Date()));
         this.startDate = new Date();
-
     }
     public abstract float calculateSalary();//abstract method tính lương
     public abstract String getRole();//abstract method phân quyền

@@ -2,15 +2,14 @@ package BUS;
 
 import DAO.CustomerDAO;
 import DTO.Customer;
-
 import java.util.Scanner;
 
 // CustomerService.java - xu ly nghiep vu khach hang
 public class CustomerService {
-    private CustomerDAO customerDAO;
+    private final CustomerDAO customerDAO;
     static Scanner sc = new Scanner(System.in);
 
-    private static final String FILE_CUSTOMERS = "data/Customer.txt";
+    private static final String FILE_CUSTOMERS = "OOP-SGU/src/data/Customer.txt";
 
     public CustomerService() {
         customerDAO = new CustomerDAO();

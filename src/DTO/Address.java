@@ -64,16 +64,11 @@ public class Address {
     }
 
     public void inPut(){
-        System.out.println("Moi nhap so nha: ");
-        setHouseNumber(sc.nextLine());
-        System.out.println("Moi nhap ten duong");
-        setStreet(sc.nextLine());
-        System.out.println("Moi nhap ten phuong/xa: ");
-        setWard(sc.nextLine());
-        System.out.println("Moi nhap quan/huyen: ");
-        setDistrict(sc.nextLine());
-        System.out.println("moi nhap tinh: ");
-        setCity(sc.nextLine());
+        setHouseNumber(BUS.Validation.getNonEmptyString("Moi nhap so nha: "));
+        setStreet(BUS.Validation.getNonEmptyString("Moi nhap ten duong: "));
+        setWard(BUS.Validation.getNonEmptyString("Moi nhap ten phuong/xa: "));
+        setDistrict(BUS.Validation.getNonEmptyString("Moi nhap quan/huyen: "));
+        setCity(BUS.Validation.getNonEmptyString("Moi nhap tinh/thanh pho: "));
     }
     //****
     @Override

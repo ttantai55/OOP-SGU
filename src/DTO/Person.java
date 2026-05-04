@@ -52,16 +52,12 @@ public class Person {
 
 
     public void input(){
-        System.out.println("Moi nhap ho va ten: ");
-        setFullName(sc.nextLine());
-        System.out.println("Moi nhap so dien thoai(10 so bat dau tu so 0): ");
-        setPhoneNumber(sc.nextLine());
-        System.out.println("Moi nhap email: ");
-        setEmail(sc.nextLine());
+        setFullName(BUS.Validation.getNonEmptyString("Moi nhap ho va ten: "));
+        setPhoneNumber(BUS.Validation.getValidPhone("Moi nhap so dien thoai (10-11 so): "));
+        setEmail(BUS.Validation.getValidEmail("Moi nhap email (@gmail.com): "));
         System.out.println("Moi nhap dia chi: ");
         this.address = new Address();
         this.address.inPut();
-
     }
 
     @Override

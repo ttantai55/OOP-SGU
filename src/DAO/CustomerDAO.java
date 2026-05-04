@@ -67,6 +67,17 @@ public class CustomerDAO implements IRepository<Customer> {
         return result;
     }
 
+    public Customer findByUsername (String username) {
+        boolean found = false;
+        for (Customer cus : customers) {
+            if(cus != null && cus.getUsername().equals(username)) {
+                found = true;
+                return cus;
+            }
+        }
+        return null;
+    }
+
     @Override
     public void displayAll() {
         for (int i = 0; i < count; i++) {
@@ -109,6 +120,10 @@ public class CustomerDAO implements IRepository<Customer> {
     @Override
     public void writeFile(String filePath) {
         try {
+            java.io.File file = new java.io.File(filePath);
+            if (file.getParentFile() != null) {
+                file.getParentFile().mkdirs();
+            }
             java.io.BufferedWriter bw = new java.io.BufferedWriter(
                     new java.io.FileWriter(filePath));
             java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy");
