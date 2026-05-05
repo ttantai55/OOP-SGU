@@ -19,7 +19,9 @@ public class EmployeeService {
 
     public EmployeeService() {
         employeeDAO = new EmployeeDAO();
+        //loadFromfile(); fix
     }
+
 
     // ==================== LOAD / SAVE ====================
 

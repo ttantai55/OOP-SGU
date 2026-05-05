@@ -11,8 +11,8 @@ public class DeliveryEmployee extends Employee{
     static Scanner sc = new Scanner(System.in);
     public DeliveryEmployee(){}
 
-    public DeliveryEmployee(String employeeId, String position, float baseSalary, Date startDate, String deliveryArea, String licensePlate, float feePerOrder, int deliveryCount) {
-        super(employeeId, position, baseSalary, startDate);
+    public DeliveryEmployee(String employeeId,String CCCD, String position, float baseSalary, Date startDate, String deliveryArea, String licensePlate, float feePerOrder, int deliveryCount) {
+        super(employeeId,CCCD, position, baseSalary, startDate);
         this.deliveryArea = deliveryArea;
         this.licensePlate = licensePlate;
         this.feePerOrder = feePerOrder;

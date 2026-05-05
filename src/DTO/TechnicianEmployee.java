@@ -9,8 +9,8 @@ public class TechnicianEmployee extends Employee {
     static Scanner sc = new Scanner(System.in);
     public TechnicianEmployee() {}
 
-    public TechnicianEmployee(String employeeId, String position, float baseSalary, Date startDate, float expenditure, int repairCount) {
-        super(employeeId, position, baseSalary, startDate);
+    public TechnicianEmployee(String employeeId,String CCCD, String position, float baseSalary, Date startDate, float expenditure, int repairCount) {
+        super(employeeId,CCCD, position, baseSalary, startDate);
         this.expenditure = expenditure;
         this.repairCount = repairCount;
     }

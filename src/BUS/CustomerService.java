@@ -78,8 +78,7 @@ public class CustomerService {
             return;
         }
         System.out.println("=".repeat(150));
-        System.out.printf("%-5s | %-30s | %-13s | %-25s | %-45s | %-10s | %-10d | %-10s | %-12s%n",
-                "STT", "Ho Ten", "So DT", "Email", "Dia Chi", "Ma KH", 0, "Loai", "Ngay DK");
+
         System.out.printf("%-5s | %-30s | %-13s | %-25s | %-45s | %-10s | %-10s | %-10s | %-12s%n",
                 "---", "Ho Ten", "So DT", "Email", "Dia Chi", "Ma KH", "Diem TL", "Loai", "Ngay DK");
         System.out.println("=".repeat(150));

@@ -8,8 +8,8 @@ public class SalesEmployee extends Employee {
     private float commissionAmount;//tiền hoa hồng
     static Scanner sc = new Scanner(System.in);
     public SalesEmployee(){}
-    public SalesEmployee(String employeeId, String position, float baseSalary, Date startDate, float bonus, float commissionAmount) {
-        super(employeeId, position, baseSalary, startDate);
+    public SalesEmployee(String employeeId, String CCCD, String position, float baseSalary, Date startDate, float bonus, float commissionAmount) {
+        super(employeeId, CCCD,position, baseSalary, startDate);
         this.bonus = bonus;
         this.commissionAmount = commissionAmount;
     }

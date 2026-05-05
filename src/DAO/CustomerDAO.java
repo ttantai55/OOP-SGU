@@ -120,10 +120,7 @@ public class CustomerDAO implements IRepository<Customer> {
     @Override
     public void writeFile(String filePath) {
         try {
-            java.io.File file = new java.io.File(filePath);
-            if (file.getParentFile() != null) {
-                file.getParentFile().mkdirs();
-            }
+
             java.io.BufferedWriter bw = new java.io.BufferedWriter(
                     new java.io.FileWriter(filePath));
             java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy");

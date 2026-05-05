@@ -8,8 +8,8 @@ public class Manager extends Employee{
     private String department; // phòng ban
     static Scanner sc = new Scanner(System.in);
     public Manager(){}
-    public Manager(String employeeId, String position, float baseSalary, Date startDate, float allowance, String department) {
-        super(employeeId, position, baseSalary, startDate);
+    public Manager(String employeeId, String CCCD, String position, float baseSalary, Date startDate, float allowance, String department) {
+        super(employeeId,CCCD, position, baseSalary, startDate);
         this.allowance = allowance;
         this.department = department;
     }

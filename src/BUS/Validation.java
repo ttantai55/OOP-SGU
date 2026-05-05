@@ -48,4 +48,18 @@ public class Validation {
             }
         }
     }
+
+    public static String getValidCCCD(String prompt) {
+        String CCCD;
+        while (true) {
+            System.out.print(prompt);
+            CCCD = sc.nextLine().trim();
+            // Bieu thuc chinh quy (Regex): Chi chua so, do dai 12 chữ số
+            if (CCCD.matches("^[0-9]{12}$")) {
+                return CCCD; // Thoat vong lap, tra ve CCCD dung
+            } else {
+                System.out.println("[Loi] CCCD phai bao gom 12 chữ số! Vui long nhap lai.");
+            }
+        }
+    }
 }

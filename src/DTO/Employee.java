@@ -6,19 +6,27 @@ import java.util.Scanner;
 
 public abstract class Employee extends Person {
     protected String employeeId;
+    protected String CCCD;
     protected String position; //chức vụ
     protected float baseSalary; //lương cơ bản
     protected Date startDate;//ngày vào làm
     static Scanner sc = new Scanner(System.in);
     public Employee(){}
-    public Employee(String employeeId, String position, float baseSalary, Date startDate){
+    public Employee(String employeeId,String CCCD,String position, float baseSalary, Date startDate){
         this.employeeId = employeeId;
+        this.CCCD = CCCD;
         this.position = position;
         this.baseSalary = baseSalary;
         this.startDate = startDate;
     }
     public String getEmployeeId(){
         return employeeId;
+    }
+    public String getCCCD(){
+        return CCCD;
+    }
+    public void setCCCD(String CCCD){
+        this.CCCD = CCCD;
     }
     public void setEmployeeId(String employeeId){
         this.employeeId = employeeId;
@@ -53,6 +61,7 @@ public abstract class Employee extends Person {
     public void input(){
         super.input();
         setEmployeeId(BUS.Validation.getNonEmptyString("Ma nhan vien: "));
+        setCCCD(BUS.Validation.getValidCCCD("số CCCD: "));
         setPosition(BUS.Validation.getNonEmptyString("Chuc vu: "));
         while (true) {
             try {

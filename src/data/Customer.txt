@@ -2,3 +2,6 @@ KH001,Nguyen Van A,0901234567,nguyenvana@email.com,12,Nguyen Hue,Ben Nghe,Q1,Ho 
 KH002,Tran Thi B,0912345678,tranthib@email.com,45,Le Loi,Ben Thanh,Q1,Ho Chi Minh,150,Thuong,15/03/2023
 KH003,Le Van C,0923456789,levanc@email.com,88,Hai Ba Trung,Tan Dinh,Q1,Ho Chi Minh,50,Moi,20/06/2024
 KH004,Chu nguyen chuong,0777777777,chuataydau@gmail.com,Chua cap nhat,Chua cap nhat,Chua cap nhat,Chua cap nhat,Chua cap nhat,0,Moi,04/05/2026
+KH001,Nguyen van thanh,82716482920,ghdaj@gmail.com,12,23,41,24,2,300,thuong,04/05/2026
+1,Chu Van thanh,2816283902,gha@gmail.com,21,43,24,2,4,5,moi,04/05/2026
+KH007,Truong VO ky,08274819290,yah@gmail.com,Chua cap nhat,Chua cap nhat,Chua cap nhat,Chua cap nhat,Chua cap nhat,0,Moi,04/05/2026
