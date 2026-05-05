@@ -16,6 +16,7 @@ public class AccountService {
         this.accountDAO = new AccountDAO();
         accountDAO.readFile("src/data/accounts.txt"); // Tu dong doc tu lieu va nao vao he thong khi duoc Khoi tao !
     }
+<<<<<<< HEAD
 
     // --- [BỔ SUNG] CÁC HÀM ĐỒNG BỘ DỮ LIỆU ---
 
@@ -23,6 +24,15 @@ public class AccountService {
    // public void loadFromFile() {
    //     accountDAO.readFile("src/data/accounts.txt");
    // }
+=======
+    
+    // --- [BỔ SUNG] CÁC HÀM ĐỒNG BỘ DỮ LIỆU ---
+
+    // [OOP] Delegation: Uy quyen cho DAO doc du lieu
+    public void loadFromFile() {
+        accountDAO.readFile("src/data/accounts.txt");
+    }
+>>>>>>> origin
 
     // [OOP] Delegation: Uy quyen cho DAO ghi du lieu xuong o cung
     public void saveToFile() {
@@ -63,7 +73,11 @@ public class AccountService {
             System.out.println("[Loi] Ten dang nhap da ton tai!");
             return false;
         }
+<<<<<<< HEAD
         accountDAO.add(acc);
+=======
+        accountDAO.add(acc); 
+>>>>>>> origin
         return true;
     }
 
@@ -88,6 +102,7 @@ public class AccountService {
     public void showAllAccounts() {
         accountDAO.displayAll();
     }
+<<<<<<< HEAD
 
     public void addNewAccount() {
         System.out.println("\n--- THEM TAI KHOAN MOI ---");
@@ -199,3 +214,6 @@ public class AccountService {
         System.out.println("-> DOI MAT KHAU THANH CONG!");
     }
 }
+=======
+}
+>>>>>>> origin

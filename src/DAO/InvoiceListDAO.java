@@ -6,6 +6,7 @@ import DTO.Customer;
 import DTO.Installment;
 import DTO.InvoiceDTO;
 import DTO.InvoiceItemDTO;
+<<<<<<< HEAD
 import DTO.PaymentDTO;
 import DTO.SalesEmployee;
 import DTO.Transfer;
@@ -14,6 +15,16 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+=======
+import java.util.Arrays;
+import java.text.SimpleDateFormat;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Date;
+>>>>>>> origin
 
 
 public class InvoiceListDAO implements IRepository<InvoiceDTO> {
@@ -44,6 +55,7 @@ public class InvoiceListDAO implements IRepository<InvoiceDTO> {
         System.out.println("Da them hoa don thanh cong: " + invoice.getInvoiceId() + ".");
     }
 
+<<<<<<< HEAD
      @Override
     // sử dụng xóa mềm (sort delete)
     public void remove(String invoiceId) { 
@@ -52,6 +64,23 @@ public class InvoiceListDAO implements IRepository<InvoiceDTO> {
         inv.setStatus(false); // dò được id hóa đơn thì đặt là false
         System.out.println("Da xoa hoa don thanh cong: " + invoiceId + ".");
          return;
+=======
+    @Override
+    public void remove(String invoiceId) {
+        boolean found = false;
+        for (InvoiceDTO inv : invoiceList) {
+            if (inv != null && inv.getInvoiceId().equals(invoiceId)) {
+                inv.setStatus(false);
+                found = true;
+                break;
+            }
+        }
+        if (found) {
+            System.out.println("Đã hủy hóa đơn: " + invoiceId + ".");
+        } else {
+            System.out.println("Không tìm thấy hóa đơn: " + invoiceId + ".");
+        }
+>>>>>>> origin
     }
         System.out.println("Khong tim thay hoa don de xoa!");
 }  
@@ -136,6 +165,7 @@ public class InvoiceListDAO implements IRepository<InvoiceDTO> {
 
 @Override
 public void readFile(String filePath) {
+<<<<<<< HEAD
     InvoiceDTO[] tempArr = new InvoiceDTO[0];
 
     java.io.File file = new java.io.File(filePath);
@@ -221,6 +251,45 @@ public void readFile(String filePath) {
     }
 
     this.invoiceList = tempArr;
+=======
+    try {
+        BufferedReader br = new BufferedReader(new FileReader(filePath));
+        String line = br.readLine();
+
+        while (line != null) {
+            String[] parts = line.split(",");
+
+            InvoiceDTO inv = new InvoiceDTO();
+
+            inv.setInvoiceId(parts[0]);
+
+            try {
+                Date ngay = sdf.parse(parts[3]);
+                inv.setCreatedDate(ngay);
+            } catch (Exception e) {
+                // bỏ qua nếu không đọc được ngày
+            }
+
+            if (parts[4].equals("Active")) {
+                inv.setStatus(true);
+            } else {
+                inv.setStatus(false);
+            }
+
+            int viTri = invoiceList.length;
+            invoiceList = Arrays.copyOf(invoiceList, viTri + 1);
+            invoiceList[viTri] = inv;
+
+            line = br.readLine();
+        }
+
+        br.close();
+        System.out.println("Đọc dữ liệu từ file " + filePath + " thành công!");
+
+    } catch (IOException e) {
+        System.err.println("Lỗi khi đọc file: " + e.getMessage());
+    }
+>>>>>>> origin
 }
 
 @Override

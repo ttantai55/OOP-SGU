@@ -7,7 +7,7 @@ import BUS.RepairRecordListBUS;
 import java.util.Scanner;
 
 public class Main {
-// CHƯA HOÀN THIỆN XONG ( DEMO )
+
     static Scanner sc = new Scanner(System.in);
 
     static InvoiceListBUS invoiceBUS;
@@ -134,8 +134,11 @@ public class Main {
             System.out.println("  4. Xem sua chua theo bao hanh");
             System.out.println("  5. Cap nhat trang thai sua chua");
             System.out.println("  6. Thong ke sua chua");
+            System.out.println("  7. Tao bao hanh thu cong");
+            System.out.println("  8. Xem tat ca sua chua");
+            System.out.println("  9. Loc sua chua theo trang thai");
             System.out.println("  0. Quay lai");
-            System.out.print("Chon (0-6): ");
+            System.out.print("Chon (0-9): ");
 
             try {
                 choice = Integer.parseInt(sc.nextLine());
@@ -155,6 +158,12 @@ public class Main {
                 repairBUS.updateRepairStatus();
             } else if (choice == 6) {
                 repairBUS.calculateRepairStats();
+            } else if (choice == 7) {
+                warrantyBUS.inputWarranty();
+            } else if (choice == 8) {
+                repairBUS.viewAllRepairs();
+            } else if (choice == 9) {
+                repairBUS.viewRepairsByStatus();
             } else if (choice == 0) {
                 System.out.println("Quay lai menu chinh.");
             } else {
@@ -171,8 +180,10 @@ public class Main {
             System.out.println("  2. Xem tat ca khuyen mai");
             System.out.println("  3. Cap nhat khuyen mai");
             System.out.println("  4. Huy khuyen mai");
+            System.out.println("  5. Xem chi tiet khuyen mai theo ma");
+            System.out.println("  6. Xem khuyen mai theo san pham");
             System.out.println("  0. Quay lai");
-            System.out.print("Chon (0-4): ");
+            System.out.print("Chon (0-6): ");
 
             try {
                 choice = Integer.parseInt(sc.nextLine());
@@ -188,6 +199,10 @@ public class Main {
                 promotionBUS.updatePromotion();
             } else if (choice == 4) {
                 promotionBUS.cancelPromotion();
+            } else if (choice == 5) {
+                promotionBUS.printPromotionById();
+            } else if (choice == 6) {
+                promotionBUS.printPromotionsByProduct();
             } else if (choice == 0) {
                 System.out.println("Quay lai menu chinh.");
             } else {

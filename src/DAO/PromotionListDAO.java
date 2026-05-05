@@ -1,11 +1,22 @@
 package DAO;
 
 import DTO.PromotionDTO;
+<<<<<<< HEAD
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+=======
+import java.util.Arrays;
+import java.text.SimpleDateFormat;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Date;
+>>>>>>> origin
 
 public class PromotionListDAO implements IRepository<PromotionDTO> {
     private static PromotionDTO[] promotionList = new PromotionDTO[0];
@@ -95,6 +106,7 @@ public class PromotionListDAO implements IRepository<PromotionDTO> {
 
     @Override
     public void readFile(String filePath) {
+<<<<<<< HEAD
         PromotionDTO[] tempArr = new PromotionDTO[0];
 
         java.io.File file = new java.io.File(filePath);
@@ -135,6 +147,52 @@ public class PromotionListDAO implements IRepository<PromotionDTO> {
         }
 
         this.promotionList = tempArr;
+=======
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(filePath));
+            String line = br.readLine();
+
+            while (line != null) {
+                String[] parts = line.split(",");
+
+                PromotionDTO p = new PromotionDTO();
+
+                p.setPromotionId(parts[0]);
+                p.setProgramName(parts[1]);
+                p.setProductID(parts[2]);
+
+                try {
+                    Date ngayBatDau = sdf.parse(parts[3]);
+                    p.setStartDate(ngayBatDau);
+                    Date ngayKetThuc = sdf.parse(parts[4]);
+                    p.setEndDate(ngayKetThuc);
+                } catch (Exception e) {
+                    // bỏ qua nếu không đọc được ngày
+                }
+
+                p.setCondition(parts[5]);
+                p.setDiscountPercent(Double.parseDouble(parts[6]));
+
+                if (parts[7].equals("Active")) {
+                    p.setStatus(true);
+                } else {
+                    p.setStatus(false);
+                }
+
+                int viTri = promotionList.length;
+                promotionList = Arrays.copyOf(promotionList, viTri + 1);
+                promotionList[viTri] = p;
+
+                line = br.readLine();
+            }
+
+            br.close();
+            System.out.println("Đọc dữ liệu từ file " + filePath + " thành công!");
+
+        } catch (IOException e) {
+            System.err.println("Lỗi khi đọc file: " + e.getMessage());
+        }
+>>>>>>> origin
     }
 
     @Override

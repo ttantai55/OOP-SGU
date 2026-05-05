@@ -158,14 +158,18 @@ invoice.setEmployee(emp);
         }
         detail.setQuantity(quantity);
 
-        String warrantyId = invoice.getInvoiceId() + "-WAR-" + product.getProductID();
+        String warrantyId = invoice.getInvoiceId() + "-WAR-" + soThuTu;
         Date startDate = new Date();
         Calendar cal = Calendar.getInstance();
         cal.setTime(startDate);
         cal.add(Calendar.MONTH, product.getWarrantyPeriod());
         Date endDate = cal.getTime();
         WarrantyDTO warranty = new WarrantyDTO(warrantyId, invoice.getInvoiceId(), product, startDate, endDate, true);
+<<<<<<< HEAD
         detail.setWarranty(warranty); // chưa lưu vào DAO, chờ thanh toán thành công
+=======
+        detail.setWarranty(warranty); // chưa lưu vào warrantyDAO, chờ đến khi payment thành công
+>>>>>>> origin
 
         System.out.print("  Co ap dung khuyen mai? (y/n): ");
         String promoChoice = sc.nextLine().toLowerCase();
@@ -174,6 +178,9 @@ invoice.setEmployee(emp);
             PromotionDTO promotion = promotionDAO.findById(sc.nextLine());
             if (promotion != null && promotion.isStatus()) {
                 detail.setPromotion(promotion);
+            } else if (promotion != null && !promotion.isStatus()) {
+                System.out.println("  Khuyến mãi này đã bị hủy, bỏ qua.");
+                detail.setPromotion(null);
             } else {
                 System.out.println("  Khuyen mai khong hop le hoac da bi huy, bo qua.");
                 detail.setPromotion(null);
@@ -243,7 +250,15 @@ invoice.setEmployee(emp);
         String contractNum = sc.nextLine();
         System.out.print("So thang tra gop: ");
         int months = Integer.parseInt(sc.nextLine());
+<<<<<<< HEAD
         System.out.print("Tien tra truoc: ");
+=======
+        if (months <= 0) {
+            System.out.println("Số tháng phải lớn hơn 0!");
+            return;
+        }
+        System.out.print("Tiền trả trước: ");
+>>>>>>> origin
         double downPayment = Double.parseDouble(sc.nextLine());
         payment = new Installment(paymentId, paymentDate, company, contractNum, months, downPayment);
 
@@ -264,6 +279,9 @@ invoice.setEmployee(emp);
                         warrantyDAO.add(item.getWarranty()); // chỉ lưu warranty khi thanh toán thành công
                     }
                     invItemDAO.add(item);
+                    if (item.getWarranty() != null) {
+                        warrantyDAO.add(item.getWarranty()); // lưu warranty chỉ khi hóa đơn được xác nhận
+                    }
                 }
             }
         }

@@ -32,10 +32,12 @@ public class InvoiceItemDTO {
 
     // lấy tên và id của sản phẩm đó theo ProductsDTO
     public String getProductName(){
-        return product.getProductName();
+        if (this.product != null) return product.getProductName();
+        return "N/A";
     }
     public String getProductId(){
-        return product.getProductID();
+        if (this.product != null) return product.getProductID();
+        return "N/A";
     }
 
     public String getInvoiceId(){
@@ -56,7 +58,8 @@ public class InvoiceItemDTO {
 
     // lấy giá của sản phẩm đó theo ProductsDTO
     public double getUnitPrice() {
-        return product.getPrice();
+        if (this.product != null) return product.getPrice();
+        return 0;
     }
 
     // phần bảo hành sẽ lấy theo Id của mã bảo hành 

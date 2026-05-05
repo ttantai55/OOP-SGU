@@ -68,7 +68,10 @@ public class CustomerDAO implements IRepository<Customer> {
     }
 
     public Customer findByUsername (String username) {
+<<<<<<< HEAD
         boolean found = false;
+=======
+>>>>>>> origin
         for (Customer cus : customers) {
             if(cus != null && cus.getUsername().equals(username)) {
                 found = true;

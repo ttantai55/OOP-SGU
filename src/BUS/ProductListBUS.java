@@ -17,6 +17,10 @@ public class ProductListBUS {
         productDAO.readFile(FILE_PRODUCTS);
     }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin
     //=========LOAD / SAVE ========
 
     public void loadFile(){

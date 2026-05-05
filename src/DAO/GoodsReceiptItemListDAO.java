@@ -1,7 +1,13 @@
 package DAO;
 
 import DTO.GoodsReceiptItemDTO;
+<<<<<<< HEAD
 import DTO.ProductsDTO;
+=======
+import java.util.Arrays;
+import java.io.BufferedReader;
+import java.io.FileReader;
+>>>>>>> origin
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -36,7 +42,11 @@ public class GoodsReceiptItemListDAO implements IInvoiceManage<GoodsReceiptItemD
             }
         }
 
+<<<<<<< HEAD
         this.details = temp;
+=======
+        details = temp; // mảng chỉ còn lại các item không bị xóa
+>>>>>>> origin
 
         if (found) {
             System.out.println("Da xoa san pham " + productId + " khoi phieu nhap " + receiptId + ".");
@@ -115,6 +125,7 @@ public class GoodsReceiptItemListDAO implements IInvoiceManage<GoodsReceiptItemD
 
    @Override
     public void readFile(String filePath) {
+<<<<<<< HEAD
         GoodsReceiptItemDTO[] tempArr = new GoodsReceiptItemDTO[0];
         
         // Kiểm tra file tồn tại
@@ -152,6 +163,36 @@ public class GoodsReceiptItemListDAO implements IInvoiceManage<GoodsReceiptItemD
         
         // Nạp mảng vào biến gốc
         this.details = tempArr;
+=======
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(filePath));
+            String line = br.readLine();
+
+            while (line != null) {
+                String[] parts = line.split(",");
+
+                GoodsReceiptItemDTO item = new GoodsReceiptItemDTO();
+
+                item.setReceiptId(parts[0]);
+                // parts[1] là productId, parts[2] là productName - cần đối tượng ProductsDTO đầy đủ
+                item.setQuantity(Integer.parseInt(parts[3]));
+                item.setImportPrice(Double.parseDouble(parts[4]));
+                // parts[5] là subTotal - tính toán tự động, không cần đọc
+
+                int viTri = details.length;
+                details = Arrays.copyOf(details, viTri + 1);
+                details[viTri] = item;
+
+                line = br.readLine();
+            }
+
+            br.close();
+            System.out.println("Đọc dữ liệu từ file " + filePath + " thành công!");
+
+        } catch (IOException e) {
+            System.err.println("Lỗi khi đọc file: " + e.getMessage());
+        }
+>>>>>>> origin
     }
 
     @Override

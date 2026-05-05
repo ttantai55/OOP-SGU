@@ -72,7 +72,7 @@ public class RepairRecordListBUS {
         RepairRecordDTO[] result = new RepairRecordDTO[0];
 
         for (RepairRecordDTO repair : allRepairs) {
-            if (repair != null && repair.getProcessStatus() != null &&
+            if (repair != null && repair.isStatus() && repair.getProcessStatus() != null &&
                 repair.getProcessStatus().toLowerCase().contains(status.toLowerCase())) {
                 result = java.util.Arrays.copyOf(result, result.length + 1);
                 result[result.length - 1] = repair;
@@ -139,7 +139,7 @@ public class RepairRecordListBUS {
         int processingCount = 0;
 
         for (RepairRecordDTO repair : allRepairs) {
-            if (repair != null) {
+            if (repair != null && repair.isStatus()) {
                 totalRepairs++;
                 totalCost += repair.getRepairCost();
 

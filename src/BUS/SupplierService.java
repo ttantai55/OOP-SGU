@@ -9,7 +9,7 @@ public class SupplierService {
 
     // [OOP] Composition (Mối quan hệ "Has-A") & Delegation (Ủy quyền):
     // Service chứa một đối tượng DAO để giao tiếp với file dữ liệu.
-    private SupplierDAO supplierDAO;
+    private final SupplierDAO supplierDAO;
     private Scanner sc;
 
     public SupplierService() {
