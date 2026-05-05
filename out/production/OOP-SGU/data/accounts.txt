@@ -1,9 +1,0 @@
-ACC01,LHTCoder,240795,quan ly,true,Chua_Gan
-ACC02,TTTCoder,SV2005,khach hang,true,Chua_Gan
-ACC03,TaiSmile,123456,Quan ly,false,QL001
-ACC04,ToTanTai,123456,quan ly,true,QL001
-ACC04,LHTSmile,123456,Quan ly,true,QL002
-ACC_KH004,okoru,123456,Khach hang,true,KH004
-ACC05,NhanVienSale,123456,nhan vien,true,NV003
-ACC_KH007,demo,123456,Khach hang,true,KH007
-ACC09,demo1,123,quan ly,true,NV007
