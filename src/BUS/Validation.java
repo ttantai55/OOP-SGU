@@ -3,6 +3,12 @@ package BUS;
 import java.util.Scanner;
 
 public class Validation {
+    public static final String PRODUCT_IMEI_REGEX = "^[LA]IMEI-\\d{3}$";
+    public static final String PRODUCT_ID_REGEX = "^(LT|AC)\\d{3}$";
+    public static final String POSITIVE_NUMBER_REGEX = "^[1-9]\\d*$";//Su dung cho nhom tien va time
+    public static final String STATUS_REGEX = "^(?i)(Dang ban|Ngung ban)$";
+    public static final String RAM_STORAGE_REGEX = "^(4|8|16|32)$";
+
     static Scanner sc = new Scanner(System.in);
 
     // 1. Ep nhap so dien thoai chuan (10 hoac 11 so)
@@ -47,5 +53,18 @@ public class Validation {
                 System.out.println("[Loi] Khong duoc de trong! Vui long nhap lai.");
             }
         }
+    }
+
+
+    public static boolean isValidProductIMEI(String id) {
+        return id != null && id.matches(PRODUCT_IMEI_REGEX);
+    }
+
+    public static boolean isValidProductID(String id) {
+        return id != null && id.matches(PRODUCT_ID_REGEX);
+    }
+
+    public static boolean isValidPositiveNumber(String numberStr) {
+        return numberStr != null && numberStr.matches(POSITIVE_NUMBER_REGEX);
     }
 }
