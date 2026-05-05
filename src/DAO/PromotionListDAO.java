@@ -1,46 +1,23 @@
 package DAO;
 
 import DTO.PromotionDTO;
-<<<<<<< HEAD
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
-=======
-import java.util.Arrays;
-import java.text.SimpleDateFormat;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Date;
->>>>>>> origin
 
 public class PromotionListDAO implements IRepository<PromotionDTO> {
-    private static PromotionDTO[] promotionList = new PromotionDTO[0];
-    private final String filePath = "data/promotion.txt";
-    private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+    private PromotionDTO[] promotionList = new PromotionDTO[0];
+    private final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-    public PromotionListDAO() {
-        loadFile();
-    }
-
-    public void loadFile() {
-        readFile(this.filePath);
-        System.out.println("Da tai du lieu thanh cong tu file: " + filePath);
-    }
-
-    public void saveFile() {
-        writeFile(this.filePath);
-        System.out.println("Da luu du lieu vao file: " + filePath);
-    }
+    
 
     @Override
     public void add(PromotionDTO promotion) {
         promotionList = Arrays.copyOf(promotionList, promotionList.length + 1);
         promotionList[promotionList.length - 1] = promotion;
+     
         System.out.println("Da them khuyen mai thanh cong: " + promotion.getPromotionId() + ".");
     }
 
@@ -49,6 +26,7 @@ public class PromotionListDAO implements IRepository<PromotionDTO> {
         for (PromotionDTO p : promotionList) {
             if (p != null && p.getPromotionId().equals(promotionId)) {
                 p.setStatus(false);
+               
                 System.out.println("Da huy khuyen mai: " + promotionId + ".");
                 return;
             }
@@ -61,6 +39,7 @@ public class PromotionListDAO implements IRepository<PromotionDTO> {
         for (int i = 0; i < promotionList.length; i++) {
             if (promotionList[i] != null && promotionList[i].getPromotionId().equals(updatedPromotion.getPromotionId())) {
                 promotionList[i] = updatedPromotion;
+               
                 System.out.println("Da cap nhat khuyen mai thanh cong: " + updatedPromotion.getPromotionId() + ".");
                 return;
             }
@@ -106,7 +85,6 @@ public class PromotionListDAO implements IRepository<PromotionDTO> {
 
     @Override
     public void readFile(String filePath) {
-<<<<<<< HEAD
         PromotionDTO[] tempArr = new PromotionDTO[0];
 
         java.io.File file = new java.io.File(filePath);
@@ -147,52 +125,6 @@ public class PromotionListDAO implements IRepository<PromotionDTO> {
         }
 
         this.promotionList = tempArr;
-=======
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(filePath));
-            String line = br.readLine();
-
-            while (line != null) {
-                String[] parts = line.split(",");
-
-                PromotionDTO p = new PromotionDTO();
-
-                p.setPromotionId(parts[0]);
-                p.setProgramName(parts[1]);
-                p.setProductID(parts[2]);
-
-                try {
-                    Date ngayBatDau = sdf.parse(parts[3]);
-                    p.setStartDate(ngayBatDau);
-                    Date ngayKetThuc = sdf.parse(parts[4]);
-                    p.setEndDate(ngayKetThuc);
-                } catch (Exception e) {
-                    // bỏ qua nếu không đọc được ngày
-                }
-
-                p.setCondition(parts[5]);
-                p.setDiscountPercent(Double.parseDouble(parts[6]));
-
-                if (parts[7].equals("Active")) {
-                    p.setStatus(true);
-                } else {
-                    p.setStatus(false);
-                }
-
-                int viTri = promotionList.length;
-                promotionList = Arrays.copyOf(promotionList, viTri + 1);
-                promotionList[viTri] = p;
-
-                line = br.readLine();
-            }
-
-            br.close();
-            System.out.println("Đọc dữ liệu từ file " + filePath + " thành công!");
-
-        } catch (IOException e) {
-            System.err.println("Lỗi khi đọc file: " + e.getMessage());
-        }
->>>>>>> origin
     }
 
     @Override

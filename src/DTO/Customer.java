@@ -85,6 +85,7 @@ public class Customer extends Person {
                 customerId, loyaltyPoints, customerType, sdf.format(registeredDate));
     }
 
+    @Override
     public void displayInfo() {
         System.out.println(toString());
     }

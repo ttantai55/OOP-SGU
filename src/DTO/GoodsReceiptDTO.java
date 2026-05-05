@@ -138,17 +138,11 @@ public class GoodsReceiptDTO {
         return "N/A";
     }
 
-    public String getReceiverName(){
-<<<<<<< HEAD
-<<<<<<< HEAD
-        return receiver.getEmployeeName();
-=======
-        return receiver.getFullName();
->>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
-=======
-        if (this.receiver != null) return this.receiver.getFullName();
+    public String getReceiverName() {
+        if (this.receiver != null) {
+            return this.receiver.getFullName();
+        }
         return "N/A";
->>>>>>> origin
     }
 
 

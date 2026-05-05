@@ -31,6 +31,10 @@ public class ProductListDAO  implements IProductManage<ProductsDTO> {
          
     }
 
+    public ProductsDTO[] getALL() {
+        return pList;
+    }
+
 
     public void displayGroupedProducts(ProductsDTO[] pList) {
         // kiem tra mang 

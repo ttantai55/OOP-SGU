@@ -12,23 +12,13 @@ public class AccountDAO implements IRepository<Account> {
     public AccountDAO() {
         this.accounts = new Account[100];
         this.count = 0;
-<<<<<<< HEAD
-        // [ĐÃ SỬA LỖI] Tắt tính năng tự động đọc file ở hàm khởi tạo
-        // Để DAO trở nên thụ động, chờ Service ra lệnh mới được đọc
-=======
-        // Chi doc du lieu len khi he thong khoi dong
-        readFile(defaultPath); 
->>>>>>> origin
+       
     }
 
     @Override
     public void add(Account obj) {
         if (count < accounts.length) {
             accounts[count++] = obj;
-<<<<<<< HEAD
-=======
-            // writeFile(defaultPath); // [KIEN TRUC 3 LOP] Khong luu tu dong tai day
->>>>>>> origin
             System.out.println("[Thong bao] Them tai khoan vao bo nho thanh cong!");
         } else {
             System.out.println("[Loi] Danh sach tai khoan da day!");
@@ -42,12 +32,7 @@ public class AccountDAO implements IRepository<Account> {
                 for (int j = i; j < count - 1; j++) {
                     accounts[j] = accounts[j + 1];
                 }
-<<<<<<< HEAD
                 accounts[--count] = null;
-=======
-                accounts[--count] = null; // Xoa phan tu cuoi, giam so luong
-                // writeFile(defaultPath); // [KIEN TRUC 3 LOP] Khong luu tu dong tai day
->>>>>>> origin
                 System.out.println("[Thong bao] Da xoa tai khoan khoi bo nho: " + id);
                 return;
             }
@@ -60,10 +45,6 @@ public class AccountDAO implements IRepository<Account> {
         for (int i = 0; i < count; i++) {
             if (accounts[i].getAccountId().equals(obj.getAccountId())) {
                 accounts[i] = obj;
-<<<<<<< HEAD
-=======
-                // writeFile(defaultPath); // [KIEN TRUC 3 LOP] Khong luu tu dong tai day
->>>>>>> origin
                 System.out.println("[Thong bao] Cap nhat tai khoan trong bo nho thanh cong!");
                 return;
             }

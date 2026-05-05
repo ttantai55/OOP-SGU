@@ -14,7 +14,7 @@ public class AccountMenu {
     }
 
     public void showMenu() {
-        int choice = -1;
+        int choice;
         do {
             System.out.println("\n" + "=".repeat(60));
             System.out.println("              QUAN LY TAI KHOAN HE THONG");

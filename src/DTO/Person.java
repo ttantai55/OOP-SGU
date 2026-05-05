@@ -1,13 +1,11 @@
 package DTO;
 
-import java.util.Scanner;
 
 public class Person {
     protected String fullName;
     protected String phoneNumber;
     protected String email;
     protected Address address;
-    static Scanner sc = new Scanner(System.in);
     public Person() {
     }
 

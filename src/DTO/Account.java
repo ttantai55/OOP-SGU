@@ -12,10 +12,7 @@ public class Account {
     
     // [OOP] Association: Moi quan he "Has-A" (Mot tai khoan thuoc ve/lien ket voi mot nhan vien)
     private Employee employee; 
-<<<<<<< HEAD
-=======
     private String ownerId; // Ma chu so huu (khi chua co doi tuong Employee)
->>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
 
     // 1. Constructor khong tham so (Khoi tao doi tuong mac dinh)
     public Account() {
@@ -30,8 +27,6 @@ public class Account {
         this.role = role;
         this.isActive = isActive;
         this.employee = employee;
-<<<<<<< HEAD
-=======
         this.ownerId = (employee != null) ? employee.getEmployeeId() : null;
     }
 
@@ -44,7 +39,6 @@ public class Account {
         this.isActive = isActive;
         this.ownerId = ownerId;
         this.employee = null;
->>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
     }
 
     // [OOP] Encapsulation: Cac phuong thuc Getter/Setter giao tiep an toan voi thuoc tinh
@@ -66,8 +60,6 @@ public class Account {
     public Employee getEmployee() { return employee; }
     public void setEmployee(Employee employee) { this.employee = employee; }
 
-<<<<<<< HEAD
-=======
     public String getOwnerId() {
         if (ownerId != null) return ownerId;
         if (employee != null) return employee.getEmployeeId();
@@ -75,7 +67,6 @@ public class Account {
     }
     public void setOwnerId(String ownerId) { this.ownerId = ownerId; }
 
->>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
     // Phuong thuc kiem tra dang nhap
     public boolean login(String username, String password) {
         return this.username.equals(username) && this.password.equals(password);

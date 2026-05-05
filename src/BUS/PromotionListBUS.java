@@ -11,11 +11,16 @@ import java.util.Scanner;
 public class PromotionListBUS {
     Scanner sc = new Scanner(System.in);
 
-    private PromotionListDAO promDAO = new PromotionListDAO();
-    private ProductListDAO productsDAO = new ProductListDAO();
+    private PromotionListDAO promDAO; 
+    private ProductListDAO productsDAO;
+    
+    public PromotionListBUS(){
+        this.productsDAO = new ProductListDAO();
+        this.promDAO = new PromotionListDAO();
+    }
 
     public void inputPromotion() {
-        System.out.print("Nhap ma khuyen mai: ");
+        System.out.print("Moi tao ma khuyen mai: ");
         String promotionId = sc.nextLine();
 
         System.out.print("Nhap ten chuong trinh khuyen mai: ");

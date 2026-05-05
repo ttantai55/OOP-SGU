@@ -4,7 +4,7 @@ import DTO.Customer;
 
 // CustomerDAO.java
 public class CustomerDAO implements IRepository<Customer> {
-    private Customer[] customers;
+    private final Customer[] customers;
     private int count;
 
     public CustomerDAO() {
@@ -51,7 +51,8 @@ public class CustomerDAO implements IRepository<Customer> {
         }
         return null;
     }
-
+    
+    @Override
     public Customer[] findByName(String name) {
         Customer[] temp = new Customer[count];
         int size = 0;
@@ -68,10 +69,7 @@ public class CustomerDAO implements IRepository<Customer> {
     }
 
     public Customer findByUsername (String username) {
-<<<<<<< HEAD
         boolean found = false;
-=======
->>>>>>> origin
         for (Customer cus : customers) {
             if(cus != null && cus.getUsername().equals(username)) {
                 found = true;

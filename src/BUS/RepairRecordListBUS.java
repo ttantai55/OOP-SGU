@@ -121,6 +121,7 @@ public class RepairRecordListBUS {
 
         repair.setProcessStatus(newStatus);
         repairDAO.update(repair);
+        saveFile();
 
         System.out.println("Da cap nhat trang thai sua chữa [" + repairId + "] thanh: " + newStatus + ".");
     }

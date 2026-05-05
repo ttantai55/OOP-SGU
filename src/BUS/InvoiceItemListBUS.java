@@ -16,11 +16,11 @@ public class InvoiceItemListBUS {
     private final String FILE_PATH = "data/invoice.txt";
     Scanner sc = new Scanner(System.in);
 
-    private InvoiceItemListDAO invItemDAO;
-    private InvoiceListDAO invDAO;
-    private ProductListDAO productsDAO;
-    private PromotionListDAO promotionDAO;
-    private WarrantyListDAO warrantyDAO;
+    private final InvoiceItemListDAO invItemDAO;
+    private final InvoiceListDAO invDAO;
+    private final ProductListDAO productsDAO;
+    private final PromotionListDAO promotionDAO;
+    private final WarrantyListDAO warrantyDAO;
 
     public InvoiceItemListBUS() {
         this.invDAO = new InvoiceListDAO();

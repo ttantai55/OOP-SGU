@@ -1,12 +1,10 @@
 package DTO;
 
 import java.util.Date;
-import java.util.Scanner;
 
 public class Manager extends Employee{
     private float allowance; // phụ cấp
     private String department; // phòng ban
-    static Scanner sc = new Scanner(System.in);
     public Manager(){}
     public Manager(String employeeId, String CCCD, String position, float baseSalary, Date startDate, float allowance, String department) {
         super(employeeId,CCCD, position, baseSalary, startDate);
@@ -63,6 +61,8 @@ public class Manager extends Employee{
         return super.toString() + String.format(" | %-15s | %,12.0f | %,15.0f",
                 department, allowance, calculateSalary());
     }
+    
+    @Override
     public void displayInfo() {
         System.out.println(toString());
     }

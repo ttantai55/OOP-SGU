@@ -1,35 +1,16 @@
 package DAO;
 
 import DTO.InvoiceItemDTO;
-<<<<<<< HEAD
 import DTO.ProductsDTO;
 import DTO.PromotionDTO;
 import DTO.WarrantyDTO;
-=======
-import java.util.Arrays;
-import java.io.BufferedReader;
-import java.io.FileReader;
->>>>>>> origin
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
 
-public class InvoiceItemListDAO implements IRepository<InvoiceItemDTO> {
-    private static InvoiceItemDTO[] itemList = new InvoiceItemDTO[0];
-    private final String filePath = "data/invoiceitem.txt";
-
-    public InvoiceItemListDAO() {
-        loadFile();
-    }
-
-    public void loadFile() {
-        readFile(this.filePath);
-    }
-
-    public void saveFile() {
-        writeFile(this.filePath);
-    }
+public class InvoiceItemListDAO implements IInvoiceManage<InvoiceItemDTO> {
+    private InvoiceItemDTO[] itemList = new InvoiceItemDTO[0];
 
     @Override
     public void add(InvoiceItemDTO item) {
@@ -55,7 +36,7 @@ public class InvoiceItemListDAO implements IRepository<InvoiceItemDTO> {
             }
         }
 
-        itemList = temp; // mảng chỉ còn lại sản phẩm ko bị xóa
+        this.itemList = temp; // mảng chỉ còn lại sản phẩm ko bị xóa
 
         if (found) {
             System.out.println("Da xoa san pham " + productId + " khoi hoa don " + invoiceId);
@@ -91,12 +72,7 @@ public class InvoiceItemListDAO implements IRepository<InvoiceItemDTO> {
     }
 
     @Override
-    public InvoiceItemDTO findById(String productId) {
-        System.out.println("Hãy sử dụng hàm findDetail(invoiceId, productId).");
-        return null;
-    }
-
-    public InvoiceItemDTO findDetail(String invoiceId, String productId) {
+    public InvoiceItemDTO findById(String invoiceId, String productId) {
         for (InvoiceItemDTO item : itemList) {
             if (item != null
                 && item.getInvoiceId().equals(invoiceId)
@@ -131,7 +107,6 @@ public class InvoiceItemListDAO implements IRepository<InvoiceItemDTO> {
 
     @Override
     public void readFile(String filePath) {
-<<<<<<< HEAD
         InvoiceItemDTO[] tempArr = new InvoiceItemDTO[0];
 
         java.io.File file = new java.io.File(filePath);
@@ -182,38 +157,6 @@ public class InvoiceItemListDAO implements IRepository<InvoiceItemDTO> {
         }
 
         this.itemList = tempArr;
-=======
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(filePath));
-            String line = br.readLine();
-
-            while (line != null) {
-                String[] parts = line.split(",");
-
-                InvoiceItemDTO item = new InvoiceItemDTO();
-
-                item.setInvoiceId(parts[0]);
-                // parts[1] là productId, parts[2] là productName - cần đối tượng ProductsDTO đầy đủ
-                item.setQuantity(Integer.parseInt(parts[3]));
-                // parts[4] là unitPrice - lấy từ ProductsDTO, bỏ qua
-                // parts[5] là promotionId - cần đối tượng PromotionDTO đầy đủ
-                // parts[6] là warrantyId - cần đối tượng WarrantyDTO đầy đủ
-                // parts[7] là subTotal - tính toán tự động, không cần đọc
-
-                int viTri = itemList.length;
-                itemList = Arrays.copyOf(itemList, viTri + 1);
-                itemList[viTri] = item;
-
-                line = br.readLine();
-            }
-
-            br.close();
-            System.out.println("Đọc dữ liệu từ file " + filePath + " thành công!");
-
-        } catch (IOException e) {
-            System.err.println("Lỗi khi đọc file: " + e.getMessage());
-        }
->>>>>>> origin
     }
 
     @Override

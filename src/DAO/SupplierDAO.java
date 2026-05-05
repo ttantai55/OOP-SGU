@@ -5,21 +5,18 @@ import java.io.*;
 import java.util.Arrays;
 
 public class SupplierDAO implements IRepository<Supplier> {
-    private Supplier[] suppliers;
+    private final Supplier[] suppliers;
     private int count;
-    private final String defaultPath = "OOP-SGU/src/data/suppliers.txt";
 
     public SupplierDAO() {
         this.suppliers = new Supplier[100]; 
         this.count = 0;
-        readFile(defaultPath); // Tai du lieu khi khoi dong
     }
 
     @Override
     public void add(Supplier obj) {
         if (count < suppliers.length) {
             suppliers[count++] = obj;
-            writeFile(defaultPath); // Luu ra file
             System.out.println("[Thong bao] Them nha cung cap thanh cong!");
         } else {
             System.out.println("[Loi] Danh sach nha cung cap da day!");
@@ -34,7 +31,7 @@ public class SupplierDAO implements IRepository<Supplier> {
                     suppliers[j] = suppliers[j + 1];
                 }
                 suppliers[--count] = null;
-                writeFile(defaultPath); // Luu ra file
+
                 System.out.println("[Thong bao] Da xoa nha cung cap: " + id);
                 return;
             }
@@ -47,7 +44,6 @@ public class SupplierDAO implements IRepository<Supplier> {
         for (int i = 0; i < count; i++) {
             if (suppliers[i].getSupplierId().equals(obj.getSupplierId())) {
                 suppliers[i] = obj;
-                writeFile(defaultPath); // Luu ra file
                 System.out.println("[Thong bao] Cap nhat nha cung cap thanh cong!");
                 return;
             }

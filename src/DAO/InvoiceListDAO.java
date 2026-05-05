@@ -6,7 +6,6 @@ import DTO.Customer;
 import DTO.Installment;
 import DTO.InvoiceDTO;
 import DTO.InvoiceItemDTO;
-<<<<<<< HEAD
 import DTO.PaymentDTO;
 import DTO.SalesEmployee;
 import DTO.Transfer;
@@ -15,37 +14,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
-=======
-import java.util.Arrays;
-import java.text.SimpleDateFormat;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Date;
->>>>>>> origin
 
 
 public class InvoiceListDAO implements IRepository<InvoiceDTO> {
    
-    private static InvoiceDTO[] invoiceList = new InvoiceDTO[0];
-    private final String filePath = "data/invoice.txt";
-    private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-
-    public InvoiceListDAO() {
-        loadFile();
-    }
-
-    public void loadFile() {
-        readFile(this.filePath);
-        System.out.println("Da tai du lieu thanh cong tu file: " + filePath);
-    }
-
-    public void saveFile() {
-        writeFile(this.filePath);
-        System.out.println("Da luu du lieu vao file: " + filePath);
-    }
+    private InvoiceDTO[] invoiceList = new InvoiceDTO[0];
+    private final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     @Override
     // thêm hóa đơn bằng cách đặt biến tạm, tạo mảng mới, copy mảng cũ qua mảng mới và thêm hóa đơn mới vào cuối mảng mới
@@ -55,7 +29,6 @@ public class InvoiceListDAO implements IRepository<InvoiceDTO> {
         System.out.println("Da them hoa don thanh cong: " + invoice.getInvoiceId() + ".");
     }
 
-<<<<<<< HEAD
      @Override
     // sử dụng xóa mềm (sort delete)
     public void remove(String invoiceId) { 
@@ -64,23 +37,6 @@ public class InvoiceListDAO implements IRepository<InvoiceDTO> {
         inv.setStatus(false); // dò được id hóa đơn thì đặt là false
         System.out.println("Da xoa hoa don thanh cong: " + invoiceId + ".");
          return;
-=======
-    @Override
-    public void remove(String invoiceId) {
-        boolean found = false;
-        for (InvoiceDTO inv : invoiceList) {
-            if (inv != null && inv.getInvoiceId().equals(invoiceId)) {
-                inv.setStatus(false);
-                found = true;
-                break;
-            }
-        }
-        if (found) {
-            System.out.println("Đã hủy hóa đơn: " + invoiceId + ".");
-        } else {
-            System.out.println("Không tìm thấy hóa đơn: " + invoiceId + ".");
-        }
->>>>>>> origin
     }
         System.out.println("Khong tim thay hoa don de xoa!");
 }  
@@ -115,7 +71,7 @@ public class InvoiceListDAO implements IRepository<InvoiceDTO> {
     public InvoiceDTO[] findByName(String customerName) {
         InvoiceDTO[] result = new InvoiceDTO[0];
         for (InvoiceDTO inv : invoiceList) {
-            if (inv != null && inv.getCustomerName().toLowerCase().contains(customerName.toLowerCase())) {
+            if (inv != null && inv.getCustomerName().equalsIgnoreCase(customerName)) {
                 result = Arrays.copyOf(result, result.length + 1);
                 result[result.length - 1] = inv;
             }
@@ -165,7 +121,6 @@ public class InvoiceListDAO implements IRepository<InvoiceDTO> {
 
 @Override
 public void readFile(String filePath) {
-<<<<<<< HEAD
     InvoiceDTO[] tempArr = new InvoiceDTO[0];
 
     java.io.File file = new java.io.File(filePath);
@@ -251,45 +206,6 @@ public void readFile(String filePath) {
     }
 
     this.invoiceList = tempArr;
-=======
-    try {
-        BufferedReader br = new BufferedReader(new FileReader(filePath));
-        String line = br.readLine();
-
-        while (line != null) {
-            String[] parts = line.split(",");
-
-            InvoiceDTO inv = new InvoiceDTO();
-
-            inv.setInvoiceId(parts[0]);
-
-            try {
-                Date ngay = sdf.parse(parts[3]);
-                inv.setCreatedDate(ngay);
-            } catch (Exception e) {
-                // bỏ qua nếu không đọc được ngày
-            }
-
-            if (parts[4].equals("Active")) {
-                inv.setStatus(true);
-            } else {
-                inv.setStatus(false);
-            }
-
-            int viTri = invoiceList.length;
-            invoiceList = Arrays.copyOf(invoiceList, viTri + 1);
-            invoiceList[viTri] = inv;
-
-            line = br.readLine();
-        }
-
-        br.close();
-        System.out.println("Đọc dữ liệu từ file " + filePath + " thành công!");
-
-    } catch (IOException e) {
-        System.err.println("Lỗi khi đọc file: " + e.getMessage());
-    }
->>>>>>> origin
 }
 
 @Override
@@ -316,7 +232,7 @@ public void writeFile(String filePath) {
                     paymentDateStr = pay.getPaymentDate() != null ? sdf.format(pay.getPaymentDate()) : "N/A";
                     if (pay instanceof Cash) {
                         paymentType = "Cash";
-                        f1 = String.valueOf(((Cash) pay).getCashReceived());
+                        f1 = String.format("%.0f", ((Cash) pay).getCashReceived());
                         f2 = "N/A"; f3 = "N/A"; f4 = "N/A";
                     } else if (pay instanceof Credit) {
                         Credit cr = (Credit) pay;
@@ -331,7 +247,7 @@ public void writeFile(String filePath) {
                         paymentType = "Installment";
                         f1 = ins.getFinanceCompanyName(); f2 = ins.getContractNumber();
                         f3 = String.valueOf(ins.getInstallmentMonths());
-                        f4 = String.valueOf(ins.getDownPayment());
+                        f4 = String.format("%.0f", ins.getDownPayment());
                     } else {
                         paymentType = "N/A";
                         f1 = "N/A"; f2 = "N/A"; f3 = "N/A"; f4 = "N/A";
@@ -343,7 +259,7 @@ public void writeFile(String filePath) {
                              employeeId + "," +
                              sdf.format(inv.getCreatedDate()) + "," +
                              status + "," +
-                             totalPrice + "," +
+                             String.format("%.0f", totalPrice) + "," +
                              paymentId + "," +
                              paymentDateStr + "," +
                              paymentType + "," +
@@ -364,8 +280,7 @@ public void writeFile(String filePath) {
 
 // hàm tự động tính tiền của 1 hóa đơn
  public static double calculateTotalPrice(InvoiceDTO invoice) {
-    if (invoice.getInvoiceItemList() == null || invoice.getInvoiceItemList().length == 0)
-        return 0;
+    if (invoice.getInvoiceItemList() == null || invoice.getInvoiceItemList().length == 0) return 0;
         double total = 0;
         for (InvoiceItemDTO item : invoice.getInvoiceItemList()) {
             if (item != null) total += InvoiceItemListDAO.calculateSubTotal(item);

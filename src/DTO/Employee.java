@@ -2,7 +2,6 @@ package DTO;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Scanner;
 
 public abstract class Employee extends Person {
     protected String employeeId;
@@ -10,8 +9,10 @@ public abstract class Employee extends Person {
     protected String position; //chức vụ
     protected float baseSalary; //lương cơ bản
     protected Date startDate;//ngày vào làm
-    static Scanner sc = new Scanner(System.in);
+
+
     public Employee(){}
+    
     public Employee(String employeeId,String CCCD,String position, float baseSalary, Date startDate){
         this.employeeId = employeeId;
         this.CCCD = CCCD;
@@ -96,6 +97,7 @@ public abstract class Employee extends Person {
                 employeeId, CCCD, position, baseSalary, sdf.format(startDate));
     }
 
+    @Override
     public void displayInfo() {
         System.out.println(toString());
     }

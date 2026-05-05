@@ -7,7 +7,6 @@ import DAO.CustomerDAO;
 import DTO.Account;
 import DTO.Address;
 import DTO.Customer;
-
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -17,8 +16,8 @@ import java.util.Scanner;
 
 public class LoginUI {
 
-    private AccountService accountService;
-    private Scanner sc;
+    private final AccountService accountService;
+    private final Scanner sc;
 
     public LoginUI() {
         this.accountService = new AccountService();
@@ -28,7 +27,7 @@ public class LoginUI {
     }
 
     public void start() {
-        int choice = -1;
+        int choice;
         do {
             System.out.println("\n" + "=".repeat(41));
             System.out.println("     HE THONG QUAN LY CUA HANG LAPTOP    ");

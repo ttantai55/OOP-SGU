@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 public class ProductListBUS {
     private final ProductListDAO productDAO;
-    private static final String FILE_PRODUCTS = "OOP-SGU/src/data/product.txt";
+    private static final String FILE_PRODUCTS = "data/product.txt";
 
     static Scanner sc = new Scanner(System.in);
 
@@ -17,10 +17,6 @@ public class ProductListBUS {
         productDAO.readFile(FILE_PRODUCTS);
     }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> origin
     //=========LOAD / SAVE ========
 
     public void loadFile(){
@@ -57,6 +53,8 @@ public class ProductListBUS {
                 System.out.println("Lua chon khong hop le. Huy thao tac!");
                 return;
         }
+        // set imei trc khi nhap
+        product.setProductIMEI(Validation.inputUniqueIMEI(sc));
         product.input();
         productDAO.add(product);
         System.out.println("Ban them san pham thanh cong!");

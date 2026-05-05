@@ -1,9 +1,7 @@
 package BUS;
 
-import DAO.EmployeeDAO;
 import DAO.GoodsReceiptItemListDAO;
 import DAO.GoodsReceiptListDAO;
-import DAO.ProductListDAO;
 import DAO.SupplierDAO;
 import DTO.Employee;
 import DTO.GoodsReceiptDTO;
@@ -16,49 +14,80 @@ import java.util.Date;
 import java.util.Scanner;
 
 public class GoodsReceiptBUS {
-    Scanner sc = new Scanner(System.in);
+    private static final String FILE_RECEIPT      = "data/GoodsReceipt.txt";
+    private static final String FILE_RECEIPT_ITEM = "data/Goodsreceiptitem.txt";
 
-    private final GoodsReceiptListDAO grDAO = new GoodsReceiptListDAO();
-    private final GoodsReceiptItemListDAO grItemDAO = new GoodsReceiptItemListDAO();
-    private final EmployeeDAO employeeDAO = new EmployeeDAO();
-    private final ProductListDAO productsDAO = new ProductListDAO();
-    private final SupplierDAO supplierDAO = new SupplierDAO();
+    static Scanner sc = new Scanner(System.in);
+
+    private final GoodsReceiptListDAO     grDAO;
+    private final GoodsReceiptItemListDAO grItemDAO;
+    private final SupplierDAO             supplierDAO;
+    private final EmployeeService         employeeService;
+    private final ProductListBUS          productBUS;
 
     public GoodsReceiptBUS() {
+        grDAO           = new GoodsReceiptListDAO();
+        grItemDAO       = new GoodsReceiptItemListDAO();
+        supplierDAO     = new SupplierDAO();
+        employeeService = new EmployeeService();
+        productBUS      = new ProductListBUS();
         
+        grDAO.readFile(FILE_RECEIPT);
+        grItemDAO.readFile(FILE_RECEIPT_ITEM);
+
     }
 
-    // --- NHẬP PHIẾU NHẬP HÀNG ---
+
+    // ========= LOAD / SAVE =========
+
+    public void loadFile() {
+        employeeService.loadFromFile();
+        grDAO.readFile(FILE_RECEIPT);
+        grItemDAO.readFile(FILE_RECEIPT_ITEM);
+
+        // Resolve stub objects (chỉ có ID) → object đầy đủ, và gắn items vào receipt
+        for (GoodsReceiptDTO rec : grDAO.getAll()) {
+            if (rec == null) continue;
+            rec.setItems(grItemDAO.findByReceiptId(rec.getReceiptId()));
+            if (rec.getReceiver() != null) {
+                Employee emp = employeeService.findById(rec.getReceiver().getEmployeeId());
+                if (emp != null) rec.setReceiver(emp);
+            }
+            if (rec.getSupplier() != null) {
+                Supplier sup = supplierDAO.findById(rec.getSupplier().getSupplierId());
+                if (sup != null) rec.setSupplier(sup);
+            }
+        }
+
+        System.out.println("Da tai du lieu thanh cong tu file: " + FILE_RECEIPT + " va " + FILE_RECEIPT_ITEM);
+    }
+
+    public void saveFile() {
+        grDAO.writeFile(FILE_RECEIPT);
+        grItemDAO.writeFile(FILE_RECEIPT_ITEM);
+        System.out.println("Da luu du lieu vao file: " + FILE_RECEIPT + " va " + FILE_RECEIPT_ITEM);
+    }
+
+
+    // ========= TIM KIEM =========
+
+    public GoodsReceiptDTO findById(String id) {
+        return grDAO.findById(id);
+    }
+
+
+    // ========= THEM PHIEU NHAP =========
+
     public void inputReceipt() {
-        GoodsReceiptDTO rec = new GoodsReceiptDTO();
-
         System.out.print("Nhap ma phieu nhap: ");
-        rec.setReceiptId(sc.nextLine());
+        String id         = sc.nextLine();
+        Supplier supplier = selectSupplier();
+        Employee receiver = selectReceiver();
 
+        GoodsReceiptDTO rec = new GoodsReceiptDTO();
+        rec.setReceiptId(id);
         rec.setCreatedDate(new Date());
-
-        // Sử dụng vòng lặp kiểm tra Nhà Cung Cấp
-        Supplier supplier = null;
-        while (supplier == null) {
-            System.out.print("Nhap ma nha cung cap: ");
-            String supId = sc.nextLine();
-            supplier = supplierDAO.findById(supId);
-            if (supplier == null) {
-                System.out.println("Loi: Khong tim thay nha cung cap. Vui long nhap lai!");
-            }
-        }
         rec.setSupplier(supplier);
-
-        // Sử dụng vòng lặp kiểm tra Nhân viên nhận hàng
-        Employee receiver = null;
-        while (receiver == null) {
-            System.out.print("Nhap ma nhan vien nhan hang: ");
-            String empId = sc.nextLine();
-            receiver = employeeDAO.findById(empId);
-            if (receiver == null) {
-                System.out.println("Loi: Khong tim thay nhan vien. Vui long nhap lai!");
-            }
-        }
         rec.setReceiver(receiver);
 
         System.out.print("Nhap ten nguoi tao: ");
@@ -73,41 +102,41 @@ public class GoodsReceiptBUS {
         rec.setConsignee(sc.nextLine());
         System.out.print("Nhap SDT ben nhan hang: ");
         rec.setPhoneOfConsignee(sc.nextLine());
+        rec.setItems(collectItems(id));
 
-        // Nhập chi tiết mặt hàng
+        commitReceipt(rec);
+        System.out.println("Da them phieu nhap [" + id + "] thanh cong!");
+    }
+
+    private Supplier selectSupplier() {
+        Supplier supplier = null;
+        while (supplier == null) {
+            System.out.print("Nhap ma nha cung cap: ");
+            supplier = supplierDAO.findById(sc.nextLine());
+            if (supplier == null) System.out.println("Loi: Khong tim thay nha cung cap. Vui long nhap lai!");
+        }
+        return supplier;
+    }
+
+    private Employee selectReceiver() {
+        Employee receiver = null;
+        while (receiver == null) {
+            System.out.print("Nhap ma nhan vien nhan hang: ");
+            receiver = employeeService.findById(sc.nextLine());
+            if (receiver == null) System.out.println("Loi: Khong tim thay nhan vien. Vui long nhap lai!");
+        }
+        return receiver;
+    }
+
+    private GoodsReceiptItemDTO[] collectItems(String receiptId) {
         GoodsReceiptItemDTO[] items = new GoodsReceiptItemDTO[0];
         String themTiep = "y";
         int soThuTu = 1;
         while (themTiep.equals("y")) {
-            System.out.println("--- Mat hang " + soThuTu + " ---");
-            GoodsReceiptItemDTO item = new GoodsReceiptItemDTO();
+            System.out.println("Mat hang thu: " + soThuTu);
+            GoodsReceiptItemDTO item = buildSingleItem(receiptId);
+            if (item == null) continue;
 
-            System.out.print("  Ma IMEI: ");
-            ProductsDTO product = productsDAO.findById(sc.nextLine());
-            if (product == null) {
-                System.out.println("  Khong tim thay san pham! Vui long nhap lai.");
-                continue;
-            }
-            item.setProduct(product);
-
-            System.out.print("  So luong: ");
-            int soLuong = Integer.parseInt(sc.nextLine());
-            if (soLuong > 0) {
-                item.setQuantity(soLuong);
-            } else {
-                item.setQuantity(1);
-            }
-
-            System.out.print("  Gia nhap (VND): ");
-            double giaNhap = Double.parseDouble(sc.nextLine());
-            if (giaNhap >= 0) {
-                item.setImportPrice(giaNhap);
-            } else {
-                item.setImportPrice(0);
-            }
-
-            // Gán mã phiếu nhập vào từng chi tiết để liên kết
-            item.setReceiptId(rec.getReceiptId());
             items = Arrays.copyOf(items, items.length + 1);
             items[items.length - 1] = item;
             soThuTu++;
@@ -115,76 +144,134 @@ public class GoodsReceiptBUS {
             System.out.print("Them mat hang tiep theo? (y/n): ");
             themTiep = sc.nextLine().toLowerCase();
         }
-        rec.setItems(items);
-
-        grDAO.add(rec);
-
-        for (GoodsReceiptItemDTO item : items) {
-            if (item != null) {
-                grItemDAO.add(item); 
-            }
-        }
-
-        System.out.println("Da them phieu nhap [" + rec.getReceiptId() + "] thanh cong!");
+        return items;
     }
 
+    private GoodsReceiptItemDTO buildSingleItem(String receiptId) {
+        System.out.print("  Ma IMEI: ");
+        ProductsDTO product = productBUS.getProductByID(sc.nextLine());
+        if (product == null) {
+            System.out.println("  Khong tim thay san pham! Vui long nhap lai.");
+            return null;
+        }
+
+        System.out.print("  So luong: ");
+        int quantity;
+        try {
+            quantity = Integer.parseInt(sc.nextLine());
+        } catch (Exception e) {
+            System.out.println("  Loi: Vui long nhap so nguyen!");
+            return null;
+        }
+        if (quantity <= 0) {
+            System.out.println("  So luong khong hop le! Vui long nhap lai.");
+            return null;
+        }
+
+        System.out.print("  Gia nhap (VND): ");
+        double importPrice;
+        try {
+            importPrice = Double.parseDouble(sc.nextLine());
+        } catch (Exception e) {
+            System.out.println("  Loi: Vui long nhap so thuc!");
+            return null;
+        }
+        if (importPrice < 0) {
+            System.out.println("  Gia nhap khong hop le! Vui long nhap lai.");
+            return null;
+        }
+
+        GoodsReceiptItemDTO item = new GoodsReceiptItemDTO();
+        item.setProduct(product);
+        item.setQuantity(quantity);
+        item.setImportPrice(importPrice);
+        item.setReceiptId(receiptId);
+        return item;
+    }
+
+    private void commitReceipt(GoodsReceiptDTO rec) {
+        grDAO.add(rec);
+        for (GoodsReceiptItemDTO item : rec.getItems()) {
+            if (item != null) grItemDAO.add(item);
+        }
+        saveFile();
+    }
+
+
+    // ========= HIEN THI TAT CA =========
+
+    public void displayAll() {
+        grDAO.displayAll();
+    }
+
+
+    // ========= HUY PHIEU NHAP =========
+
+    public void cancelReceipt() {
+        System.out.print("Nhap ma phieu nhap can huy: ");
+        String id = sc.nextLine();
+        grDAO.remove(id);
+        saveFile();
+    }
+
+
+    // ========= HIEN THI =========
 
     public void printReceipt(String receiptId) {
         GoodsReceiptDTO rec = grDAO.findById(receiptId);
         if (rec == null) {
-            System.out.println("Loi: Khong tim thay phieu nhap co ma " + receiptId + ".");
+            System.out.println("Khong tim thay phieu nhap: " + receiptId + ".");
             return;
         }
-
-       
         GoodsReceiptItemDTO[] items = grItemDAO.findByReceiptId(receiptId);
+
+        printReceiptHeader(rec);
+        double tongCong = printReceiptItems(items);
+        System.out.printf("%-63s TONG PHIEU: %,15.0f VND%n", "", tongCong);
+        System.out.println("=".repeat(85) + "\n");
+    }
+
+    private void printReceiptHeader(GoodsReceiptDTO rec) {
+        String supplierInfo = rec.getSupplier() == null       ? "N/A"
+                : rec.getSupplier().getSupplierName() != null ? rec.getSupplier().getSupplierName()
+                : rec.getSupplier().getSupplierId();
+        String receiverInfo = rec.getReceiver() == null       ? "N/A"
+                : rec.getReceiver().getFullName() != null     ? rec.getReceiver().getFullName()
+                : rec.getReceiver().getEmployeeId();
 
         System.out.println("\n" + "=".repeat(85));
         System.out.println("                PHIEU NHAP KHO HANG                ");
-        System.out.printf(" Ma phieu: %-15s | Ngay: %s%n", 
-                rec.getReceiptId(), 
+        System.out.printf(" Ma phieu: %-15s | Ngay: %s%n",
+                rec.getReceiptId(),
                 new SimpleDateFormat("dd/MM/yyyy").format(rec.getCreatedDate()));
-        System.out.printf(" NCC     : %-15s | NV Nhan: %s%n",
-                rec.getSupplierName(),
-                rec.getReceiverName());
-        System.out.printf(" Giao    : %-15s | Nhan   : %s%n", 
-                rec.getCourier(), rec.getConsignee());
+        System.out.printf(" NCC     : %-15s | NV Nhan: %s%n", supplierInfo, receiverInfo);
+        System.out.printf(" Giao    : %-15s | Nhan   : %s%n", rec.getCourier(), rec.getConsignee());
         System.out.println("-".repeat(85));
-
-        // In tiêu đề bảng
         System.out.printf("%-5s | %-15s | %-20s | %8s | %15s | %15s%n",
                 "STT", "Ma SP", "Ten SP", "SL", "Gia nhap", "Thanh tien");
         System.out.println("-".repeat(85));
+    }
 
-        double tongPhieu = 0;
+    private double printReceiptItems(GoodsReceiptItemDTO[] items) {
+        double tongCong = 0;
         if (items == null || items.length == 0) {
             System.out.println(" (Khong co chi tiet mat hang.)");
         } else {
-            for (int j = 0; j < items.length; j++) {
-                GoodsReceiptItemDTO item = items[j];
+            for (int i = 0; i < items.length; i++) {
+                GoodsReceiptItemDTO item = items[i];
                 if (item == null) continue;
-
                 double subTotal = item.getQuantity() * item.getImportPrice();
-                tongPhieu += subTotal;
+                tongCong += subTotal;
                 System.out.printf("%-5d | %-15s | %-20s | %8d | %,15.0f | %,15.0f%n",
-                        j + 1,
-                        item.getProductId(),
-                        item.getProductName(),
+                        i + 1,
+                        item.getProduct().getProductID(),
+                        item.getProduct().getProductName(),
                         item.getQuantity(),
                         item.getImportPrice(),
                         subTotal);
             }
         }
-
         System.out.println("-".repeat(85));
-        System.out.printf("%-63s TONG PHIEU: %,15.0f VNĐ%n", "", tongPhieu);
-        System.out.println("=".repeat(85) + "\n");
-    }
-
-
-    public void cancelReceipt() {
-        System.out.print("Nhap ma phieu nhap can huy: ");
-        String id = sc.nextLine();
-        grDAO.remove(id); 
+        return tongCong;
     }
 }

@@ -1,12 +1,11 @@
 package DTO;
 
 import java.util.Date;
-import java.util.Scanner;
+
 
 public class TechnicianEmployee extends Employee {
     private int repairCount;// số lượng sửa chữa
     private float expenditure;//tiền chỉ tiêu
-    static Scanner sc = new Scanner(System.in);
     public TechnicianEmployee() {}
 
     public TechnicianEmployee(String employeeId,String CCCD, String position, float baseSalary, Date startDate, float expenditure, int repairCount) {
@@ -74,6 +73,7 @@ public class TechnicianEmployee extends Employee {
         return super.toString() + String.format(" | %-10d | %,12.0f | %,15.0f",
                 repairCount, expenditure, calculateSalary());
     }
+    @Override
     public void displayInfo() {
         System.out.println(toString());
     }

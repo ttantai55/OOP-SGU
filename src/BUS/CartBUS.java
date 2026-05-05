@@ -8,27 +8,17 @@ import java.util.Scanner;
 public class CartBUS {
     private final CartDAO cartDAO;
     private final String username;
-    private final String FILE_CART = "data/cart.txt";
     static Scanner sc = new Scanner(System.in);
 
     public CartBUS(String username) {
         this.cartDAO = new CartDAO();
         this.username = username;
-        cartDAO.readFile(FILE_CART); 
+
     }
 
     //====LOAD/SAVE====
 
-    public void loadFile(){
-        cartDAO.readFile(FILE_CART);
-        System.out.println("Da tai du lieu thanh cong tu file" + FILE_CART);
-    }
-
-    public void saveFile(){
-        cartDAO.writeFile(FILE_CART);
-        System.out.println("Da luu du lieu vao file: "+ FILE_CART);
-    }
-
+    
     // Them SP vao Gio Hang 
 
     public void addToCart(ProductsDTO sp, int quantity) {
@@ -58,7 +48,6 @@ public class CartBUS {
             cartDAO.add(newItem);
             System.out.println("-> Da them [" + quantity +"] san pham " + name + " vao gio hang!");
         }
-        saveFile();
     }
 
     public void removeCartItem(String productID) {
@@ -68,17 +57,17 @@ public class CartBUS {
         } else {
             System.out.println("-> Khong tim thay san pham trong gio hang!");
         }
-        saveFile();
+        
     }
 
     public void updateCartItem(CartItemDTO item){
         cartDAO.update(item);
-        saveFile();
+        
     }
 
     public void clearMyCart() {
         cartDAO.clearCartByUser(username);
-        saveFile();
+       
     }
 
     //======Hien thi======

@@ -1,14 +1,14 @@
 package DTO;
 
 import java.util.Date;
-import java.util.Scanner;
+
 
 public class DeliveryEmployee extends Employee{
     private String licensePlate;
     private String deliveryArea;
     private int deliveryCount;
     private float feePerOrder;
-    static Scanner sc = new Scanner(System.in);
+
     public DeliveryEmployee(){}
 
     public DeliveryEmployee(String employeeId,String CCCD, String position, float baseSalary, Date startDate, String deliveryArea, String licensePlate, float feePerOrder, int deliveryCount) {
@@ -96,6 +96,7 @@ public class DeliveryEmployee extends Employee{
         return super.toString() + String.format(" | %-15s | %-20s | %-10d | %,12.0f | %,15.0f",
                 licensePlate, deliveryArea, deliveryCount, feePerOrder, calculateSalary());
     }
+    @Override
     public void displayInfo() {
         System.out.println(toString());
     }

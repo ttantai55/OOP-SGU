@@ -2,7 +2,6 @@ package DAO;
 
 import DTO.GoodsReceiptDTO;
 import DTO.GoodsReceiptItemDTO;
-<<<<<<< HEAD
 import DTO.SalesEmployee;
 import DTO.Supplier;
 import java.io.BufferedWriter;
@@ -12,35 +11,9 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 public class GoodsReceiptListDAO implements IRepository<GoodsReceiptDTO>{
-=======
-import java.util.Arrays;
-import java.text.SimpleDateFormat;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Date;
->>>>>>> origin
 
-    private static GoodsReceiptDTO[] receiptList = new GoodsReceiptDTO[0];
-    private final String filePath = "data/goodsreceipt.txt";
-    private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-
-// load dữ liệu từ file vào mảng khi khởi tạo đối tượng DAO
-    public GoodsReceiptListDAO() {
-        loadFile();
-    }
-
-    public void loadFile() {
-        readFile(this.filePath);
-        System.out.println("Da tai du lieu thanh cong tu file: " + filePath);
-    }
-
-    public void saveFile() {
-        writeFile(this.filePath);
-        System.out.println("Da luu du lieu vao file: " + filePath);
-    }
+    private GoodsReceiptDTO[] receiptList = new GoodsReceiptDTO[0];
+    private final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     @Override
     // tương tự với cách hoạt động của hóa đơn bán hàng
@@ -158,7 +131,6 @@ import java.util.Date;
 
        @Override
     public void readFile(String filePath) {
-<<<<<<< HEAD
         GoodsReceiptDTO[] tempArr = new GoodsReceiptDTO[0];
         
         // Kiểm tra file tồn tại
@@ -216,50 +188,6 @@ import java.util.Date;
         
         // Nạp mảng vào biến gốc
         this.receiptList = tempArr;
-=======
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(filePath));
-            String line = br.readLine();
-
-            while (line != null) {
-                String[] parts = line.split(",");
-
-                GoodsReceiptDTO rec = new GoodsReceiptDTO();
-
-                rec.setReceiptId(parts[0]);
-
-                try {
-                    Date ngayNhap = sdf.parse(parts[1]);
-                    rec.setCreatedDate(ngayNhap);
-                } catch (Exception e) {
-                    // bỏ qua nếu không đọc được ngày
-                }
-
-                // parts[2] là supplierId - cần đối tượng Supplier đầy đủ
-                // parts[3] là receiverId - cần đối tượng Employee đầy đủ
-
-                if (parts[4].equals("Active")) {
-                    rec.setStatus(true);
-                } else {
-                    rec.setStatus(false);
-                }
-
-                // parts[5] là totalPrice - tính toán tự động, không cần đọc
-
-                int viTri = receiptList.length;
-                receiptList = Arrays.copyOf(receiptList, viTri + 1);
-                receiptList[viTri] = rec;
-
-                line = br.readLine();
-            }
-
-            br.close();
-            System.out.println("Đọc dữ liệu từ file " + filePath + " thành công!");
-
-        } catch (IOException e) {
-            System.err.println("Lỗi khi đọc file: " + e.getMessage());
-        }
->>>>>>> origin
     }
 
 

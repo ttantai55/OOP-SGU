@@ -9,7 +9,7 @@ import java.util.Arrays;
 
 public class CartDAO implements ICartManage<CartItemDTO>{
     private CartItemDTO[] cartList; // day la gio hang cua ca he thong 
-    //private final String filePath = "data/cart.txt";
+
 
     public CartDAO() {
         cartList = new CartItemDTO[0];

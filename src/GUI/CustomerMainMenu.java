@@ -11,7 +11,7 @@ import java.util.Scanner;
 // Giao dien chinh danh rieng cho Khach Hang
 public class CustomerMainMenu {
     static Scanner sc = new Scanner(System.in);
-    private String username;
+    private final String username;
 
     public CustomerMainMenu() {
         this.username = "";
