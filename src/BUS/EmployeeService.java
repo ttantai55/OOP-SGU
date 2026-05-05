@@ -114,8 +114,8 @@ public class EmployeeService {
 
     // Common part of the header (shared columns)
     private static final String COMMON_HEADER = String.format(
-            "%-5s | %-25s | %-12s | %-25s | %-50s | %-10s | %-14s | %-15s | %15s | %-12s",
-            "STT", "Ho Ten", "So DT", "Email", "Dia Chi", "Ma NV", "CCCD", "Chuc Vu", "Luong CB", "Ngay VL");
+            "%-5s | %-25s | %-12s | %-25s | %-50s | %-10s | %-14s | %-15s | %15s | %-17s",
+            "STT", "Ho Ten", "So DT", "Email", "Dia Chi", "Ma NV", "CCCD", "Chuc Vu", "Luong co ban", "Ngay vao lam");
 
     public void displayManagers() {
         int width = 270;

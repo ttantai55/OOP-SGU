@@ -63,6 +63,7 @@ public class Validation {
             }
         }
     }
+    //valid nhập họ và tên
     public static String getValidFullName(String prompt) {
         String FullName;
         while (true) {

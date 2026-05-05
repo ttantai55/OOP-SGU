@@ -21,7 +21,7 @@ import java.util.Scanner;
 public class ProductListDAO  implements IProductManage<ProductsDTO> {
     private ProductsDTO[] pList;
 
-    private final String filePath = "OOP-SGU/src/data/product.txt";
+    private final String filePath = "src/data/product.txt";
 
     static Scanner sc = new Scanner(System.in);
 

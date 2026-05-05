@@ -20,11 +20,11 @@ public class SupplierService {
     // --- CÁC HÀM ĐỒNG BỘ DỮ LIỆU ---
     public void loadFromFile() {
         // [OOP] Delegation: Giao việc đọc file cho DAO
-        supplierDAO.readFile("OOP-SGU/src/data/suppliers.txt");
+        supplierDAO.readFile("src/data/suppliers.txt");
     }
 
     public void saveToFile() {
-        supplierDAO.writeFile("OOP-SGU/src/data/suppliers.txt");
+        supplierDAO.writeFile("src/data/suppliers.txt");
     }
 
     // --- MENU QUẢN LÝ NHÀ CUNG CẤP ---

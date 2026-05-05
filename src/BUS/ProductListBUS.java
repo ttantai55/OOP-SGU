@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 public class ProductListBUS {
     private final ProductListDAO productDAO;
-    private static final String FILE_PRODUCTS = "OOP-SGU/src/data/product.txt";
+    private static final String FILE_PRODUCTS = "src/data/product.txt";
 
     static Scanner sc = new Scanner(System.in);
 

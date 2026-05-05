@@ -8,7 +8,7 @@ import java.util.Scanner;
 public class CartBUS {
     private final CartDAO cartDAO;
     private final String username;
-    private final String FILE_CART = "OOP-SGU/src/data/cart.txt";
+    private final String FILE_CART = "src/data/cart.txt";
     static Scanner sc = new Scanner(System.in);
 
     public CartBUS(String username) {

@@ -7,6 +7,7 @@ public class Person {
     protected String phoneNumber;
     protected String email;
     protected Address address;
+    protected int status = 1; // 1 = active, 0 = soft-deleted
     static Scanner sc = new Scanner(System.in);
     public Person() {
     }
@@ -48,6 +49,14 @@ public class Person {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
 
