@@ -9,3 +9,4 @@ T,NV004,Pham Van Duc,0934444444,duc@email.com,5,Le Duan,Ben Nghe,Q1,Ho Chi Minh,
 D,NV007,Phan Thi Huong,0967000003,huong@email.com,5,Nguyen Van Linh,Tan Phong,Q7,Ho Chi Minh,Nhan Vien,7500000.0,28/04/2026,Q7-Q8,51B-67890,35000.0,90
 S,NV002,Tran Van Binh,0912222222,binh@email.com,20,Nguyen Hue,Ben Thanh,Q1,Ho Chi Minh,Nhan Vien,8000000.0,15/03/2021,500000.0,2000000.0
 M,NV005,Truon Hak H,0926182731,Hayhh@gmail.com,12,12,12,12,12,nhan vien,2.5E8,04/05/2026,25000.0,ban hang
+M,NV0011,chuong vo ky,0182639262,yag@gmail.com,12,12,12,12,12,quan ly,2.5E8,05/05/2026,25000.0,IT2

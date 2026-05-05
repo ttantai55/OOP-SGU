@@ -34,6 +34,7 @@ public class CustomerService {
         c.input();
         customerDAO.add(c);
         System.out.println("Them khach hang thanh cong!");
+        saveToFile();
     }
 
     // ==================== XOA KHACH HANG ====================
@@ -45,6 +46,7 @@ public class CustomerService {
         }
         customerDAO.remove(id);
         System.out.println("Da xoa khach hang co ma: " + id);
+        saveToFile();
     }
 
     // ==================== CAP NHAT KHACH HANG ====================
@@ -58,6 +60,7 @@ public class CustomerService {
         c.input();
         customerDAO.update(c);
         System.out.println("Cap nhat khach hang thanh cong!");
+        saveToFile();
     }
 
     // ==================== TIM KIEM ====================
@@ -116,7 +119,7 @@ public class CustomerService {
             System.out.println("\n" + "=".repeat(40));
             System.out.println("  QUAN LY KHACH HANG");
             System.out.println("=".repeat(40));
-            System.out.println("  1. Hien thi tat ca khach hang");
+            System.out.println("  1. Hien thi thong tin tat ca khach hang");
             System.out.println("  2. Them khach hang");
             System.out.println("  3. Xoa khach hang");
             System.out.println("  4. Cap nhat khach hang");
@@ -125,8 +128,7 @@ public class CustomerService {
             System.out.println("  7. Sap xep theo ten");
             System.out.println("  8. Sap xep theo diem tich luy");
             System.out.println("  9. Thong ke theo loai");
-            System.out.println(" 10. Luu du lieu ra file");
-            System.out.println(" 11. Tai du lieu tu file");
+            System.out.println(" 10. Tai du lieu tu file");
             System.out.println("  0. Thoat");
             System.out.println("=".repeat(40));
             System.out.print("Chon: ");
@@ -168,9 +170,6 @@ public class CustomerService {
                     statsByType();
                     break;
                 case 10:
-                    saveToFile();
-                    break;
-                case 11:
                     loadFromFile();
                     break;
                 case 0:

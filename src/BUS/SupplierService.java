@@ -82,6 +82,7 @@ public class SupplierService {
 
         // Nếu ID chưa tồn tại, ủy quyền cho DAO lưu vào danh sách
         supplierDAO.add(newSupplier);
+        saveToFile();
     }
 
     private void updateSupplier() {
@@ -103,6 +104,7 @@ public class SupplierService {
         existingSupplier.setEmail(Validation.getValidEmail("Moi nhap Email moi (@gmail.com): "));
 
         supplierDAO.update(existingSupplier);
+        saveToFile();
     }
 
     private void deleteSupplier() {
@@ -118,6 +120,7 @@ public class SupplierService {
         String confirm = sc.nextLine().trim();
         if (confirm.equalsIgnoreCase("Y")) {
             supplierDAO.remove(id);
+            saveToFile();
         } else {
             System.out.println("[Thong bao] Da huy thao tac xoa.");
         }

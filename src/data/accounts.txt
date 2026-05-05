@@ -6,3 +6,4 @@ ACC04,LHTSmile,123456,Quan ly,true,QL002
 ACC_KH004,okoru,123456,Khach hang,true,KH004
 ACC05,NhanVienSale,123456,nhan vien,true,NV003
 ACC_KH007,demo,123456,Khach hang,true,KH007
+ACC09,demo1,123,quan ly,true,NV007

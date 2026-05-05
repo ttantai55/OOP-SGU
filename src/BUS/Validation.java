@@ -48,6 +48,7 @@ public class Validation {
             }
         }
     }
+    //nhập CCCD chuẩn 12 chữ số (k được để trống)
 
     public static String getValidCCCD(String prompt) {
         String CCCD;
@@ -59,6 +60,18 @@ public class Validation {
                 return CCCD; // Thoat vong lap, tra ve CCCD dung
             } else {
                 System.out.println("[Loi] CCCD phai bao gom 12 chữ số! Vui long nhap lai.");
+            }
+        }
+    }
+    public static String getValidFullName(String prompt) {
+        String FullName;
+        while (true) {
+            System.out.print(prompt);
+            FullName = sc.nextLine().trim();
+            if (FullName.matches("^[\\p{L}]+(\\s[\\p{L}]+)*$")) {
+                return FullName;
+            } else {
+                System.out.println("[Loi] Nhap dung dinh dang ten tieng viet (viet hoa chu cai dau tien)! Vui long nhap lai.");
             }
         }
     }

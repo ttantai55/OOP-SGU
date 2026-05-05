@@ -86,9 +86,16 @@ public abstract class Employee extends Person {
     @Override
     public String toString() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        return super.toString() + String.format(" | %-10s | %-15s | %,15.0f | %-12s",
-                employeeId, position, baseSalary, sdf.format(startDate));
+        return super.toString() + String.format(" | %-10s | %-14s | %-15s | %,15.0f | %-12s",
+                employeeId, CCCD, position, baseSalary, sdf.format(startDate));
     }
+    // Returns only the common fields (Person + Employee), without subclass-specific fields
+    public String toCommonString() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        return super.toString() + String.format(" | %-10s | %-14s | %-15s | %,15.0f | %-12s",
+                employeeId, CCCD, position, baseSalary, sdf.format(startDate));
+    }
+
     public void displayInfo() {
         System.out.println(toString());
     }

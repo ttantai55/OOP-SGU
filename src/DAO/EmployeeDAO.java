@@ -84,16 +84,14 @@ public class EmployeeDAO implements IRepository<Employee> {
             System.out.println("Danh sach nhan vien rong.");
             return;
         }
-        System.out.println("=".repeat(210));
-        System.out.printf("%-5s | %-30s | %-13s | %-25s | %-45s | %-10s | %-15s | %-15s | %-12s | %s%n",
-                "STT", "Ho Ten", "So DT", "Email", "Dia Chi", "Ma NV", "Chuc Vu", "Luong CB", "Ngay VL",
-                "Thong Tin Them");
-        System.out.println("=".repeat(210));
+        System.out.println("=".repeat(220));
+        System.out.printf("%-5s | %-25s | %-12s | %-25s | %-50s | %-10s | %-14s | %-15s | %15s | %-12s%n",
+                "STT", "Ho Ten", "So DT", "Email", "Dia Chi", "Ma NV", "CCCD", "Chuc Vu", "Luong CB", "Ngay VL");
+        System.out.println("=".repeat(220));
         for (int i = 0; i < count; i++) {
-            System.out.printf("%-5d | ", i + 1);
-            employees[i].displayInfo();
+            System.out.printf("%-5d | %s%n", i + 1, employees[i].toCommonString());
         }
-        System.out.println("=".repeat(210));
+        System.out.println("=".repeat(220));
         System.out.println("Tong so: " + count + " nhan vien.");
     }
 
