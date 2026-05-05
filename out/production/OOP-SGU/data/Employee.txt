@@ -1,0 +1,12 @@
+S,NV006,Bui Van Nam,0956000002,nam@email.com,20,Tran Hung Dao,Nguyen Cu Trinh,Q5,Ho Chi Minh,Nhan Vien,8500000.0,28/04/2026,1000000.0,3000000.0
+T,NV008,Do Minh Tuan,0978000004,tuan@email.com,15,Vo Nguyen Giap,Linh Trung,Thu Duc,Ho Chi Minh,Ky Thuat Vien,9500000.0,28/04/2026,60,800000.0
+M,NV005,Hoang Thi Mai,0945000001,mai@email.com,99,Vo Van Tan,Vo Thi Sau,Q3,Ho Chi Minh,Truong Phong,2.0E7,28/04/2026,5000000.0,IT
+S,Nv971,Huynh Van Giao,0926382647,chuatay@gmail.com,114,CUong quang Cuong,5,chua tay,tay,Nhân Viên,2.5E7,04/05/2026,25000.0,28422.0
+M,NV007,Huynh Van ho,09831726422,shag@gmail.com,12,12,12,12,12,quan ly,2500000.0,05/05/2026,25000.0,quản ly
+M,nv09331,hyas,fhas,fnah@g,a,a,g,á,g,quanly,2600.0,28/04/2026,25000.0,quanly
+D,NV003,Le Thi Cam,0923333333,cam@email.com,30,Hai Ba Trung,Tan Dinh,Q1,Ho Chi Minh,Nhan Vien,7000000.0,01/09/2022,Q1-Q3,59A-12345,30000.0,80
+T,NV004,Pham Van Duc,0934444444,duc@email.com,5,Le Duan,Ben Nghe,Q1,Ho Chi Minh,Ky Thuat,9000000.0,10/01/2021,50,500000.0
+D,NV007,Phan Thi Huong,0967000003,huong@email.com,5,Nguyen Van Linh,Tan Phong,Q7,Ho Chi Minh,Nhan Vien,7500000.0,28/04/2026,Q7-Q8,51B-67890,35000.0,90
+S,NV002,Tran Van Binh,0912222222,binh@email.com,20,Nguyen Hue,Ben Thanh,Q1,Ho Chi Minh,Nhan Vien,8000000.0,15/03/2021,500000.0,2000000.0
+M,NV005,Truon Hak H,0926182731,Hayhh@gmail.com,12,12,12,12,12,nhan vien,2.5E8,04/05/2026,25000.0,ban hang
+M,NV0011,chuong vo ky,0182639262,yag@gmail.com,12,12,12,12,12,quan ly,2.5E8,05/05/2026,25000.0,IT2

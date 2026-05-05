@@ -24,6 +24,25 @@ public class BillMenu {
         grBUS        = new GoodsReceiptBUS();
         warrantyBUS  = new WarrantyListBUS();
         repairBUS    = new RepairRecordListBUS();
+
+        // Tự động tải dữ liệu từ file khi khởi tạo
+        loadData();
+    }
+
+    // ==================== LOAD / SAVE ====================
+
+    private void loadData() {
+        System.out.println("Dang tai du lieu hoa don va phieu nhap...");
+        invoiceBUS.loadFile();
+        grBUS.loadFile();
+        System.out.println("Tai du lieu hoa don va phieu nhap thanh cong!");
+    }
+
+    private void saveData() {
+        System.out.println("Dang luu du lieu hoa don va phieu nhap...");
+        invoiceBUS.saveFile();
+        grBUS.saveFile();
+        System.out.println("Luu du lieu hoa don va phieu nhap thanh cong!");
     }
 
     public void showMenu() {
@@ -60,6 +79,7 @@ public class BillMenu {
                     menuKhuyenMai();
                     break;
                 case 0:
+                    saveData();
                     System.out.println("Quay lai menu chinh...");
                     break;
                 default:
@@ -79,9 +99,10 @@ public class BillMenu {
             System.out.println("  2. Xem chi tiet hoa don");
             System.out.println("  3. Huy hoa don");
             System.out.println("  4. Xem hoa don theo khach hang");
+            System.out.println("  5. Xem danh sach hoa don ban hang");
             System.out.println("  0. Quay lai");
             System.out.println("=".repeat(55));
-            System.out.print("Vui long chon chuc nang (0-4): ");
+            System.out.print("Vui long chon chuc nang (0-5): ");
 
             try {
                 choice = Integer.parseInt(sc.nextLine().trim());
@@ -92,6 +113,7 @@ public class BillMenu {
             switch (choice) {
                 case 1:
                     invoiceBUS.inputInvoice();
+                    invoiceBUS.saveFile(); // Tự động lưu sau khi thêm
                     pause();
                     break;
                 case 2:
@@ -101,10 +123,15 @@ public class BillMenu {
                     break;
                 case 3:
                     invoiceBUS.cancelInvoice();
+                    invoiceBUS.saveFile(); // Tự động lưu sau khi hủy
                     pause();
                     break;
                 case 4:
                     invoiceBUS.printInvoicesByCustomer();
+                    pause();
+                    break;
+                case 5:
+                    invoiceBUS.printAllInvoices();
                     pause();
                     break;
                 case 0:
@@ -126,9 +153,10 @@ public class BillMenu {
             System.out.println("  1. Tao phieu nhap hang moi");
             System.out.println("  2. Xem chi tiet phieu nhap");
             System.out.println("  3. Huy phieu nhap");
+            System.out.println("  4. Xem danh sach phieu nhap hang");
             System.out.println("  0. Quay lai");
             System.out.println("=".repeat(55));
-            System.out.print("Vui long chon chuc nang (0-3): ");
+            System.out.print("Vui long chon chuc nang (0-4): ");
 
             try {
                 choice = Integer.parseInt(sc.nextLine().trim());
@@ -139,6 +167,7 @@ public class BillMenu {
             switch (choice) {
                 case 1:
                     grBUS.inputReceipt();
+                    grBUS.saveFile(); // Tự động lưu sau khi thêm
                     pause();
                     break;
                 case 2:
@@ -148,6 +177,11 @@ public class BillMenu {
                     break;
                 case 3:
                     grBUS.cancelReceipt();
+                    grBUS.saveFile(); // Tự động lưu sau khi hủy
+                    pause();
+                    break;
+                case 4:
+                    grBUS.printAllReceipts();
                     pause();
                     break;
                 case 0:

@@ -137,7 +137,46 @@ public class GoodsReceiptListDAO implements IRepository<GoodsReceiptDTO> {
 
     @Override
     public void readFile(String filePath) {
-        // Sẽ bổ sung sau
+        try (java.io.BufferedReader br = new java.io.BufferedReader(new java.io.FileReader(filePath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                line = line.trim();
+                if (line.isEmpty()) continue;
+                String[] parts = line.split(",");
+                if (parts.length < 6) continue;
+
+                // Format: receiptId,date,supplierId,receiverId,status,totalPrice
+                GoodsReceiptDTO rec = new GoodsReceiptDTO();
+                rec.setReceiptId(parts[0].trim());
+                rec.setCreatedDate(sdf.parse(parts[1].trim()));
+
+                // Tạo stub Supplier với ID
+                DTO.Supplier supplier = new DTO.Supplier();
+                supplier.setSupplierId(parts[2].trim());
+                supplier.setSupplierName(parts[2].trim()); // Dùng ID làm tên tạm
+                rec.setSupplier(supplier);
+
+                // Tạo stub Employee với ID
+                DTO.Employee receiver = new DTO.Employee() {
+                    @Override
+                    public float calculateSalary() { return 0; }
+                    @Override
+                    public String getRole() { return "N/A"; }
+                };
+                receiver.setEmployeeId(parts[3].trim());
+                receiver.setFullName(parts[3].trim()); // Dùng ID làm tên tạm
+                rec.setReceiver(receiver);
+
+                rec.setStatus(parts[4].trim().equals("Active"));
+                // totalPrice ở parts[5] - không cần lưu vì tính từ items
+
+                add(rec);
+            }
+        } catch (java.io.FileNotFoundException e) {
+            System.out.println("[Thong bao] Chua co file GoodsReceipt.txt (Se tu tao khi them moi).");
+        } catch (Exception e) {
+            System.out.println("[Loi] Loi khi doc file GoodsReceipt: " + e.getMessage());
+        }
     }
 
     @Override

@@ -122,7 +122,36 @@ public class GoodsReceiptItemListDAO implements IRepository<GoodsReceiptItemDTO>
 
     @Override
     public void readFile(String filePath) {
-        // Sẽ bổ sung sau
+        try (java.io.BufferedReader br = new java.io.BufferedReader(new java.io.FileReader(filePath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                line = line.trim();
+                if (line.isEmpty()) continue;
+                String[] parts = line.split(",");
+                if (parts.length < 6) continue;
+
+                // Format: receiptId,productId,productName,quantity,importPrice,subTotal
+                GoodsReceiptItemDTO item = new GoodsReceiptItemDTO();
+                item.setReceiptId(parts[0].trim());
+
+                // Tạo stub ProductsDTO với thông tin cơ bản
+                DTO.ProductsDTO product = new DTO.ProductsDTO();
+                product.setProductID(parts[1].trim());
+                product.setProductName(parts[2].trim());
+                product.setWarrantyPeriod(0);
+                item.setProduct(product);
+
+                item.setQuantity(Integer.parseInt(parts[3].trim()));
+                item.setImportPrice(Double.parseDouble(parts[4].trim()));
+                // parts[5] = subTotal (tính từ quantity * importPrice, bỏ qua)
+
+                add(item);
+            }
+        } catch (java.io.FileNotFoundException e) {
+            System.out.println("[Thong bao] Chua co file GoodsReceiptItem.txt (Se tu tao khi them moi).");
+        } catch (Exception e) {
+            System.out.println("[Loi] Loi khi doc file GoodsReceiptItem: " + e.getMessage());
+        }
     }
 
     @Override

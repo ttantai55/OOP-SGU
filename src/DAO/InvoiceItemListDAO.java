@@ -104,7 +104,56 @@ public class InvoiceItemListDAO implements IInvoiceManage<InvoiceItemDTO> {
 
     @Override
     public void readFile(String filePath) {
-        // Sẽ bổ sung sau
+        try (java.io.BufferedReader br = new java.io.BufferedReader(new java.io.FileReader(filePath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                line = line.trim();
+                if (line.isEmpty()) continue;
+                String[] parts = line.split(",");
+                if (parts.length < 9) continue;
+
+                // Format: invoiceId,productId,productName,quantity,unitPrice,promotionId,discountPercent,warrantyId,subTotal
+                InvoiceItemDTO item = new InvoiceItemDTO();
+                item.setInvoiceId(parts[0].trim());
+
+                // Tạo stub ProductsDTO với thông tin cơ bản
+                DTO.ProductsDTO product = new DTO.ProductsDTO();
+                product.setProductID(parts[1].trim());
+                product.setProductName(parts[2].trim());
+                product.setPrice(Double.parseDouble(parts[4].trim()));
+                product.setWarrantyPeriod(0);
+                item.setProduct(product);
+
+                item.setQuantity(Integer.parseInt(parts[3].trim()));
+
+                // Promotion (parts[5] = promotionId, parts[6] = discountPercent)
+                String promotionId = parts[5].trim();
+                if (!promotionId.equals("N/A")) {
+                    DTO.PromotionDTO promo = new DTO.PromotionDTO();
+                    promo.setPromotionId(promotionId);
+                    promo.setDiscountPercent(Double.parseDouble(parts[6].trim()));
+                    item.setPromotion(promo);
+                } else {
+                    item.setPromotion(null);
+                }
+
+                // Warranty (parts[7] = warrantyId)
+                String warrantyId = parts[7].trim();
+                if (!warrantyId.equals("N/A")) {
+                    DTO.WarrantyDTO warranty = new DTO.WarrantyDTO();
+                    warranty.setWarrantyId(warrantyId);
+                    item.setWarranty(warranty);
+                } else {
+                    item.setWarranty(null);
+                }
+
+                add(item);
+            }
+        } catch (java.io.FileNotFoundException e) {
+            System.out.println("[Thong bao] Chua co file InvoiceItem.txt (Se tu tao khi them moi).");
+        } catch (Exception e) {
+            System.out.println("[Loi] Loi khi doc file InvoiceItem: " + e.getMessage());
+        }
     }
 
     @Override
@@ -114,10 +163,13 @@ public class InvoiceItemListDAO implements IInvoiceManage<InvoiceItemDTO> {
             for (InvoiceItemDTO item : itemList) {
                 if (item != null) {
                     String promotionId;
+                    double discountPercent;
                     if (item.getPromotion() != null) {
                         promotionId = item.getPromotion().getPromotionId();
+                        discountPercent = item.getDiscountPercent();
                     } else {
                         promotionId = "N/A";
+                        discountPercent = 0.0;
                     }
 
                     String warrantyId;
@@ -127,12 +179,14 @@ public class InvoiceItemListDAO implements IInvoiceManage<InvoiceItemDTO> {
                         warrantyId = "N/A";
                     }
 
+                    // Format: invoiceId,productId,productName,quantity,unitPrice,promotionId,discountPercent,warrantyId,subTotal
                     String line = item.getInvoiceId() + "," +
                                  item.getProductId() + "," +
                                  item.getProductName() + "," +
                                  item.getQuantity() + "," +
                                  item.getUnitPrice() + "," +
                                  promotionId + "," +
+                                 discountPercent + "," +
                                  warrantyId + "," +
                                  calculateSubTotal(item);
 

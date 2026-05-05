@@ -51,7 +51,7 @@ public class ProductListDAO  implements IProductManage<ProductsDTO> {
         // Vòng lặp duyệt qua từng sản phẩm trong kho
         for (int i = 0; i < pList.length; i++) {
             // Bỏ qua nếu là khoảng trống (null) hoặc sản phẩm này đã được đếm ở nhóm trước đó
-            if (pList[i] == null || counted[i] || pList[i].isStatus()) {
+            if (pList[i] == null || counted[i] || !pList[i].isStatus()) {
                 continue;
             }
 
@@ -65,7 +65,7 @@ public class ProductListDAO  implements IProductManage<ProductsDTO> {
             // Lục lọi các sản phẩm nằm phía sau xem có anh em sinh đôi (cùng ProductID) không
             for (int j = i + 1; j < pList.length; j++) {
                 //Phai kiem tra trang thai = true ms thao tac 
-                if (pList[j] != null && !counted[j] && pList[i].isStatus()) {
+                if (pList[j] != null && !counted[j] && pList[j].isStatus()) {
                     // Nếu trùng mã ProductID -> Cùng một dòng máy
                     if (pList[j].getProductID().equals(productIDPresent)) {
                         amount++; // Tăng số lượng

@@ -38,6 +38,44 @@ public class InvoiceListBUS {
     private final PromotionListDAO promotionDAO = new PromotionListDAO();
     private final WarrantyListDAO warrantyDAO = new WarrantyListDAO();
 
+    private static final String FILE_INVOICE = "src/data/Invoice.txt";
+    private static final String FILE_INVOICE_ITEM = "src/data/InvoiceItem.txt";
+
+    // ==================== LOAD / SAVE ====================
+
+    public void loadFile() {
+        invDAO.readFile(FILE_INVOICE);
+        invItemDAO.readFile(FILE_INVOICE_ITEM);
+
+        // Liên kết các chi tiết hóa đơn vào hóa đơn cha
+        // + Resolve stub Customer/Employee thành đối tượng thật từ DAO
+        InvoiceDTO[] allInvoices = invDAO.getAll();
+        for (InvoiceDTO inv : allInvoices) {
+            if (inv != null) {
+                // Liên kết items
+                InvoiceItemDTO[] items = invItemDAO.findByInvoiceId(inv.getInvoiceId());
+                inv.setInvoiceItemList(items);
+
+                // Resolve Customer thật từ CustomerDAO (thay stub chỉ có ID)
+                Customer realCustomer = customerDAO.findById(inv.getCustomerId());
+                if (realCustomer != null) {
+                    inv.setCustomer(realCustomer);
+                }
+
+                // Resolve Employee thật từ EmployeeDAO (thay stub chỉ có ID)
+                Employee realEmployee = employeeDAO.findById(inv.getEmployeeId());
+                if (realEmployee != null) {
+                    inv.setEmployee(realEmployee);
+                }
+            }
+        }
+    }
+
+    public void saveFile() {
+        invDAO.writeFile(FILE_INVOICE);
+        invItemDAO.writeFile(FILE_INVOICE_ITEM);
+    }
+
     // *nhập hóa đơn*
     // mã hóa đơn
     // mã khách
@@ -347,6 +385,11 @@ public class InvoiceListBUS {
                 printInvoice(inv.getInvoiceId());
             }
         }
+    }
+
+    // Xem danh sach tat ca hoa don ban hang
+    public void printAllInvoices() {
+        invDAO.displayAll();
     }
 
     public void cancelInvoice() {

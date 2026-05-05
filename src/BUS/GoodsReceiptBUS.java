@@ -25,6 +25,43 @@ public class GoodsReceiptBUS {
     private final ProductListDAO productsDAO = new ProductListDAO();
     private final SupplierDAO supplierDAO = new SupplierDAO();
 
+    private static final String FILE_RECEIPT = "src/data/GoodsReceipt.txt";
+    private static final String FILE_RECEIPT_ITEM = "src/data/GoodsReceiptItem.txt";
+
+    // ==================== LOAD / SAVE ====================
+
+    public void loadFile() {
+        grDAO.readFile(FILE_RECEIPT);
+        grItemDAO.readFile(FILE_RECEIPT_ITEM);
+
+        // Liên kết items + Resolve stub Supplier/Employee thành đối tượng thật
+        DTO.GoodsReceiptDTO[] allReceipts = grDAO.getAll();
+        for (DTO.GoodsReceiptDTO rec : allReceipts) {
+            if (rec != null) {
+                // Liên kết items
+                DTO.GoodsReceiptItemDTO[] items = grItemDAO.findByReceiptId(rec.getReceiptId());
+                rec.setItems(items);
+
+                // Resolve Supplier thật từ SupplierDAO
+                DTO.Supplier realSupplier = supplierDAO.findById(rec.getSupplierId());
+                if (realSupplier != null) {
+                    rec.setSupplier(realSupplier);
+                }
+
+                // Resolve Employee thật từ EmployeeDAO
+                DTO.Employee realEmployee = employeeDAO.findById(rec.getReceiverId());
+                if (realEmployee != null) {
+                    rec.setReceiver(realEmployee);
+                }
+            }
+        }
+    }
+
+    public void saveFile() {
+        grDAO.writeFile(FILE_RECEIPT);
+        grItemDAO.writeFile(FILE_RECEIPT_ITEM);
+    }
+
     // --- NHẬP PHIẾU NHẬP HÀNG ---
     public void inputReceipt() {
         GoodsReceiptDTO rec = new GoodsReceiptDTO();
@@ -176,6 +213,11 @@ public class GoodsReceiptBUS {
         System.out.println("=".repeat(85) + "\n");
     }
 
+
+    // Xem danh sach tat ca phieu nhap hang
+    public void printAllReceipts() {
+        grDAO.displayAll();
+    }
 
     public void cancelReceipt() {
         System.out.print("Nhap ma phieu nhap can huy: ");

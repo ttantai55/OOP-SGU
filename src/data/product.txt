@@ -1,20 +1,17 @@
-Laptop,LIMEI-001,LT001,CAT01,Gaming,BR01,Asus,1989,Asus ROG Strix G15,25000000,24,China,Intel Core i7,12700H,14,20,16,DDR5,SSD,512,NVIDIA RTX 3060,GDDR6,6,15.6,IPS 144Hz,4 Cell 90Wh,Dang ban
-Laptop,LIMEI-002,LT001,CAT01,Gaming,BR01,Asus,1989,Asus ROG Strix G15,25000000,24,China,Intel Core i7,12700H,14,20,16,DDR5,SSD,512,NVIDIA RTX 3060,GDDR6,6,15.6,IPS 144Hz,4 Cell 90Wh,Dang ban
-Laptop,LIMEI-003,LT001,CAT01,Gaming,BR01,Asus,1989,Asus ROG Strix G15,25000000,24,China,Intel Core i7,12700H,14,20,16,DDR5,SSD,512,NVIDIA RTX 3060,GDDR6,6,15.6,IPS 144Hz,4 Cell 90Wh,Dang ban
-Laptop,LIMEI-004,LT002,CAT02,Ultrabook,BR02,Dell,1984,Dell XPS 13 Plus,35000000,12,USA,Intel Core i5,1340P,12,16,16,LPDDR5,SSD,512,Intel Iris Xe,Integrated,0,13.4,OLED 60Hz,3 Cell 55Wh,Dang ban
-Laptop,LIMEI-005,LT002,CAT02,Ultrabook,BR02,Dell,1984,Dell XPS 13 Plus,35000000,12,USA,Intel Core i5,1340P,12,16,16,LPDDR5,SSD,512,Intel Iris Xe,Integrated,0,13.4,OLED 60Hz,3 Cell 55Wh,Dang ban
-Laptop,LIMEI-006,LT002,CAT02,Ultrabook,BR02,Dell,1984,Dell XPS 13 Plus,35000000,12,USA,Intel Core i5,1340P,12,16,16,LPDDR5,SSD,512,Intel Iris Xe,Integrated,0,13.4,OLED 60Hz,3 Cell 55Wh,Ngung ban
-Laptop,LIMEI-007,LT003,CAT03,Macbook,BR03,Apple,1976,Macbook Pro 14 M2,45000000,12,China,Apple M2 Pro,M2 Pro,10,10,16,Unified,SSD,512,Apple GPU,Integrated,16,14.2,Liquid Retina,70Wh,Dang ban
-Laptop,LIMEI-008,LT003,CAT03,Macbook,BR03,Apple,1976,Macbook Pro 14 M2,45000000,12,China,Apple M2 Pro,M2 Pro,10,10,16,Unified,SSD,512,Apple GPU,Integrated,16,14.2,Liquid Retina,70Wh,Dang ban
-Laptop,LIMEI-009,LT003,CAT03,Macbook,BR03,Apple,1976,Macbook Pro 14 M2,45000000,12,China,Apple M2 Pro,M2 Pro,10,10,16,Unified,SSD,512,Apple GPU,Integrated,16,14.2,Liquid Retina,70Wh,Dang ban
-Laptop,LIMEI-010,LT004,CAT04,Business,BR04,Lenovo,1984,Thinkpad T14 Gen 3,22000000,36,China,AMD Ryzen 7,6850U,8,16,16,DDR5,SSD,512,AMD Radeon 680M,Integrated,0,14.0,IPS 60Hz,4 Cell 52Wh,Dang ban
-Laptop,LIMEI-011,LT004,CAT04,Business,BR04,Lenovo,1984,Thinkpad T14 Gen 3,22000000,36,China,AMD Ryzen 7,6850U,8,16,16,DDR5,SSD,512,AMD Radeon 680M,Integrated,0,14.0,IPS 60Hz,4 Cell 52Wh,Dang ban
-Laptop,LIMEI-012,LT004,CAT04,Business,BR04,Lenovo,1984,Thinkpad T14 Gen 3,22000000,36,China,AMD Ryzen 7,6850U,8,16,16,DDR5,SSD,512,AMD Radeon 680M,Integrated,0,14.0,IPS 60Hz,4 Cell 52Wh,Dang ban
-Accessory,AIMEI-001,AC001,CAT05,Mouse,BR05,Logitech,1981,Logitech G102 Lightsync,450000,12,China,Wired,Gaming mouse 8000 DPI,Dang ban
-Accessory,AIMEI-002,AC001,CAT05,Mouse,BR05,Logitech,1981,Logitech G102 Lightsync,450000,12,China,Wired,Gaming mouse 8000 DPI,Dang ban
-Accessory,AIMEI-003,AC002,CAT06,Keyboard,BR06,Keychron,2017,Keychron K2 V2,1800000,12,China,Wireless,Mechanical keyboard RGB,Dang ban
-Accessory,AIMEI-004,AC002,CAT06,Keyboard,BR06,Keychron,2017,Keychron K2 V2,1800000,12,China,Wireless,Mechanical keyboard RGB,Ngung ban
-Accessory,AIMEI-005,AC003,CAT07,Headphone,BR07,Sony,1946,Sony WH-1000XM5,7500000,12,Vietnam,Wireless,Noise cancelling headphone,Dang ban
-Accessory,AIMEI-006,AC003,CAT07,Headphone,BR07,Sony,1946,Sony WH-1000XM5,7500000,12,Vietnam,Wireless,Noise cancelling headphone,Dang ban
-Accessory,AIMEI-007,AC004,CAT08,Storage,BR08,Samsung,1938,Samsung 980 Pro 1TB,2500000,60,Korea,SSD,NVMe Gen 4,Dang ban
-Accessory,AIMEI-008,AC004,CAT08,Storage,BR08,Samsung,1938,Samsung 980 Pro 1TB,2500000,60,Korea,SSD,NVMe Gen 4,Dang ban
+Laptop,LIMEI-001,LT001,CAT01,Gaming,BR01,Asus,1989,Asus ROG Strix G15,2.5E7,24,China,Dang ban,Intel Core i7,12700H,14,20,NVIDIA RTX 3060,GDDR6,6,16,DDR5,15.6,IPS 144Hz,SSD,512,4 Cell 90Wh
+Laptop,LIMEI-002,LT001,CAT01,Gaming,BR01,Asus,1989,Asus ROG Strix G15,2.5E7,24,China,Dang ban,Intel Core i7,12700H,14,20,NVIDIA RTX 3060,GDDR6,6,16,DDR5,15.6,IPS 144Hz,SSD,512,4 Cell 90Wh
+Laptop,LIMEI-003,LT001,CAT01,Gaming,BR01,Asus,1989,Asus ROG Strix G15,2.5E7,24,China,Dang ban,Intel Core i7,12700H,14,20,NVIDIA RTX 3060,GDDR6,6,16,DDR5,15.6,IPS 144Hz,SSD,512,4 Cell 90Wh
+Laptop,LIMEI-004,LT002,CAT02,Ultrabook,BR02,Dell,1984,Dell XPS 13 Plus,3.5E7,12,USA,Dang ban,Intel Core i5,1340P,12,16,Intel Iris Xe,Integrated,0,16,LPDDR5,13.4,OLED 60Hz,SSD,512,3 Cell 55Wh
+Laptop,LIMEI-005,LT002,CAT02,Ultrabook,BR02,Dell,1984,Dell XPS 13 Plus,3.5E7,12,USA,Dang ban,Intel Core i5,1340P,12,16,Intel Iris Xe,Integrated,0,16,LPDDR5,13.4,OLED 60Hz,SSD,512,3 Cell 55Wh
+Laptop,LIMEI-006,LT002,CAT02,Ultrabook,BR02,Dell,1984,Dell XPS 13 Plus,3.5E7,12,USA,Tam ngung,Intel Core i5,1340P,12,16,Intel Iris Xe,Integrated,0,16,LPDDR5,13.4,OLED 60Hz,SSD,512,3 Cell 55Wh
+Laptop,LIMEI-007,LT003,CAT03,Macbook,BR03,Apple,1976,Macbook Pro 14 M2,4.5E7,12,China,Dang ban,Apple M2 Pro,M2 Pro,10,10,Apple GPU,Integrated,16,16,Unified,14.2,Liquid Retina,SSD,512,70Wh
+Laptop,LIMEI-008,LT003,CAT03,Macbook,BR03,Apple,1976,Macbook Pro 14 M2,4.5E7,12,China,Dang ban,Apple M2 Pro,M2 Pro,10,10,Apple GPU,Integrated,16,16,Unified,14.2,Liquid Retina,SSD,512,70Wh
+Laptop,LIMEI-009,LT003,CAT03,Macbook,BR03,Apple,1976,Macbook Pro 14 M2,4.5E7,12,China,Dang ban,Apple M2 Pro,M2 Pro,10,10,Apple GPU,Integrated,16,16,Unified,14.2,Liquid Retina,SSD,512,70Wh
+Laptop,LIMEI-010,LT004,CAT04,Business,BR04,Lenovo,1984,Thinkpad T14 Gen 3,2.2E7,36,China,Dang ban,AMD Ryzen 7,6850U,8,16,AMD Radeon 680M,Integrated,0,16,DDR5,14.0,IPS 60Hz,SSD,512,4 Cell 52Wh
+Laptop,LIMEI-011,LT004,CAT04,Business,BR04,Lenovo,1984,Thinkpad T14 Gen 3,2.2E7,36,China,Dang ban,AMD Ryzen 7,6850U,8,16,AMD Radeon 680M,Integrated,0,16,DDR5,14.0,IPS 60Hz,SSD,512,4 Cell 52Wh
+Laptop,LIMEI-012,LT004,CAT04,Business,BR04,Lenovo,1984,Thinkpad T14 Gen 3,2.2E7,36,China,Dang ban,AMD Ryzen 7,6850U,8,16,AMD Radeon 680M,Integrated,0,16,DDR5,14.0,IPS 60Hz,SSD,512,4 Cell 52Wh
+Accessory,AIMEI-001,AC001,CAT05,Mouse,BR05,Logitech,1981,Logitech G102 Lightsync,450000.0,12,China,Dang ban,Wired,Gaming mouse 8000 DPI
+Accessory,AIMEI-002,AC001,CAT05,Mouse,BR05,Logitech,1981,Logitech G102 Lightsync,450000.0,12,China,Dang ban,Wired,Gaming mouse 8000 DPI
+Accessory,AIMEI-003,AC002,CAT06,Keyboard,BR06,Keychron,2017,Keychron K2 V2,1800000.0,12,China,Dang ban,Wireless,Mechanical keyboard RGB
+Accessory,AIMEI-004,AC002,CAT06,Keyboard,BR06,Keychron,2017,Keychron K2 V2,1800000.0,12,China,Tam ngung,Wireless,Mechanical keyboard RGB
+Accessory,AIMEI-005,AC003,CAT07,Headphone,BR07,Sony,1946,Sony WH-1000XM5,7500000.0,12,Vietnam,Dang ban,Wireless,Noise cancelling headphone

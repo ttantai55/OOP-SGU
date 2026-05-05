@@ -14,7 +14,7 @@ public class ProductListBUS {
 
     public ProductListBUS(){
         productDAO = new ProductListDAO();
-        //loadFile();
+        productDAO.readFile(FILE_PRODUCTS);
     }
 
 

@@ -4,6 +4,7 @@ import BUS.AccountService; // [BỔ SUNG] Import Service quản lý tài khoản
 import BUS.CustomerService;
 import BUS.EmployeeService;
 import BUS.SupplierService;
+import BUS.ProductListBUS;
 import java.util.Scanner;
 
 // [OOP] Class: Giao diện Menu Chính dành cho Quản trị viên (Admin)
@@ -31,7 +32,9 @@ public class MainMenu {
         EmployeeService employeeService = new EmployeeService();
         CustomerService customerService = new CustomerService();
         SupplierService supplierService = new SupplierService();
-        AccountService accountService = new AccountService(); // [BỔ SUNG]
+        AccountService accountService = new AccountService();
+        ProductListBUS productListBUS = new ProductListBUS();
+        // [BỔ SUNG]
 
         System.out.println("[Thong bao] Dang tai du lieu he thong vao bo nho (RAM)...");
 
@@ -104,7 +107,9 @@ public class MainMenu {
                     employeeService.saveToFile();
                     customerService.saveToFile();
                     supplierService.saveToFile();
-                    accountService.saveToFile(); // [BỔ SUNG]
+                    accountService.saveToFile();
+                    productListBUS.saveFile();
+                    // [BỔ SUNG]
                     return; // Thoát hàm showMenu(), trả luồng điều khiển về lại cho LoginUI
                 default:
                     System.out.println("[Loi] Lua chon khong hop le. Vui long thu lai!");

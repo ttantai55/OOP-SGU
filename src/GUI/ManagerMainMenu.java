@@ -31,7 +31,7 @@ public class ManagerMainMenu {
             System.out.println("  1. Quan ly Nhan Vien");
             System.out.println("  2. Quan ly Khach Hang");
             System.out.println("  3. Quan ly Tai Khoan");
-            System.out.println("  4. Quan ly Don Hang");
+            System.out.println("  4. Quan ly Hoa Don");
             System.out.println("  5. Quan ly San Pham");
             System.out.println("  0. Dang xuat (Quay lai man hinh dang nhap)");
             System.out.println("=".repeat(55));
