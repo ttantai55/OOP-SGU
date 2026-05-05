@@ -55,32 +55,15 @@ public class Customer extends Person {
     @Override
     public void input(){
         super.input();
-        setCustomerId(BUS.Validation.getNonEmptyString("Nhap ma khach hang: "));
-        while (true) {
-            try {
-                String pointStr = BUS.Validation.getNonEmptyString("Nhap diem tich luy: ");
-                int points = Integer.parseInt(pointStr);
-                if (points < 0) {
-                    System.out.println("[Loi] Diem tich luy phai >= 0!");
-                    continue;
-                }
-                setLoyaltyPoints(points);
-                break;
-            } catch (NumberFormatException e) {
-                System.out.println("[Loi] Diem tich luy phai la so nguyen! Vui long nhap lai.");
-            }
-        }
-        while (true) {
-            String type = BUS.Validation.getNonEmptyString("Loai khach hang (VIP/Thuong/Moi): ");
-            if (type.equalsIgnoreCase("VIP") || type.equalsIgnoreCase("Thuong") || type.equalsIgnoreCase("Moi")) {
-                setCustomerType(type);
-                break;
-            } else {
-                System.out.println("[Loi] Loai khach hang phai la: VIP, Thuong hoac Moi!");
-            }
-        }
-        System.out.println("Ngay dang ky: " + new java.text.SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date()));
+        System.out.println("Nhap ma khach hang: ");
+        setCustomerId(sc.nextLine());
+        System.out.println("nhap diem tich luy: ");
+        setLoyaltyPoints(Integer.parseInt(sc.nextLine()));
+        System.out.println("loai khach hang (VIP/thuong/moi): ");
+        setCustomerType(sc.nextLine());
+        System.out.println("Ngay dang ky: ");
         this.registeredDate = new Date();
+
     }
     //****
     public void updatePoints(int newPoints){
@@ -101,6 +84,7 @@ public class Customer extends Person {
         return super.toString() + String.format(" | %-10s | %-10d | %-10s | %-12s",
                 customerId, loyaltyPoints, customerType, sdf.format(registeredDate));
     }
+
     public void displayInfo() {
         System.out.println(toString());
     }

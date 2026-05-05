@@ -1,16 +1,16 @@
 package BUS;
 
-import DAO.WarrantyListDAO;
-import DAO.RepairRecordListDAO;
+import DAO.EmployeeDAO;
 import DAO.InvoiceListDAO;
 import DAO.ProductListDAO;
-import DAO.EmployeeDAO;
-import DTO.WarrantyDTO;
-import DTO.RepairRecordDTO;
+import DAO.RepairRecordListDAO;
+import DAO.WarrantyListDAO;
+import DTO.Employee;
 import DTO.InvoiceDTO;
 import DTO.ProductsDTO;
+import DTO.RepairRecordDTO;
 import DTO.TechnicianEmployee;
-import DTO.Employee;
+import DTO.WarrantyDTO;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -36,7 +36,7 @@ public class WarrantyListBUS {
         }
 
         System.out.print("Nhap ma IMEI san pham can tao bao hanh: ");
-        ProductsDTO product = productsDAO.findByIMEI(sc.nextLine());
+        ProductsDTO product = productsDAO.findById(sc.nextLine());
 
         if (product == null) {
             System.out.println("Loi: Khong tim thay san pham.");

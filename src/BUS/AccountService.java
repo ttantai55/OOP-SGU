@@ -156,4 +156,45 @@ public class AccountService {
         }
         saveToFile();
     }
+
+    //Ham doi mat khau 
+    public void changePassword(String username) {
+        // 1. Nhờ DAO móc tài khoản dưới kho lên
+        Account acc = accountDAO.findByUsername(username);
+        
+        if (acc == null) {
+            System.out.println("-> Loi: Khong tim thay tai khoan tren he thong!");
+            return; // Dừng hàm luôn
+        }
+
+        // 2. Kiểm tra mật khẩu cũ
+        System.out.print("Moi nhap mat khau hien tai: ");
+        String oldPass = sc.nextLine();
+
+        if (!acc.getPassword().equals(oldPass)) {
+            System.out.println("-> Loi: Mat khau hien tai khong chinh xac!");
+            return; // Sai pass thì đuổi ra ngoài luôn, chặn đứng ý đồ hack
+        }
+
+        // 3. Cho phép nhập mật khẩu mới
+        System.out.print("Moi nhap mat khau moi: ");
+        String newPass = sc.nextLine();
+        
+        System.out.print("Xac nhan lai mat khau moi: ");
+        String confirmPass = sc.nextLine();
+
+        // 4. Validate (Kiểm tra xem 2 lần nhập pass mới có khớp nhau không)
+        if (!newPass.equals(confirmPass)) {
+            System.out.println("-> Loi: Mat khau xac nhan khong khop!");
+            return;
+        }
+
+        // 5. Cập nhật và Lưu xuống File
+        acc.setPassword(newPass); // Set pass mới vào Object
+        
+        // Gọi hàm lưu file của bro ở đây để chốt sổ xuống Database (ví dụ: accountDAO.writeFile())
+        accountDAO.writeFile("src/data/accounts.txt"); 
+        
+        System.out.println("-> DOI MAT KHAU THANH CONG!");
+    }
 }

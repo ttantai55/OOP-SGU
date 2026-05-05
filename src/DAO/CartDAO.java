@@ -151,14 +151,11 @@ public class CartDAO implements ICartManage<CartItemDTO>{
         double totalBill = 0;
         boolean hasItem = false;
 
-<<<<<<< HEAD
-=======
         //Tieu de
         System.out.println("\n=========================== GIO HANG CUA: " + username.toUpperCase() + " ===========================");
         System.out.printf(" %-10s | %-25s | %-15s | %-8s | %-15s \n", "Ma SP", "Ten San Pham", "Don gia", "So luong", "Thanh tien");
         System.out.println("------------------------------------------------------------------------------------");
 
->>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
         for (CartItemDTO item : cartList) {
             if (item != null && item.getUsername().equals(username)) {
                 hasItem = true;
@@ -174,11 +171,7 @@ public class CartDAO implements ICartManage<CartItemDTO>{
             System.out.println(" Gio hang cua ban hien tai dang trong! Hay di mua sam them nhe.");
         } else {
             System.out.println("------------------------------------------------------------------------------------");
-<<<<<<< HEAD
-            System.out.println(" TONG CONG CAN THANH TOAN: "+ totalBill +" %,.2f VNĐ" );
-=======
             System.out.printf(" TONG CONG CAN THANH TOAN: %,.2f VNĐ \n", totalBill);
->>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
         }
 
     }

@@ -1,10 +1,10 @@
 package DAO;
 
 import DTO.InvoiceItemDTO;
-import java.util.Arrays;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 
 public class InvoiceItemListDAO implements IInvoiceManage<InvoiceItemDTO> {
     private static InvoiceItemDTO[] itemList = new InvoiceItemDTO[0];
@@ -20,15 +20,7 @@ public class InvoiceItemListDAO implements IInvoiceManage<InvoiceItemDTO> {
 
     // khi xóa 1 chi tiết thì nên nhập cả mã hóa đơn(invoiceId) và mã sản phẩm(productId) để tránh xóa nhầm 1 chi tiết của hóa đơn khác
     @Override
-<<<<<<< HEAD
-    public void remove(String id) {
-        System.out.println("Hãy sử dụng hàm removeDetails(invoiceId, productId).");
-    }
-
-    public void removeDetails(String invoiceId, String productId) {
-=======
     public void remove(String invoiceId, String productId) {
->>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
         boolean found = false;
         InvoiceItemDTO[] temp = new InvoiceItemDTO[0]; // tạo mảng temp để duyệt và chuyển các item cần giữ lại
 
@@ -177,15 +169,11 @@ public class InvoiceItemListDAO implements IInvoiceManage<InvoiceItemDTO> {
                         calculateSubTotal(item));
             }
         }
-<<<<<<< HEAD
-        System.out.println("=".repeat(85));
-=======
         System.out.println("=" + "=".repeat(84));
     }
 
     // Alias cho remove, dung trong BUS
     public void removeDetails(String invoiceId, String productId) {
         remove(invoiceId, productId);
->>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
     }
 }

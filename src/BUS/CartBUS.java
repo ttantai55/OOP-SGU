@@ -8,16 +8,13 @@ import java.util.Scanner;
 public class CartBUS {
     private final CartDAO cartDAO;
     private final String username;
-<<<<<<< HEAD
     private final String FILE_CART = "data/cart.txt";
-=======
-    private final String FILE_CART = "OOP-SGU/src/data/cart.txt";
->>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
     static Scanner sc = new Scanner(System.in);
 
     public CartBUS(String username) {
         this.cartDAO = new CartDAO();
         this.username = username;
+        // loadFile
     }
 
     //====LOAD/SAVE====
@@ -76,10 +73,7 @@ public class CartBUS {
 
     public void updateCartItem(CartItemDTO item){
         cartDAO.update(item);
-<<<<<<< HEAD
-=======
         saveFile();
->>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
     }
 
     public void clearMyCart() {
@@ -93,9 +87,6 @@ public class CartBUS {
         cartDAO.displayProduct(username);
     }
 
-<<<<<<< HEAD
-    
-=======
     // Lay DS sp trong gio hang cua khach hien tai
 
     public CartItemDTO[] getMyCartItems() {
@@ -141,6 +132,5 @@ public class CartBUS {
             System.out.println("Khong tim thay san pham nay trong gio hang!");
         }
     }
->>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
 
 }

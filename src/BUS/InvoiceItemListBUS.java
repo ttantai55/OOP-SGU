@@ -1,12 +1,7 @@
 package BUS;
 
-<<<<<<< HEAD
-import DAO.InvoiceListDAO;
-import DAO.InvoiceItemListDAO;
-=======
 import DAO.InvoiceItemListDAO;
 import DAO.InvoiceListDAO;
->>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
 import DAO.ProductListDAO;
 import DAO.PromotionListDAO;
 import DAO.WarrantyListDAO;
@@ -15,20 +10,16 @@ import DTO.InvoiceItemDTO;
 import DTO.ProductsDTO;
 import DTO.PromotionDTO;
 import DTO.WarrantyDTO;
-<<<<<<< HEAD
-import java.text.SimpleDateFormat;
-=======
->>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
 import java.util.Scanner;
 
 public class InvoiceItemListBUS {
     Scanner sc = new Scanner(System.in);
 
-    private InvoiceItemListDAO invItemDAO = new InvoiceItemListDAO();
-    private InvoiceListDAO invDAO = new InvoiceListDAO();
-    private ProductListDAO productsDAO = new ProductListDAO();
-    private PromotionListDAO promotionDAO = new PromotionListDAO();
-    private WarrantyListDAO warrantyDAO = new WarrantyListDAO();
+    private final InvoiceItemListDAO invItemDAO = new InvoiceItemListDAO();
+    private final InvoiceListDAO invDAO = new InvoiceListDAO();
+    private final ProductListDAO productsDAO = new ProductListDAO();
+    private final PromotionListDAO promotionDAO = new PromotionListDAO();
+    private final WarrantyListDAO warrantyDAO = new WarrantyListDAO();
 
     public void inputInvoiceItem() {
         System.out.print("Nhap ma hoa don: ");
@@ -41,11 +32,7 @@ public class InvoiceItemListBUS {
         }
 
         System.out.print("Nhap ma IMEI san pham: ");
-<<<<<<< HEAD
-        ProductsDTO product = productsDAO.findByIMEI(sc.nextLine());
-=======
         ProductsDTO product = productsDAO.findById(sc.nextLine());
->>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
 
         if (product == null) {
             System.out.println("Loi: Khong tim thay san pham.");

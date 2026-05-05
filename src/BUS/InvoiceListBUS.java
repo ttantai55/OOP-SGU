@@ -20,11 +20,7 @@ import DTO.Transfer;
 import DTO.Installment;
 import java.text.SimpleDateFormat;
 import DAO.InvoiceItemListDAO;
-<<<<<<< HEAD
-=======
 import DTO.CartItemDTO;
->>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
-
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -33,15 +29,6 @@ import java.util.Scanner;
 public class InvoiceListBUS {
     Scanner sc = new Scanner(System.in);
 
-<<<<<<< HEAD
-    private InvoiceListDAO invDAO = new InvoiceListDAO();
-    private InvoiceItemListDAO invItemDAO = new InvoiceItemListDAO();
-    private CustomerDAO customerDAO = new CustomerDAO();
-    private EmployeeDAO employeeDAO = new EmployeeDAO();
-    private ProductListDAO productsDAO = new ProductListDAO();
-    private PromotionListDAO promotionDAO = new PromotionListDAO();
-    private WarrantyListDAO warrantyDAO = new WarrantyListDAO();
-=======
     private final InvoiceListDAO invDAO = new InvoiceListDAO();
     private final InvoiceItemListDAO invItemDAO = new InvoiceItemListDAO();
     private final CustomerDAO customerDAO = new CustomerDAO();
@@ -49,7 +36,6 @@ public class InvoiceListBUS {
     private final ProductListDAO productsDAO = new ProductListDAO();
     private final PromotionListDAO promotionDAO = new PromotionListDAO();
     private final WarrantyListDAO warrantyDAO = new WarrantyListDAO();
->>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
 
 
 
@@ -113,11 +99,7 @@ invoice.setEmployee(emp);
         InvoiceItemDTO detail = new InvoiceItemDTO();
 
         System.out.print("  Mã IMEI: ");
-<<<<<<< HEAD
-        ProductsDTO product = productsDAO.findByIMEI(sc.nextLine());
-=======
         ProductsDTO product = productsDAO.findById(sc.nextLine());
->>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
         if (product == null) {
             System.out.println("  Không tìm thấy sản phẩm! Vui lòng nhập lại.");
             continue;
@@ -265,11 +247,7 @@ public void printInvoice(String invoiceId) {
         System.out.println(" Trạng thái hóa đơn: " + invoice.isStatus());
         System.out.println("-".repeat(115));
         System.out.printf("%-4s | %-10s | %-20s | %-4s | %-13s | %-8s | %-15s | %-15s%n",
-<<<<<<< HEAD
-                "STT", "Mã SP", "Tên SP", "SL", "Đơn Giá", "KM(%)", "Mã BH", "Thành Tiền");
-=======
                 "STT", "Mã SP", "Tên SP", "SL", "Đơn Giá", "KM(%)", "Bảo Hành", "Thành Tiền");
->>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
         System.out.println("-".repeat(115));
 
         double tongCong = 0;
@@ -286,10 +264,7 @@ public void printInvoice(String invoiceId) {
                 kmInfo = "N/A";
             }
 
-<<<<<<< HEAD
-=======
             String thoiGianBH = item.getProduct().getWarrantyPeriod() + "thang";
->>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
             System.out.printf("%-4d | %-10s | %-20s | %-4d | %-13.0f | %-8s | %-15s | %,15.0f VNĐ%n",
                     (i + 1),
                     item.getProductId(),
@@ -297,11 +272,7 @@ public void printInvoice(String invoiceId) {
                     item.getQuantity(),
                     item.getUnitPrice(),
                     kmInfo,
-<<<<<<< HEAD
-                    item.getWarrantyId(),
-=======
                     thoiGianBH,
->>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
                     thanhTien);
 
             tongCong += thanhTien;
@@ -357,8 +328,6 @@ System.out.println("=".repeat(115) + "\n");
         String id = sc.nextLine();
         invDAO.remove(id);
     }
-<<<<<<< HEAD
-=======
 
     // =======Ham thanh toan======= 
 
@@ -487,5 +456,4 @@ System.out.println("=".repeat(115) + "\n");
                 return null;
         }
     }
->>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
 }

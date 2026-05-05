@@ -69,7 +69,7 @@ public class CustomerMainMenu {
                     System.out.println("\n[Thong bao] Tinh nang Xem lich su mua hang dang duoc phat trien...");
                     break;
                 case 6:
-                    System.out.println("\n[Thong bao] Tinh nang Doi mat khau dang duoc phat trien...");
+                    accountBUS.changePassword(username);
                     break;
                 case 0:
                     System.out.println("\n[Thong bao] Dang xuat thanh cong. Dang tro ve man hinh chinh...");
