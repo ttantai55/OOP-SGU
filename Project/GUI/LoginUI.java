@@ -1,7 +1,6 @@
 package GUI;
 
 import BUS.AccountService;
-import BUS.Validation;
 import DAO.AccountDAO;
 import DAO.CustomerDAO;
 import DTO.Account;
@@ -23,7 +22,7 @@ public class LoginUI {
     public LoginUI() {
         this.accountService = new AccountService();
         this.sc = new Scanner(System.in);
-        // [ĐÃ SỬA LỖI] Ra lệnh nạp dữ liệu 1 lần duy nhất khi khởi động ứng dụng
+        // Ra lệnh nạp dữ liệu 1 lần duy nhất khi khởi động ứng dụng
         this.accountService.loadFromFile();
     }
 
@@ -102,11 +101,37 @@ public class LoginUI {
         }
     }
 
+    // [OOP] Reusability: Hàm hỗ trợ nhập liệu chuyên dụng cho quy trình có thể thoát ngang
+    private String getInputWithEscape(String prompt, String regex, String errorMsg) {
+        while (true) {
+            System.out.print(prompt);
+            String input = sc.nextLine().trim();
+            
+            // 1. Kiểm tra lệnh thoát ngang (Early Exit)
+            if (input.equals("Esc")) {
+                return null; // Trả về null như một tín hiệu yêu cầu hủy bỏ
+            }
+            
+            // 2. Kiểm tra chuỗi rỗng
+            if (input.isEmpty()) {
+                System.out.println("[Loi] Du lieu khong duoc de trong!");
+                continue;
+            }
+            
+            // 3. Kiểm tra biểu thức chính quy (nếu có yêu cầu kiểm tra định dạng)
+            if (regex != null && !input.matches(regex)) {
+                System.out.println("[Loi] " + errorMsg);
+                continue;
+            }
+            
+            return input;
+        }
+    }
+
     private void registerCustomerAccount() {
         AccountDAO accountDAO = new AccountDAO();
         CustomerDAO customerDAO = new CustomerDAO();
         
-        // [ĐÃ SỬA LỖI] Vì DAO đã thụ động, ta phải ra lệnh cho nó đọc file tại đây
         accountDAO.readFile("src/data/accounts.txt");
         customerDAO.readFile("src/data/customers.txt");
 
@@ -114,23 +139,49 @@ public class LoginUI {
         System.out.println("   DANG KY TAI KHOAN KHACH HANG MOI");
         System.out.println("=".repeat(50));
 
+        // --- BUOC 1: THU THAP THONG TIN TAI KHOAN ---
         String username;
         while (true) {
-            username = Validation.getNonEmptyString("1. Nhap ten dang nhap: ");
+            username = getInputWithEscape("1. Nhap ten dang nhap (Nhap Esc de thoat ra menu chinh): ", null, null);
+            if (username == null) {
+                System.out.println("\n[Thong bao] Da huy qua trinh dang ky. Quay lai man hinh chinh...");
+                return; // [OOP] Early Exit
+            }
+
             if (accountDAO.findByUsername(username) != null) {
                 System.out.println("[Loi] Ten dang nhap da ton tai! Vui long chon ten khac.");
             } else {
                 break;
             }
         }
-        String password = Validation.getNonEmptyString("2. Nhap mat khau: ");
+        
+        String password = getInputWithEscape("2. Nhap mat khau (Nhap Esc de thoat ra menu chinh): ", null, null);
+        if (password == null) {
+            System.out.println("\n[Thong bao] Da huy qua trinh dang ky. Quay lai man hinh chinh...");
+            return;
+        }
 
+        // --- BUOC 2: THU THAP THONG TIN KHACH HANG ---
         System.out.println("\n--- THONG TIN CA NHAN ---");
         String customerId = "KH" + String.format("%03d", customerDAO.getCount() + 1);
         
-        String fullName = Validation.getNonEmptyString("3. Ho va Ten: ");
-        String phone = Validation.getValidPhone("4. So dien thoai: ");
-        String email = Validation.getValidEmail("5. Email: ");
+        String fullName = getInputWithEscape("3. Ho va Ten (Nhap Esc de thoat ra menu chinh): ", null, null);
+        if (fullName == null) {
+            System.out.println("\n[Thong bao] Da huy qua trinh dang ky. Quay lai man hinh chinh...");
+            return;
+        }
+
+        String phone = getInputWithEscape("4. So dien thoai (Nhap Esc de thoat ra menu chinh): ", "^(0|\\+84)\\d{9}$", "So dien thoai khong hop le (Phai la so va co 10 chu so)!");
+        if (phone == null) {
+            System.out.println("\n[Thong bao] Da huy qua trinh dang ky. Quay lai man hinh chinh...");
+            return;
+        }
+
+        String email = getInputWithEscape("5. Email (Nhap Esc de thoat ra menu chinh): ", "^[A-Za-z0-9+_.-]+@(.+)$", "Email khong hop le (VD: nguyenvan@gmail.com)!");
+        if (email == null) {
+            System.out.println("\n[Thong bao] Da huy qua trinh dang ky. Quay lai man hinh chinh...");
+            return;
+        }
 
         String accountId = "ACC_" + customerId;
         Account newAcc = new Account(accountId, username, password, "Khach hang", true, customerId);
@@ -152,6 +203,7 @@ public class LoginUI {
         emptyAddress.setCity("Chua cap nhat");
         newCus.setAddress(emptyAddress);
 
+        // --- BUOC 3: TAO VA LUU OTP RA FILE ---
         String generatedOTP = String.format("%06d", new Random().nextInt(999999));
         try (BufferedWriter bw = new BufferedWriter(new FileWriter("src/data/OTP.txt"))) {
             bw.write("Ma OTP dang ky cua khach hang '" + fullName + "' la: " + generatedOTP);
@@ -169,8 +221,13 @@ public class LoginUI {
         boolean isVerified = false;
         
         while (retryCount < 3) {
-            System.out.print("\nNhap ma OTP (6 so): ");
+            System.out.print("\nNhap ma OTP (6 so) hoac nhap 'Esc' de thoat ra menu chinh: ");
             String inputOTP = sc.nextLine().trim();
+            
+            if (inputOTP.equals("Esc")) {
+                System.out.println("\n[Thong bao] Da huy xac thuc. Quay lai man hinh chinh...");
+                return; 
+            }
             
             if (inputOTP.equals(generatedOTP)) {
                 isVerified = true;
@@ -188,7 +245,7 @@ public class LoginUI {
             accountDAO.writeFile("src/data/accounts.txt");
             customerDAO.writeFile("src/data/customers.txt");
             
-            // [QUAN TRỌNG] Tải lại dữ liệu vào accountService chính để Khách hàng có thể đăng nhập ngay
+            // Tải lại dữ liệu vào accountService chính để Khách hàng có thể đăng nhập ngay
             this.accountService.loadFromFile();
 
             System.out.println("\n[Thong bao] CHUC MUNG! Dang ky tai khoan thanh cong.");
@@ -206,15 +263,15 @@ public class LoginUI {
         
         if (userRole.contains("khach hang")) {
             System.out.println("[Thong bao] Dang mo Menu danh cho Khach Hang...");
-            GUI.CustomerMainMenu customerMenu = new GUI.CustomerMainMenu(); // Cập nhật menu khách hàng trong CustomerMainMenu.java
+            GUI.CustomerMainMenu customerMenu = new GUI.CustomerMainMenu(); 
             customerMenu.showMenu();
         } else if (userRole.contains("nhan vien")) {
             System.out.println("[Thong bao] Dang mo Menu danh cho Nhan vien...");
-            GUI.EmployeeMainMenu employeeMenu = new GUI.EmployeeMainMenu(); //Cập nhật menu nhân viên trong EmployeeMainMenu.java
+            GUI.EmployeeMainMenu employeeMenu = new GUI.EmployeeMainMenu(); 
             employeeMenu.showMenu();
         } else if (userRole.contains("quan ly")) {
             System.out.println("[Thong bao] Dang mo Menu danh cho Quan ly...");
-            GUI.ManagerMainMenu managerMenu = new GUI.ManagerMainMenu(); //Cập nhật menu quản lý trong ManagerMainMenu.java
+            GUI.ManagerMainMenu managerMenu = new GUI.ManagerMainMenu(); 
             managerMenu.showMenu();
         } 
         else {
