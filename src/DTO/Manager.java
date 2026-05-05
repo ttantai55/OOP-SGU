@@ -8,8 +8,8 @@ public class Manager extends Employee{
     private String department; // phòng ban
     static Scanner sc = new Scanner(System.in);
     public Manager(){}
-    public Manager(String employeeId, String position, float baseSalary, Date startDate, float allowance, String department) {
-        super(employeeId, position, baseSalary, startDate);
+    public Manager(String employeeId, String CCCD, String position, float baseSalary, Date startDate, float allowance, String department) {
+        super(employeeId,CCCD, position, baseSalary, startDate);
         this.allowance = allowance;
         this.department = department;
     }
@@ -34,10 +34,18 @@ public class Manager extends Employee{
     @Override
     public void input(){
         super.input();
-        System.out.println("Nhap phu cap: ");
-        setAllowance(Float.parseFloat(sc.nextLine()));
-        System.out.println("Phong ban: ");
-        setDepartment(sc.nextLine());
+        while (true) {
+            try {
+                String str = BUS.Validation.getNonEmptyString("Nhap phu cap: ");
+                float a = Float.parseFloat(str);
+                if (a < 0) { System.out.println("[Loi] Phu cap phai >= 0!"); continue; }
+                setAllowance(a);
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("[Loi] Phai nhap so! Vui long nhap lai.");
+            }
+        }
+        setDepartment(BUS.Validation.getNonEmptyString("Phong ban: "));
     }
     //****
     @Override

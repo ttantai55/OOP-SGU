@@ -8,7 +8,11 @@ import java.util.Scanner;
 
 public class ProductListBUS {
     private final ProductListDAO productDAO;
+<<<<<<< HEAD
     private static final String FILE_PRODUCTS = "data/product.txt";
+=======
+    private static final String FILE_PRODUCTS = "OOP-SGU/src/data/product.txt";
+>>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
 
     static Scanner sc = new Scanner(System.in);
 
@@ -17,6 +21,7 @@ public class ProductListBUS {
         //loadFile();
     }
 
+<<<<<<< HEAD
     /*public void inputList(){
         int temp;
         System.out.println("Moi nhap so luong San Pham can nhap:");
@@ -37,6 +42,9 @@ public class ProductListBUS {
         }
     }*/
     
+=======
+
+>>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
     //=========LOAD / SAVE ========
 
     public void loadFile(){
@@ -62,6 +70,7 @@ public class ProductListBUS {
             return;
         }
         
+<<<<<<< HEAD
         if (choice == 1) { 
             product = new LaptopDTO();
         } else if (choice == 2) {
@@ -69,6 +78,18 @@ public class ProductListBUS {
         } else {
             System.out.println("Lua chon khong hop le. Huy thao tac!");
             return;
+=======
+        switch (choice) {
+            case 1:
+                product = new LaptopDTO();
+                break;
+            case 2:
+                product = new AccessoryDTO();
+                break;
+            default:
+                System.out.println("Lua chon khong hop le. Huy thao tac!");
+                return;
+>>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
         }
         product.input();
         productDAO.add(product);

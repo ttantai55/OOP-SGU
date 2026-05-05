@@ -21,7 +21,11 @@ import java.util.Scanner;
 public class ProductListDAO  implements IProductManage<ProductsDTO> {
     private ProductsDTO[] pList;
 
+<<<<<<< HEAD
     private final String filePath = "data/product.txt";
+=======
+    private final String filePath = "OOP-SGU/src/data/product.txt";
+>>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
 
     static Scanner sc = new Scanner(System.in);
 
@@ -380,4 +384,17 @@ public class ProductListDAO  implements IProductManage<ProductsDTO> {
         return count;
     }
 
+<<<<<<< HEAD
+=======
+    //Tim san pham theo IMEI
+    public ProductsDTO findByIMEI(String imei) {
+        for (ProductsDTO product : pList) {
+            if (product != null && product.isStatus() && product.getProductIMEI().equalsIgnoreCase(imei)) {
+                return product;
+            }
+        }
+        return null;
+    }
+
+>>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
 }

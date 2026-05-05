@@ -8,8 +8,8 @@ public class SalesEmployee extends Employee {
     private float commissionAmount;//tiền hoa hồng
     static Scanner sc = new Scanner(System.in);
     public SalesEmployee(){}
-    public SalesEmployee(String employeeId, String position, float baseSalary, Date startDate, float bonus, float commissionAmount) {
-        super(employeeId, position, baseSalary, startDate);
+    public SalesEmployee(String employeeId, String CCCD, String position, float baseSalary, Date startDate, float bonus, float commissionAmount) {
+        super(employeeId, CCCD,position, baseSalary, startDate);
         this.bonus = bonus;
         this.commissionAmount = commissionAmount;
     }
@@ -32,11 +32,28 @@ public class SalesEmployee extends Employee {
     @Override
     public void input(){
         super.input();
-        System.out.println("Tien thuong: ");
-        setBonus(Float.parseFloat(sc.nextLine()));
-        System.out.println("Tien hoa hong: ");
-        setCommissionAmount(Float.parseFloat(sc.nextLine()));
-
+        while (true) {
+            try {
+                String bonusStr = BUS.Validation.getNonEmptyString("Tien thuong: ");
+                float b = Float.parseFloat(bonusStr);
+                if (b < 0) { System.out.println("[Loi] Tien thuong phai >= 0!"); continue; }
+                setBonus(b);
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("[Loi] Phai nhap so! Vui long nhap lai.");
+            }
+        }
+        while (true) {
+            try {
+                String commStr = BUS.Validation.getNonEmptyString("Tien hoa hong: ");
+                float c = Float.parseFloat(commStr);
+                if (c < 0) { System.out.println("[Loi] Tien hoa hong phai >= 0!"); continue; }
+                setCommissionAmount(c);
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("[Loi] Phai nhap so! Vui long nhap lai.");
+            }
+        }
     }
     //****
     @Override

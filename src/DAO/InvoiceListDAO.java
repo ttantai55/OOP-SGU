@@ -9,12 +9,20 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 
+<<<<<<< HEAD
 public class InvoiceListDAO implements IInvoiceManage<InvoiceDTO> {
+=======
+public class InvoiceListDAO implements IRepository<InvoiceDTO> {
+>>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
    
     private static InvoiceDTO[] invoiceList = new InvoiceDTO[0];
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     public InvoiceListDAO() {
+<<<<<<< HEAD
+=======
+        
+>>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
     }
 
     @Override
@@ -101,6 +109,14 @@ public class InvoiceListDAO implements IInvoiceManage<InvoiceDTO> {
 
 // còn thiếu ReadFile
 @Override
+<<<<<<< HEAD
+=======
+public void readFile(String filePath) {
+    // Sẽ bổ sung sau
+}
+
+@Override
+>>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
 public void writeFile(String filePath) {
     try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
         

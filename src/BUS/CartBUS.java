@@ -8,7 +8,11 @@ import java.util.Scanner;
 public class CartBUS {
     private final CartDAO cartDAO;
     private final String username;
+<<<<<<< HEAD
     private final String FILE_CART = "data/cart.txt";
+=======
+    private final String FILE_CART = "OOP-SGU/src/data/cart.txt";
+>>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
     static Scanner sc = new Scanner(System.in);
 
     public CartBUS(String username) {
@@ -72,6 +76,10 @@ public class CartBUS {
 
     public void updateCartItem(CartItemDTO item){
         cartDAO.update(item);
+<<<<<<< HEAD
+=======
+        saveFile();
+>>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
     }
 
     public void clearMyCart() {
@@ -85,6 +93,54 @@ public class CartBUS {
         cartDAO.displayProduct(username);
     }
 
+<<<<<<< HEAD
     
+=======
+    // Lay DS sp trong gio hang cua khach hien tai
+
+    public CartItemDTO[] getMyCartItems() {
+        CartItemDTO[] cartList = cartDAO.getAllCarts();
+        int count = 0;
+
+        //Dem xem khach co bao nhieu mon
+        for(CartItemDTO item : cartList) {
+            if(item != null  && item.getUsername().equals(username)) {
+                count++;
+            }
+        }
+
+        //Tao mang moi chi chua sp ma khach da chon 
+        CartItemDTO[] myCart = new CartItemDTO[count];
+        int index = 0;
+        for (CartItemDTO item : cartList) {
+            if(item != null && item.getUsername().equals(username))
+                myCart[index] = item;
+                index++;
+        }
+        return myCart;
+    }
+
+    //Ham sua so luong cua 1 mon trong gio
+
+    public void updateQuantity(String productID) {
+        System.out.println("Moi nhap so luong moi cho san pham ban muon thay doi :");
+        int newQuantity = Integer.parseInt(sc.nextLine());
+        if(newQuantity <= 0) {
+            //Neu khach sua so luong thanh 0 hoac nho hon thi coi nhu Xoa san pham
+            removeCartItem(productID);
+            return;
+        }
+
+        CartItemDTO item = cartDAO.findItem(username, productID);
+        if (item != null) {
+            item.setQuantity(newQuantity);
+            cartDAO.update(item);
+            System.out.println("Da cap nhat so luong thanh cong!");
+        }
+        else {
+            System.out.println("Khong tim thay san pham nay trong gio hang!");
+        }
+    }
+>>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
 
 }

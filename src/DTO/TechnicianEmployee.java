@@ -9,8 +9,8 @@ public class TechnicianEmployee extends Employee {
     static Scanner sc = new Scanner(System.in);
     public TechnicianEmployee() {}
 
-    public TechnicianEmployee(String employeeId, String position, float baseSalary, Date startDate, float expenditure, int repairCount) {
-        super(employeeId, position, baseSalary, startDate);
+    public TechnicianEmployee(String employeeId,String CCCD, String position, float baseSalary, Date startDate, float expenditure, int repairCount) {
+        super(employeeId,CCCD, position, baseSalary, startDate);
         this.expenditure = expenditure;
         this.repairCount = repairCount;
     }
@@ -35,11 +35,28 @@ public class TechnicianEmployee extends Employee {
     @Override
     public void input(){
         super.input();
-        System.out.println("so luong san pham da sua chua: ");
-        setRepairCount(Integer.parseInt(sc.nextLine()));
-        System.out.println(" Tien chi tieu");//cần thêm method check chỉ tiêu
-        setExpenditure(Float.parseFloat(sc.nextLine()));
-
+        while (true) {
+            try {
+                String str = BUS.Validation.getNonEmptyString("So luong san pham da sua chua: ");
+                int count = Integer.parseInt(str);
+                if (count < 0) { System.out.println("[Loi] So luong phai >= 0!"); continue; }
+                setRepairCount(count);
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("[Loi] Phai nhap so nguyen! Vui long nhap lai.");
+            }
+        }
+        while (true) {
+            try {
+                String str = BUS.Validation.getNonEmptyString("Tien chi tieu: ");
+                float exp = Float.parseFloat(str);
+                if (exp < 0) { System.out.println("[Loi] Chi tieu phai >= 0!"); continue; }
+                setExpenditure(exp);
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("[Loi] Phai nhap so! Vui long nhap lai.");
+            }
+        }
     }
     //****
     @Override

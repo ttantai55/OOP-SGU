@@ -8,6 +8,7 @@ public class Customer extends Person {
     private int loyaltyPoints; // điểm tích lũy
     private String customerType; // loại khách hàng (Kim cương , bạch kim, vàng)
     private Date registeredDate; //ngày đăng ký
+    private String username;
     static Scanner sc = new Scanner(System.in);
     public Customer(){}
     public Customer(String customerId, int loyaltyPoints, String customerType, Date registeredDate) {
@@ -40,21 +41,46 @@ public class Customer extends Person {
     public void setRegisteredDate(Date registeredDate){
         this.registeredDate = registeredDate;
     }
+    
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
 
     //****
     @Override
     public void input(){
         super.input();
-        System.out.println("Nhap ma khach hang: ");
-        setCustomerId(sc.nextLine());
-        System.out.println("nhap diem tich luy: ");
-        setLoyaltyPoints(Integer.parseInt(sc.nextLine()));
-        System.out.println("loai khach hang (VIP/thuong/moi): ");
-        setCustomerType(sc.nextLine());
-        System.out.println("Ngay dang ky: ");
+        setCustomerId(BUS.Validation.getNonEmptyString("Nhap ma khach hang: "));
+        while (true) {
+            try {
+                String pointStr = BUS.Validation.getNonEmptyString("Nhap diem tich luy: ");
+                int points = Integer.parseInt(pointStr);
+                if (points < 0) {
+                    System.out.println("[Loi] Diem tich luy phai >= 0!");
+                    continue;
+                }
+                setLoyaltyPoints(points);
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("[Loi] Diem tich luy phai la so nguyen! Vui long nhap lai.");
+            }
+        }
+        while (true) {
+            String type = BUS.Validation.getNonEmptyString("Loai khach hang (VIP/Thuong/Moi): ");
+            if (type.equalsIgnoreCase("VIP") || type.equalsIgnoreCase("Thuong") || type.equalsIgnoreCase("Moi")) {
+                setCustomerType(type);
+                break;
+            } else {
+                System.out.println("[Loi] Loai khach hang phai la: VIP, Thuong hoac Moi!");
+            }
+        }
+        System.out.println("Ngay dang ky: " + new java.text.SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date()));
         this.registeredDate = new Date();
-
     }
     //****
     public void updatePoints(int newPoints){

@@ -14,6 +14,13 @@ public class RepairRecordListDAO implements IRepository<RepairRecordDTO> {
     public RepairRecordListDAO() {
     }
 
+<<<<<<< HEAD
+=======
+    public RepairRecordDTO[] getAll() {
+        return java.util.Arrays.copyOf(records, records.length);
+    }
+
+>>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
     @Override
     public void add(RepairRecordDTO obj) {
         records = Arrays.copyOf(records, records.length + 1);

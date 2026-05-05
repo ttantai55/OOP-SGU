@@ -10,12 +10,21 @@ public class CartItemDTO {
     public CartItemDTO() {
     }
 
+<<<<<<< HEAD
     public CartItemDTO(double price, String productID, String productName, int quantity, String username) {
         this.price = price;
         this.productID = productID;
         this.productName = productName;
         this.quantity = quantity;
         this.username = username;
+=======
+    public CartItemDTO(String username, String productID, String productName, double price, int quantity) {
+        this.username = username;
+        this.productID = productID;
+        this.productName = productName;
+        this.price = price;
+        this.quantity = quantity;
+>>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
     }
 
     public String getUsername() {

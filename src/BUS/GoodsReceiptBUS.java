@@ -19,11 +19,19 @@ import java.text.SimpleDateFormat;
 public class GoodsReceiptBUS {
     Scanner sc = new Scanner(System.in);
 
+<<<<<<< HEAD
     private GoodsReceiptListDAO grDAO = new GoodsReceiptListDAO();
     private GoodsReceiptItemListDAO grItemDAO = new GoodsReceiptItemListDAO();
     private EmployeeDAO employeeDAO = new EmployeeDAO();
     private ProductListDAO productsDAO = new ProductListDAO();
     private SupplierDAO supplierDAO = new SupplierDAO();
+=======
+    private final GoodsReceiptListDAO grDAO = new GoodsReceiptListDAO();
+    private final GoodsReceiptItemListDAO grItemDAO = new GoodsReceiptItemListDAO();
+    private final EmployeeDAO employeeDAO = new EmployeeDAO();
+    private final ProductListDAO productsDAO = new ProductListDAO();
+    private final SupplierDAO supplierDAO = new SupplierDAO();
+>>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
 
     // --- NHẬP PHIẾU NHẬP HÀNG ---
     public void inputReceipt() {
@@ -80,7 +88,11 @@ public class GoodsReceiptBUS {
             GoodsReceiptItemDTO item = new GoodsReceiptItemDTO();
 
             System.out.print("  Ma IMEI: ");
+<<<<<<< HEAD
             ProductsDTO product = productsDAO.findByIMEI(sc.nextLine());
+=======
+            ProductsDTO product = productsDAO.findById(sc.nextLine());
+>>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
             if (product == null) {
                 System.out.println("  Khong tim thay san pham! Vui long nhap lai.");
                 continue;

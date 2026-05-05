@@ -52,22 +52,23 @@ public class Person {
 
 
     public void input(){
-        System.out.println("Moi nhap ho va ten: ");
-        setFullName(sc.nextLine());
-        System.out.println("Moi nhap so dien thoai(10 so bat dau tu so 0): ");
-        setPhoneNumber(sc.nextLine());
-        System.out.println("Moi nhap email: ");
-        setEmail(sc.nextLine());
+        setFullName(BUS.Validation.getValidFullName("Moi nhap ho va ten: "));
+        setPhoneNumber(BUS.Validation.getValidPhone("Moi nhap so dien thoai (10-11 so): "));
+        setEmail(BUS.Validation.getValidEmail("Moi nhap email (@gmail.com): "));
         System.out.println("Moi nhap dia chi: ");
         this.address = new Address();
         this.address.inPut();
-
     }
 
     @Override
     public String toString() {
-        return String.format("%-30s | %-13s | %-25s | %-45s",
-                fullName, phoneNumber, email, address.hienThiDiaChi());
+        String addr = address != null ? address.hienThiDiaChi() : "";
+        // Truncate address if too long to keep table aligned
+        if (addr.length() > 50) {
+            addr = addr.substring(0, 47) + "...";
+        }
+        return String.format("%-25s | %-12s | %-25s | %-50s",
+                fullName, phoneNumber, email, addr);
     }
     public void displayInfo() {
         System.out.println(toString());

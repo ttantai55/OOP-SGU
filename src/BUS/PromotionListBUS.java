@@ -22,7 +22,11 @@ public class PromotionListBUS {
         String programName = sc.nextLine();
 
         System.out.print("Nhap ma san pham: ");
+<<<<<<< HEAD
         ProductsDTO product = productsDAO.findByIMEI(sc.nextLine());
+=======
+        ProductsDTO product = productsDAO.findById(sc.nextLine());
+>>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
         if (product == null) {
             System.out.println("Loi: Khong tim thay san pham.");
             return;
