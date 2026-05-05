@@ -17,13 +17,35 @@ import java.util.Date;
 import java.util.Scanner;
 
 public class WarrantyListBUS {
+    private final String FILE_PATH = "data/warrantylist.txt";
     Scanner sc = new Scanner(System.in);
 
-    private WarrantyListDAO warDAO = new WarrantyListDAO();
-    private RepairRecordListDAO repairDAO = new RepairRecordListDAO();
-    private InvoiceListDAO invDAO = new InvoiceListDAO();
-    private ProductListDAO productsDAO = new ProductListDAO();
-    private EmployeeDAO employeeDAO = new EmployeeDAO();
+    private final WarrantyListDAO warDAO;
+    private final RepairRecordListDAO repairDAO;
+    private final InvoiceListDAO invDAO;
+    private final ProductListDAO productsDAO;
+    private final EmployeeDAO employeeDAO;
+
+    public WarrantyListBUS(){
+        this.warDAO = new WarrantyListDAO();
+        this.repairDAO = new RepairRecordListDAO();
+        this.invDAO = new InvoiceListDAO();
+        this.productsDAO = new ProductListDAO();
+        this.employeeDAO = new EmployeeDAO();
+
+        warDAO.readFile(FILE_PATH);
+    }
+    //Load/Save file
+    public void loadFile(){
+        warDAO.readFile(FILE_PATH);
+        System.out.println("Da tai du lieu thanh cong tu file" + FILE_PATH);
+    }
+
+    public void saveFile(){
+        warDAO.writeFile(FILE_PATH);
+        System.out.println("Da luu du lieu vao file: "+ FILE_PATH);
+    }
+    
 
     public void inputWarranty() {
         System.out.print("Nhap ma hoa don: ");
@@ -197,6 +219,8 @@ public class WarrantyListBUS {
         // Cập nhật repairCount của warranty
         warranty.setRepairCount(attemptNumber);
         warDAO.update(warranty);
+
+        saveFile();
 
         System.out.println("Da them bản ghi sua chữa [" + repairId + "] thanh cong!");
     }

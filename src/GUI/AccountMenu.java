@@ -5,8 +5,8 @@ import java.util.Scanner;
 
 public class AccountMenu {
 
-    private AccountService accountService;
-    private Scanner sc;
+    private final AccountService accountService;
+    private final Scanner sc;
 
     public AccountMenu(AccountService accountService) {
         this.accountService = accountService;

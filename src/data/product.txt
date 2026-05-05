@@ -13,7 +13,7 @@ Laptop,LIMEI-012,LT004,CAT04,Business,BR04,Lenovo,1984,Thinkpad T14 Gen 3,220000
 Accessory,AIMEI-001,AC001,CAT05,Mouse,BR05,Logitech,1981,Logitech G102 Lightsync,450000,12,China,Wired,Gaming mouse 8000 DPI,Dang ban
 Accessory,AIMEI-002,AC001,CAT05,Mouse,BR05,Logitech,1981,Logitech G102 Lightsync,450000,12,China,Wired,Gaming mouse 8000 DPI,Dang ban
 Accessory,AIMEI-003,AC002,CAT06,Keyboard,BR06,Keychron,2017,Keychron K2 V2,1800000,12,China,Wireless,Mechanical keyboard RGB,Dang ban
-Accessory,AIMEI-004,AC002,CAT06,Keyboard,BR06,Keychron,2017,Keychron K2 V2,1800000,12,China,Wireless,Mechanical keyboard RGB,Ngung ban
+Accessory,AIMEI-004,AC002,CAT06,Keyboard,BR06,Keychron,2017,Keychron K2 V2,1800000,12,China,Wireless,Mechanical keyboard RGB,Tam Ngung
 Accessory,AIMEI-005,AC003,CAT07,Headphone,BR07,Sony,1946,Sony WH-1000XM5,7500000,12,Vietnam,Wireless,Noise cancelling headphone,Dang ban
 Accessory,AIMEI-006,AC003,CAT07,Headphone,BR07,Sony,1946,Sony WH-1000XM5,7500000,12,Vietnam,Wireless,Noise cancelling headphone,Dang ban
 Accessory,AIMEI-007,AC004,CAT08,Storage,BR08,Samsung,1938,Samsung 980 Pro 1TB,2500000,60,Korea,SSD,NVMe Gen 4,Dang ban

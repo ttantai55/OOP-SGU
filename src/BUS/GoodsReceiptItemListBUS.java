@@ -1,7 +1,7 @@
 package BUS;
 
-import DAO.GoodsReceiptListDAO;
 import DAO.GoodsReceiptItemListDAO;
+import DAO.GoodsReceiptListDAO;
 import DAO.ProductListDAO;
 import DTO.GoodsReceiptDTO;
 import DTO.GoodsReceiptItemDTO;
@@ -27,7 +27,7 @@ public class GoodsReceiptItemListBUS {
         }
 
         System.out.print("Nhap ma IMEI san pham: ");
-        ProductsDTO product = productsDAO.findByIMEI(sc.nextLine());
+        ProductsDTO product = productsDAO.findById(sc.nextLine());
 
         if (product == null) {
             System.out.println("Loi: Khong tim thay san pham.");
@@ -110,6 +110,6 @@ public class GoodsReceiptItemListBUS {
         System.out.print("Nhap ma san pham can xoa: ");
         String productId = sc.nextLine();
 
-        grItemDAO.removeDetails(receiptId, productId);
+        grItemDAO.remove(receiptId, productId);
     }
 }

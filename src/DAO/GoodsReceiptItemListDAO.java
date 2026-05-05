@@ -1,37 +1,34 @@
 package DAO;
 
 import DTO.GoodsReceiptItemDTO;
-import java.util.Arrays;
+import DTO.ProductsDTO;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 
-public class GoodsReceiptItemListDAO implements IRepository<GoodsReceiptItemDTO> {
+public class GoodsReceiptItemListDAO implements IInvoiceManage<GoodsReceiptItemDTO> {
     private static GoodsReceiptItemDTO[] details = new GoodsReceiptItemDTO[0];
+    private final String filePath = "data/goodsreceiptitem.txt";
 
-    public GoodsReceiptItemListDAO() {
-    }
-
+   
+    
     @Override
     public void add(GoodsReceiptItemDTO obj) {
         details = Arrays.copyOf(details, details.length + 1);
         details[details.length - 1] = obj;
+        System.out.println("Da them chi tiet phieu nhap thanh cong: " + obj.getProductId() + ".");
     }
 
     @Override
-    // nên nhập cả 2 tham số receiptId, productId để không bị xóa nhầm 1 chi tiết của 1 phiếu nhập khác
-    public void remove(String productId) {
-        System.out.printf(" Hãy sử dụng hàm removeDetails(receiptId, productId). ");
-    }
-
-    public void removeDetails(String receiptId, String productId) {
+    public void remove(String receiptId, String productId) {
         boolean found = false;
-        GoodsReceiptItemDTO[] temp = new GoodsReceiptItemDTO[0]; // tạo mảng temp để giữ lại các item không bị xóa
+        GoodsReceiptItemDTO[] temp = new GoodsReceiptItemDTO[0];
 
         for (GoodsReceiptItemDTO item : details) {
             if (item != null) {
                 if (item.getReceiptId().equals(receiptId) && item.getProductId().equals(productId)) {
-                    found = true; // bỏ qua phần tử cần xóa
+                    found = true;
                 } else {
                     temp = Arrays.copyOf(temp, temp.length + 1);
                     temp[temp.length - 1] = item;
@@ -39,12 +36,12 @@ public class GoodsReceiptItemListDAO implements IRepository<GoodsReceiptItemDTO>
             }
         }
 
-        this.details = temp; // mảng chỉ còn lại các item không bị xóa
+        this.details = temp;
 
         if (found) {
-            System.out.println("Đã xóa sản phẩm " + productId + " khỏi phiếu nhập " + receiptId);
+            System.out.println("Da xoa san pham " + productId + " khoi phieu nhap " + receiptId + ".");
         } else {
-            System.out.println("Không tìm thấy dòng chi tiết để xóa.");
+            System.out.println("Khong tim thay dong chi tiet de xoa.");
         }
     }
 
@@ -55,19 +52,15 @@ public class GoodsReceiptItemListDAO implements IRepository<GoodsReceiptItemDTO>
                 && details[i].getReceiptId().equals(obj.getReceiptId())
                 && details[i].getProductId().equals(obj.getProductId())) {
                 details[i] = obj;
+                System.out.println("Da cap nhat chi tiet phieu nhap thanh cong: " + obj.getProductId() + ".");
                 return;
             }
         }
+        System.out.println("Khong tim thay dong chi tiet de cap nhat!");
     }
 
     @Override
-    // nên dùng hàm findDetail(receiptId, productId) để tránh trả nhầm chi tiết của phiếu nhập khác
-    public GoodsReceiptItemDTO findById(String productId) {
-        System.out.println("Hãy sử dụng hàm findDetail(receiptId, productId).");
-        return null;
-    }
-
-    public GoodsReceiptItemDTO findDetail(String receiptId, String productId) {
+    public GoodsReceiptItemDTO findById(String receiptId, String productId) {
         for (GoodsReceiptItemDTO d : details) {
             if (d != null
                 && d.getReceiptId().equals(receiptId)
@@ -106,10 +99,10 @@ public class GoodsReceiptItemListDAO implements IRepository<GoodsReceiptItemDTO>
     public void displayAll() {
         for (GoodsReceiptItemDTO d : details) {
             if (d != null) {
-                System.out.println("Sản phẩm: " + d.getProductName()
-                        + " | Số lượng: " + d.getQuantity()
-                        + " | Giá nhập: " + d.getImportPrice()
-                        + " | Thành tiền: " + calculateSubTotal(d));
+                System.out.println("San pham: " + d.getProductName()
+                        + " | So luong: " + d.getQuantity()
+                        + " | Gia nhap: " + d.getImportPrice()
+                        + " | Thanh tien: " + calculateSubTotal(d));
             }
         }
     }
@@ -120,9 +113,45 @@ public class GoodsReceiptItemListDAO implements IRepository<GoodsReceiptItemDTO>
         return subTotal;
     }
 
-    @Override
+   @Override
     public void readFile(String filePath) {
-        // Sẽ bổ sung sau
+        GoodsReceiptItemDTO[] tempArr = new GoodsReceiptItemDTO[0];
+        
+        // Kiểm tra file tồn tại
+        java.io.File file = new java.io.File(filePath);
+        if (!file.exists()) {
+            this.details = tempArr; 
+            return; 
+        }
+
+        try (java.util.Scanner scanner = new java.util.Scanner(file)) {
+            
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                if (line.trim().isEmpty()) continue;
+
+                String[] data = line.split(",");
+
+                try {
+                    // Khởi tạo đối tượng ngay lập tức
+                    ProductsDTO product = new ProductsDTO();
+                    product.setProductID(data[1]);
+                    product.setProductName(data[2]);
+                    GoodsReceiptItemDTO item = new GoodsReceiptItemDTO(product, data[0], Integer.parseInt(data[3]), Double.parseDouble(data[4]));
+                    // Thêm vào mảng
+                    tempArr = Arrays.copyOf(tempArr, tempArr.length + 1);
+                    tempArr[tempArr.length - 1] = item;
+
+                } catch (Exception ex) {
+                    System.out.println("Loi du lieu dong: " + line);
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Loi khi doc File: " + e.getMessage());
+        }
+        
+        // Nạp mảng vào biến gốc
+        this.details = tempArr;
     }
 
     @Override
@@ -146,10 +175,10 @@ public class GoodsReceiptItemListDAO implements IRepository<GoodsReceiptItemDTO>
                 }
             }
 
-            System.out.println("Ghi dữ liệu vào file " + filePath + " thành công!");
+            System.out.println("Ghi du lieu vao file " + filePath + " thanh cong!");
 
         } catch (IOException e) {
-            System.err.println("Lỗi khi ghi file: " + e.getMessage());
+            System.err.println("Loi khi ghi file: " + e.getMessage());
         }
     }
 }

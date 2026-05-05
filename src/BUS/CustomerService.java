@@ -13,6 +13,7 @@ public class CustomerService {
 
     public CustomerService() {
         customerDAO = new CustomerDAO();
+        customerDAO.readFile(FILE_CUSTOMERS);
     }
 
     // ==================== LOAD / SAVE ====================

@@ -14,14 +14,15 @@ public class AccountService {
 
     public AccountService() {
         this.accountDAO = new AccountDAO();
+        accountDAO.readFile("src/data/accounts.txt"); // Tu dong doc tu lieu va nao vao he thong khi duoc Khoi tao !
     }
 
     // --- [BỔ SUNG] CÁC HÀM ĐỒNG BỘ DỮ LIỆU ---
 
     // [OOP] Delegation: Uy quyen cho DAO doc du lieu
-    public void loadFromFile() {
-        accountDAO.readFile("src/data/accounts.txt");
-    }
+   // public void loadFromFile() {
+   //     accountDAO.readFile("src/data/accounts.txt");
+   // }
 
     // [OOP] Delegation: Uy quyen cho DAO ghi du lieu xuong o cung
     public void saveToFile() {

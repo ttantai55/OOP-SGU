@@ -6,9 +6,25 @@ import java.text.SimpleDateFormat;
 import java.util.Scanner;
 
 public class RepairRecordListBUS {
+    private final String filePath = "data/repairrecortlist.txt";
     Scanner sc = new Scanner(System.in);
+    
+    private RepairRecordListDAO repairDAO;
+    
+    public RepairRecordListBUS() {
+        this.repairDAO = new RepairRecordListDAO();
+        repairDAO.readFile(filePath);
+    }
 
-    private RepairRecordListDAO repairDAO = new RepairRecordListDAO();
+    public void loadFile() {
+        repairDAO.readFile(filePath);
+        System.out.println("Da tai du lieu thanh cong tu file: " + filePath);
+    }
+
+    public void saveFile() {
+        repairDAO.writeFile(filePath);
+        System.out.println("Da luu du lieu vao file: " + filePath);
+    }
 
     public void viewAllRepairs() {
         repairDAO.displayAll();

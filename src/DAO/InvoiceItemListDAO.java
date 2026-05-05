@@ -1,6 +1,9 @@
 package DAO;
 
 import DTO.InvoiceItemDTO;
+import DTO.ProductsDTO;
+import DTO.PromotionDTO;
+import DTO.WarrantyDTO;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -8,14 +11,25 @@ import java.util.Arrays;
 
 public class InvoiceItemListDAO implements IInvoiceManage<InvoiceItemDTO> {
     private static InvoiceItemDTO[] itemList = new InvoiceItemDTO[0];
+    private final String filePath = "data/invoiceitem.txt";
 
     public InvoiceItemListDAO() {
+        loadFile();
+    }
+
+    public void loadFile() {
+        readFile(this.filePath);
+    }
+
+    public void saveFile() {
+        writeFile(this.filePath);
     }
 
     @Override
     public void add(InvoiceItemDTO item) {
         itemList = Arrays.copyOf(itemList, itemList.length + 1);
         itemList[itemList.length - 1] = item;
+        System.out.println("Da them chi tiet hoa don thanh cong: " + item.getProductId() + ".");
     }
 
     // khi xóa 1 chi tiết thì nên nhập cả mã hóa đơn(invoiceId) và mã sản phẩm(productId) để tránh xóa nhầm 1 chi tiết của hóa đơn khác
@@ -38,9 +52,9 @@ public class InvoiceItemListDAO implements IInvoiceManage<InvoiceItemDTO> {
         this.itemList = temp; // mảng chỉ còn lại sản phẩm ko bị xóa
 
         if (found) {
-            System.out.println("Đã xóa sản phẩm " + productId + " khỏi hóa đơn " + invoiceId);
+            System.out.println("Da xoa san pham " + productId + " khoi hoa don " + invoiceId);
         } else {
-            System.out.println("Không tìm thấy dòng chi tiết để xóa.");
+            System.out.println("Khong tim thay dong chi tiet de xoa.");
         }
     }
 
@@ -51,9 +65,11 @@ public class InvoiceItemListDAO implements IInvoiceManage<InvoiceItemDTO> {
                 itemList[i].getInvoiceId().equals(updatedItem.getInvoiceId()) &&
                 itemList[i].getProductId().equals(updatedItem.getProductId())) {
                 itemList[i] = updatedItem;
+                System.out.println("Da cap nhat chi tiet hoa don thanh cong: " + updatedItem.getProductId() + ".");
                 return;
             }
         }
+        System.out.println("Khong tim thay chi tiet hoa don de cap nhat!");
     }
 
     // hàm riêng, tìm kiếm theo id của hóa đơn
@@ -104,7 +120,56 @@ public class InvoiceItemListDAO implements IInvoiceManage<InvoiceItemDTO> {
 
     @Override
     public void readFile(String filePath) {
-        // Sẽ bổ sung sau
+        InvoiceItemDTO[] tempArr = new InvoiceItemDTO[0];
+
+        java.io.File file = new java.io.File(filePath);
+        if (!file.exists()) {
+            this.itemList = tempArr;
+            return;
+        }
+
+        try (java.util.Scanner scanner = new java.util.Scanner(file)) {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                if (line.trim().isEmpty()) continue;
+
+                String[] data = line.split(",");
+
+                try {
+                    ProductsDTO product = new ProductsDTO();
+                    product.setProductID(data[1]);
+                    product.setProductName(data[2]);
+                    product.setPrice(Double.parseDouble(data[4]));
+
+                    int quantity = Integer.parseInt(data[3]);
+
+                    PromotionDTO promotion = null;
+                    if (!data[5].equalsIgnoreCase("N/A")) {
+                        promotion = new PromotionDTO();
+                        promotion.setPromotionId(data[5]);
+                        promotion.setDiscountPercent(Double.parseDouble(data[6]));
+                    }
+
+                    WarrantyDTO warranty = null;
+                    if (!data[7].equalsIgnoreCase("N/A")) {
+                        warranty = new WarrantyDTO();
+                        warranty.setWarrantyId(data[7]);
+                    }
+
+                    InvoiceItemDTO item = new InvoiceItemDTO(product, data[0], quantity, warranty, promotion);
+
+                    tempArr = Arrays.copyOf(tempArr, tempArr.length + 1);
+                    tempArr[tempArr.length - 1] = item;
+
+                } catch (Exception ex) {
+                    System.out.println("Loi du lieu dong: " + line);
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Loi khi doc File: " + e.getMessage());
+        }
+
+        this.itemList = tempArr;
     }
 
     @Override
@@ -127,12 +192,14 @@ public class InvoiceItemListDAO implements IInvoiceManage<InvoiceItemDTO> {
                         warrantyId = "N/A";
                     }
 
+                    double discountPercent = item.getDiscountPercent();
                     String line = item.getInvoiceId() + "," +
                                  item.getProductId() + "," +
                                  item.getProductName() + "," +
                                  item.getQuantity() + "," +
                                  item.getUnitPrice() + "," +
                                  promotionId + "," +
+                                 discountPercent + "," +
                                  warrantyId + "," +
                                  calculateSubTotal(item);
 
@@ -141,27 +208,27 @@ public class InvoiceItemListDAO implements IInvoiceManage<InvoiceItemDTO> {
                 }
             }
 
-            System.out.println("Ghi dữ liệu vào file " + filePath + " thành công!");
+            System.out.println("Ghi du lieu vao file " + filePath + " thanh cong!");
 
         } catch (IOException e) {
-            System.err.println("Lỗi khi ghi file: " + e.getMessage());
+            System.err.println("Loi khi ghi file: " + e.getMessage());
         }
     }
 
     @Override
     public void displayAll() {
         if (itemList.length == 0) {
-            System.out.println("Danh sách chi tiết trống!");
+            System.out.println("Danh sach chi tiet trong!");
             return;
         }
         System.out.println("=".repeat(85));
         System.out.printf("%-10s | %-10s | %-8s | %-15s | %-15s%n",
-                "Mã HD", "Mã SP", "SL", "Đơn Giá", "Thành Tiền");
+                "Ma HD", "Ma SP", "SL", "Don Gia", "Thanh Tien");
         System.out.println("-".repeat(85));
 
         for (InvoiceItemDTO item : itemList) {
             if (item != null) {
-                System.out.printf("%-10s | %-10s | %-8d | %-15.0f | %,15.0f VNĐ%n",
+                System.out.printf("%-10s | %-10s | %-8d | %-15.0f | %,15.0f VND%n",
                         item.getInvoiceId(),
                         item.getProductId(),
                         item.getQuantity(),
@@ -169,11 +236,6 @@ public class InvoiceItemListDAO implements IInvoiceManage<InvoiceItemDTO> {
                         calculateSubTotal(item));
             }
         }
-        System.out.println("=" + "=".repeat(84));
-    }
-
-    // Alias cho remove, dung trong BUS
-    public void removeDetails(String invoiceId, String productId) {
-        remove(invoiceId, productId);
+        System.out.println("=".repeat(85));
     }
 }

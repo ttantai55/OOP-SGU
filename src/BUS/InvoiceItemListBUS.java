@@ -13,13 +13,27 @@ import DTO.WarrantyDTO;
 import java.util.Scanner;
 
 public class InvoiceItemListBUS {
+    private final String FILE_PATH = "data/invoice.txt";
     Scanner sc = new Scanner(System.in);
 
-    private final InvoiceItemListDAO invItemDAO = new InvoiceItemListDAO();
-    private final InvoiceListDAO invDAO = new InvoiceListDAO();
-    private final ProductListDAO productsDAO = new ProductListDAO();
-    private final PromotionListDAO promotionDAO = new PromotionListDAO();
-    private final WarrantyListDAO warrantyDAO = new WarrantyListDAO();
+    private InvoiceItemListDAO invItemDAO;
+    private InvoiceListDAO invDAO;
+    private ProductListDAO productsDAO;
+    private PromotionListDAO promotionDAO;
+    private WarrantyListDAO warrantyDAO;
+
+    public InvoiceItemListBUS() {
+        this.invDAO = new InvoiceListDAO();
+        this.invItemDAO = new InvoiceItemListDAO();
+        this.productsDAO = new ProductListDAO();
+        this.promotionDAO = new PromotionListDAO();
+        this.warrantyDAO = new WarrantyListDAO();
+        
+        invItemDAO.readFile(FILE_PATH);
+    }
+
+    
+    
 
     public void inputInvoiceItem() {
         System.out.print("Nhap ma hoa don: ");
@@ -108,7 +122,7 @@ public class InvoiceItemListBUS {
             InvoiceItemDTO item = items[i];
             if (item != null) {
                 double thanhTien = InvoiceItemListDAO.calculateSubTotal(item);
-                System.out.printf("%-5d | %-10s | %-20s | %-5d | %-12.0f | %,15.0f VNĐ%n",
+                System.out.printf("%-5d | %-10s | %-20s | %-5d | %-12.0f | %,15.0f VND%n",
                         i + 1,
                         item.getProductId(),
                         item.getProductName(),
@@ -119,7 +133,7 @@ public class InvoiceItemListBUS {
             }
         }
         System.out.println("-".repeat(85));
-        System.out.printf("%-60s TONG CONG: %,15.0f VNĐ%n", "", tongCong);
+        System.out.printf("%-60s TONG CONG: %,15.0f VND%n", "", tongCong);
         System.out.println("=".repeat(85) + "\n");
     }
 
@@ -130,6 +144,6 @@ public class InvoiceItemListBUS {
         System.out.print("Nhap ma san pham can xoa: ");
         String productId = sc.nextLine();
 
-        invItemDAO.removeDetails(invoiceId, productId);
+        invItemDAO.remove(invoiceId, productId);
     }
 }

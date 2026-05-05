@@ -1,12 +1,11 @@
 package BUS;
 
 import DAO.EmployeeDAO;
+import DTO.DeliveryEmployee;
 import DTO.Employee;
 import DTO.Manager;
 import DTO.SalesEmployee;
-import DTO.DeliveryEmployee;
 import DTO.TechnicianEmployee;
-
 import java.util.Scanner;
 
 // EmployeeService.java - xu ly nghiep vu nhan vien
@@ -19,7 +18,7 @@ public class EmployeeService {
 
     public EmployeeService() {
         employeeDAO = new EmployeeDAO();
-        //loadFromfile(); fix
+        employeeDAO.readFile(FILE_EMPLOYEES);
     }
 
 

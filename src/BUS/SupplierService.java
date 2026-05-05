@@ -6,13 +6,8 @@ import java.util.Scanner;
 
 // [OOP] Class: Lớp Nghiệp vụ (Business Logic) xử lý logic của Nhà cung cấp
 public class SupplierService {
-<<<<<<< HEAD
-    
-    // [OOP] Composition (Mối quan hệ "Has-A") & Delegation (Ủy quyền): 
-=======
 
     // [OOP] Composition (Mối quan hệ "Has-A") & Delegation (Ủy quyền):
->>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
     // Service chứa một đối tượng DAO để giao tiếp với file dữ liệu.
     private SupplierDAO supplierDAO;
     private Scanner sc;
@@ -20,24 +15,17 @@ public class SupplierService {
     public SupplierService() {
         this.supplierDAO = new SupplierDAO();
         this.sc = new Scanner(System.in);
+        supplierDAO.readFile("OOP-SGU/src/data/suppliers.txt");
     }
 
     // --- CÁC HÀM ĐỒNG BỘ DỮ LIỆU ---
     public void loadFromFile() {
         // [OOP] Delegation: Giao việc đọc file cho DAO
-<<<<<<< HEAD
-        supplierDAO.readFile("src/data/suppliers.txt");
-    }
-
-    public void saveToFile() {
-        supplierDAO.writeFile("src/data/suppliers.txt");
-=======
         supplierDAO.readFile("OOP-SGU/src/data/suppliers.txt");
     }
 
     public void saveToFile() {
         supplierDAO.writeFile("OOP-SGU/src/data/suppliers.txt");
->>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
     }
 
     // --- MENU QUẢN LÝ NHÀ CUNG CẤP ---
@@ -68,17 +56,10 @@ public class SupplierService {
                 case 3: deleteSupplier(); break;
                 case 4: searchSupplier(); break;
                 case 5: showAllSuppliers(); break;
-<<<<<<< HEAD
-                case 0: 
-                    System.out.println("\n[Thong bao] Dang quay lai Menu Chinh..."); 
-                    break;
-                default: 
-=======
                 case 0:
                     System.out.println("\n[Thong bao] Dang quay lai Menu Chinh...");
                     break;
                 default:
->>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
                     System.out.println("[Loi] Lua chon khong hop le. Vui long thu lai!");
             }
         } while (choice != 0);
@@ -90,11 +71,6 @@ public class SupplierService {
         System.out.println("\n--- THEM NHA CUNG CAP ---");
         // [OOP] Object Creation: Khởi tạo đối tượng mới
         Supplier newSupplier = new Supplier();
-<<<<<<< HEAD
-        
-=======
-
->>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
         // Gọi hàm input() từ DTO để tận dụng tính Đóng gói (Encapsulation)
         newSupplier.input();
 
@@ -106,20 +82,12 @@ public class SupplierService {
 
         // Nếu ID chưa tồn tại, ủy quyền cho DAO lưu vào danh sách
         supplierDAO.add(newSupplier);
-<<<<<<< HEAD
-=======
         saveToFile();
->>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
     }
 
     private void updateSupplier() {
         System.out.println("\n--- SUA THONG TIN NHA CUNG CAP ---");
         String id = Validation.getNonEmptyString("Nhap Ma NCC can sua thong tin: ");
-<<<<<<< HEAD
-        
-=======
-
->>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
         Supplier existingSupplier = supplierDAO.findById(id);
         if (existingSupplier == null) {
             System.out.println("[Loi] Khong tim thay Nha cung cap mang ma: " + id);
@@ -128,31 +96,18 @@ public class SupplierService {
 
         System.out.println("[Thong bao] Dang sua thong tin cho NCC: " + existingSupplier.getSupplierName());
         System.out.println("(Luu y: ID khong duoc phep thay doi)");
-<<<<<<< HEAD
-        
-=======
-
->>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
         // Cập nhật các trường thông tin khác
         existingSupplier.setSupplierName(Validation.getNonEmptyString("Moi nhap Ten NCC moi: "));
         existingSupplier.setContactPhone(Validation.getValidPhone("Moi nhap So dien thoai moi (10-11 so): "));
         existingSupplier.setEmail(Validation.getValidEmail("Moi nhap Email moi (@gmail.com): "));
 
         supplierDAO.update(existingSupplier);
-<<<<<<< HEAD
-=======
         saveToFile();
->>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
     }
 
     private void deleteSupplier() {
         System.out.println("\n--- XOA NHA CUNG CAP ---");
         String id = Validation.getNonEmptyString("Nhap Ma NCC can xoa: ");
-<<<<<<< HEAD
-        
-=======
-
->>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
         if (supplierDAO.findById(id) == null) {
             System.out.println("[Loi] Khong tim thay Nha cung cap mang ma: " + id);
             return;
@@ -162,10 +117,7 @@ public class SupplierService {
         String confirm = sc.nextLine().trim();
         if (confirm.equalsIgnoreCase("Y")) {
             supplierDAO.remove(id);
-<<<<<<< HEAD
-=======
             saveToFile();
->>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
         } else {
             System.out.println("[Thong bao] Da huy thao tac xoa.");
         }
@@ -174,15 +126,9 @@ public class SupplierService {
     private void searchSupplier() {
         System.out.println("\n--- TIM KIEM NHA CUNG CAP ---");
         String keyword = Validation.getNonEmptyString("Nhap ten (hoac mot phan ten) NCC can tim: ");
-<<<<<<< HEAD
-        
-        Object[] results = supplierDAO.findByName(keyword);
-        
-=======
 
         Object[] results = supplierDAO.findByName(keyword);
 
->>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
         if (results.length == 0) {
             System.out.println("[Thong bao] Khong tim thay ket qua nao phu hop voi tu khoa: " + keyword);
         } else {

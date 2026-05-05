@@ -14,7 +14,7 @@ public class CartBUS {
     public CartBUS(String username) {
         this.cartDAO = new CartDAO();
         this.username = username;
-        // loadFile
+        cartDAO.readFile(FILE_CART); 
     }
 
     //====LOAD/SAVE====

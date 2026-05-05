@@ -1,17 +1,13 @@
 package DAO;
 
 import DTO.Supplier; // Nho import dung ten class Supplier
-import java.util.Arrays;
 import java.io.*;
+import java.util.Arrays;
 
 public class SupplierDAO implements IRepository<Supplier> {
     private Supplier[] suppliers;
     private int count;
-<<<<<<< HEAD
-    private final String defaultPath = "src/data/suppliers.txt";
-=======
     private final String defaultPath = "OOP-SGU/src/data/suppliers.txt";
->>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
 
     public SupplierDAO() {
         this.suppliers = new Supplier[100]; 
@@ -70,11 +66,7 @@ public class SupplierDAO implements IRepository<Supplier> {
     }
 
     @Override
-<<<<<<< HEAD
-    public Object[] findByName(String name) {
-=======
     public Supplier[] findByName(String name) {
->>>>>>> 4ecd6559923f5f69a0c620bc55b27768888167e5
         Supplier[] result = new Supplier[count];
         int size = 0;
         for (int i = 0; i < count; i++) {
