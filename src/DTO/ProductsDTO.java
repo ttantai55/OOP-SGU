@@ -1,6 +1,6 @@
 package DTO;
-import java.util.Scanner;
 import BUS.Validation;
+import java.util.Scanner;
 
 public class ProductsDTO {
     private String productIMEI; // duy nhat 

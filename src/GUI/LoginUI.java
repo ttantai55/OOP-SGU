@@ -6,7 +6,6 @@ import DAO.CustomerDAO;
 import DTO.Account;
 import DTO.Address;
 import DTO.Customer;
-
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;

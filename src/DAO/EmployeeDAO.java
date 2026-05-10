@@ -1,12 +1,11 @@
 package DAO;
 
 import DTO.Address;
+import DTO.DeliveryEmployee;
 import DTO.Employee;
 import DTO.Manager;
 import DTO.SalesEmployee;
-import DTO.DeliveryEmployee;
 import DTO.TechnicianEmployee;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;

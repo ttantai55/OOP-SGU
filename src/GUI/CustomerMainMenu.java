@@ -4,10 +4,10 @@ import BUS.AccountService;
 import BUS.CartBUS;
 import BUS.InvoiceListBUS;
 import BUS.ProductListBUS;
+import BUS.Validation;
 import DTO.CartItemDTO;
 import DTO.ProductsDTO;
 import java.util.Scanner;
-import BUS.Validation;
 
 // Giao dien chinh danh rieng cho Khach Hang
 public class CustomerMainMenu {

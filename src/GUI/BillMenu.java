@@ -1,11 +1,10 @@
 package GUI;
 
+import BUS.GoodsReceiptBUS;
 import BUS.InvoiceListBUS;
 import BUS.PromotionListBUS;
-import BUS.GoodsReceiptBUS;
-import BUS.WarrantyListBUS;
 import BUS.RepairRecordListBUS;
-
+import BUS.WarrantyListBUS;
 import java.util.Scanner;
 
 // Sub-menu Quan ly Hoa don cho Manager
