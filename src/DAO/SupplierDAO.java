@@ -1,8 +1,8 @@
 package DAO;
 
 import DTO.Supplier; // Nho import dung ten class Supplier
-import java.util.Arrays;
 import java.io.*;
+import java.util.Arrays;
 
 public class SupplierDAO implements IRepository<Supplier> {
     private Supplier[] suppliers;
@@ -66,7 +66,7 @@ public class SupplierDAO implements IRepository<Supplier> {
     }
 
     @Override
-    public Object[] findByName(String name) {
+    public Supplier[] findByName(String name) {
         Supplier[] result = new Supplier[count];
         int size = 0;
         for (int i = 0; i < count; i++) {

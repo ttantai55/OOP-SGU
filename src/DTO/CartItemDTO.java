@@ -10,12 +10,12 @@ public class CartItemDTO {
     public CartItemDTO() {
     }
 
-    public CartItemDTO(double price, String productID, String productName, int quantity, String username) {
-        this.price = price;
+    public CartItemDTO(String username, String productID, String productName, double price, int quantity) {
+        this.username = username;
         this.productID = productID;
         this.productName = productName;
+        this.price = price;
         this.quantity = quantity;
-        this.username = username;
     }
 
     public String getUsername() {

@@ -21,7 +21,6 @@ import java.util.Scanner;
 public class ProductListDAO  implements IProductManage<ProductsDTO> {
     private ProductsDTO[] pList;
 
-    private final String filePath = "data/product.txt";
 
     static Scanner sc = new Scanner(System.in);
 
@@ -31,6 +30,10 @@ public class ProductListDAO  implements IProductManage<ProductsDTO> {
         this.pList = new ProductsDTO[0]; 
          
     }
+    
+    public ProductsDTO[] getALL() {
+        return pList;
+    }
 
 
     public void displayGroupedProducts(ProductsDTO[] pList) {
@@ -38,20 +41,20 @@ public class ProductListDAO  implements IProductManage<ProductsDTO> {
         if (pList == null || pList.length == 0) {
             System.out.println("Kho hang hien tai chua co du lieu! Vui long nhap du lieu truoc.");
             return; // Dừng hàm luôn
-    }
+        }
         // Tạo một mảng cờ hiệu để đánh dấu xem sản phẩm nào đã được đếm/gom nhóm rồi
         boolean[] counted = new boolean[pList.length];
         
         // In tiêu đề bảng cho đẹp
-        System.out.printf(" %-10s | %-25s | %-30s | %-15s | %-10s \n", "Ma SP", "Ten San Pham", "Thong so tom tat", "Gia ban", "So luong Ton");
-        System.out.println("-------------------------------------------------------------------------");
+        System.out.printf(" %-10s | %-25s | %-85s | %-15s | %-10s \n", "Ma SP", "Ten San Pham", "Thong so tom tat", "Gia ban", "So luong Ton");
+        System.out.println("-".repeat(160));
 
         boolean haveProducts = false;
 
         // Vòng lặp duyệt qua từng sản phẩm trong kho
         for (int i = 0; i < pList.length; i++) {
             // Bỏ qua nếu là khoảng trống (null) hoặc sản phẩm này đã được đếm ở nhóm trước đó
-            if (pList[i] == null || counted[i] || pList[i].isStatus()) {
+            if (pList[i] == null || counted[i] || !pList[i].isStatus()) {
                 continue;
             }
 
@@ -65,7 +68,7 @@ public class ProductListDAO  implements IProductManage<ProductsDTO> {
             // Lục lọi các sản phẩm nằm phía sau xem có anh em sinh đôi (cùng ProductID) không
             for (int j = i + 1; j < pList.length; j++) {
                 //Phai kiem tra trang thai = true ms thao tac 
-                if (pList[j] != null && !counted[j] && pList[i].isStatus()) {
+                if (pList[j] != null && !counted[j] && pList[j].isStatus()) {
                     // Nếu trùng mã ProductID -> Cùng một dòng máy
                     if (pList[j].getProductID().equals(productIDPresent)) {
                         amount++; // Tăng số lượng
@@ -75,24 +78,33 @@ public class ProductListDAO  implements IProductManage<ProductsDTO> {
             }
 
             // Sau khi đếm xong anh em dòng họ của mã này, tiến hành in ra 1 dòng tổng hợp
-            System.out.printf(" %-10s | %-25s | %-30s | %,15.2f | %7d c |\n", 
+            System.out.printf(" %-10s | %-25s | %-85s | %,15.2f | %7d \n", 
                     productIDPresent, 
                     pList[i].getProductName(),
                     pList[i].getSpecSummary(), // Lay thong so chi tiet
                     pList[i].getPrice(), 
                     amount);
+            
         }
 
         if (!haveProducts) {
             System.out.println(" Kho hang hien tai đang trong!");
         }
-        System.out.println("=========================================================================");
+        System.out.println("=".repeat(160));
     }
+
+
+
+
     //Xuat tat ca SP
     public void displayAllProducts() {
         System.out.println("===DS tat ca san pham (gom theo ProductID)===:");
         displayGroupedProducts(pList);
     }
+    
+
+
+
 
     // Xuất theo danh mục và gom theo ProductID
     public void displayByCategory() {
@@ -287,6 +299,8 @@ public class ProductListDAO  implements IProductManage<ProductsDTO> {
                 ProductsDTO product = null;
         
                 // tach du lieu thanh tung cot  = dau ","
+
+                // Laptop, 1, 2, 3, 4
                 data = line.split(",");
 
                 if (data[0].equalsIgnoreCase("Laptop")) {
@@ -310,12 +324,13 @@ public class ProductListDAO  implements IProductManage<ProductsDTO> {
         // CỰC KỲ QUAN TRỌNG:
         // Vì hàm này là 'void' (không trả về), nên ta phải nạp trực tiếp 
         // cái mảng vừa đọc được (tempArr) vào biến gốc (pList) của hệ thống
-        this.pList = tempArr;
+       pList = Arrays.copyOf(tempArr, tempArr.length);
     }
 
      //Ham lap rap Data vao mang 
-    private LaptopDTO assembleLaptop(String[] data){
+    public LaptopDTO assembleLaptop(String[] data){
         try {
+            // 0: Laptop
             String imei = data[1];
             String id = data[2];
 
@@ -327,23 +342,25 @@ public class ProductListDAO  implements IProductManage<ProductsDTO> {
             int warranty = Integer.parseInt(data[10]);
             String origin = data[11];
             
-            CpuDTO cpu = new CpuDTO(data[12], data[13], Integer.parseInt(data[14]), Integer.parseInt(data[15]));
-            RamDTO ram = new RamDTO(Integer.parseInt(data[16]), data[17]);
-            StorageDTO sto = new StorageDTO(data[18], Integer.parseInt(data[19]));
-            GpuDTO gpu = new GpuDTO(data[20], data[21], Integer.parseInt(data[22]));
-            ScreenDTO src = new ScreenDTO(Double.parseDouble(data[23]), data[24]);
-
-            String battery = data[25]; 
-            boolean status = data[26]. equalsIgnoreCase("Dang ban");
+            // Cột 12 chính là Status kế thừa từ ProductsDTO
+            boolean status = data[12].trim().equalsIgnoreCase("Dang ban"); 
+            
+            // Các linh kiện tuân theo đúng thứ tự của LaptopDTO.toFileString()
+            CpuDTO cpu = new CpuDTO(data[13], data[14], Integer.parseInt(data[15]), Integer.parseInt(data[16]));
+            GpuDTO gpu = new GpuDTO(data[17], data[18], Integer.parseInt(data[19]));
+            RamDTO ram = new RamDTO(Integer.parseInt(data[20]), data[21]);
+            ScreenDTO src = new ScreenDTO(Double.parseDouble(data[22]), data[23]);
+            StorageDTO sto = new StorageDTO(data[24], Integer.parseInt(data[25]));
+            String battery = data[26]; 
 
             return new LaptopDTO(imei, id, cate, brand, name, price, warranty, origin, cpu, ram, sto, gpu, src, battery, status);
         } catch (Exception e) {
-            System.out.println("Loi du lieu dong Laptop: " + Arrays.toString(data));
+            System.out.println("Loi du lieu dong Laptop: " + java.util.Arrays.toString(data));
             return null;
         }
     }
 
-    private AccessoryDTO assembleAccessory(String[] data) {
+    public AccessoryDTO assembleAccessory(String[] data) {
         try {
             String imei = data[1];
             String id = data[2];
@@ -356,15 +373,16 @@ public class ProductListDAO  implements IProductManage<ProductsDTO> {
             int warranty = Integer.parseInt(data[10]);
             String origin = data[11];
             
+            // Cột 12 chính là Status kế thừa từ ProductsDTO
+            boolean status = data[12].trim().equalsIgnoreCase("Dang ban");
             
-            String type = data[12];
-            String desc = data[13];
-            boolean status = data[14].equalsIgnoreCase("Dang ban");
+            String type = data[13];
+            String desc = data[14];
 
             return new AccessoryDTO(imei, id, cate, brand, name, price, warranty, origin, type, desc, status);
             
         } catch (Exception e) {
-            System.out.println("Loi du lieu dong Accessory: " + Arrays.toString(data));
+            System.out.println("Loi du lieu dong Accessory: " + java.util.Arrays.toString(data));
             return null;
         }
     }
@@ -378,6 +396,34 @@ public class ProductListDAO  implements IProductManage<ProductsDTO> {
             }
         }
         return count;
+    }
+    
+    // Hàm trừ kho khi thanh toán thành công
+    public void deductStock(String productID, int quantityToDeduct) {
+        int countDeducted = 0; // Biến đếm số lượng máy đã trừ
+        
+        // Gọi DAO lấy danh sách sản phẩm lên
+        getALL(); 
+        
+        for (ProductsDTO p : pList) {
+            // Nếu đủ số lượng cần trừ thì thoát vòng lặp
+            if (countDeducted == quantityToDeduct) {
+                break; 
+            }
+            
+            // Tìm đúng dòng máy đó (productID) và máy đó phải chưa bị bán (status = true)
+            if (p != null && p.isStatus() && p.getProductID().equalsIgnoreCase(productID)) {
+                
+                // Đổi trạng thái máy này thành false (Ngưng bán / Đã bán)
+                p.setStatus(false);
+      
+                
+                // Tăng biến đếm lên 1
+                countDeducted++; 
+            }
+        }
+        
+        System.out.println("-> Da tru kho " + countDeducted + " san pham ma " + productID);
     }
 
 }

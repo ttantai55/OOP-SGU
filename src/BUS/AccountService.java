@@ -6,20 +6,21 @@ import java.util.Scanner;
 
 // [OOP] Class: Lop nghiep vu (Business Logic Layer) xu ly logic tai khoan
 public class AccountService {
-    
-    // [OOP] Association (Ket hop) & Delegation (Uy quyen): 
+
+    // [OOP] Association (Ket hop) & Delegation (Uy quyen):
     // Service khong tu ghi file ma giao viec do cho tang DAO
-    private final AccountDAO accountDAO;
+    private AccountDAO accountDAO;
     static Scanner sc = new Scanner(System.in);
 
     public AccountService() {
         this.accountDAO = new AccountDAO();
+        accountDAO.readFile("src/data/accounts.txt"); // Tu dong doc tu lieu va nao vao he thong khi duoc Khoi tao !
     }
-    
+
     // --- [BỔ SUNG] CÁC HÀM ĐỒNG BỘ DỮ LIỆU ---
 
-    // [OOP] Delegation: Uy quyen cho DAO doc du lieu
-    public void loadFromFile() {
+   // [OOP] Delegation: Uy quyen cho DAO doc du lieu
+     public void loadFromFile() {
         accountDAO.readFile("src/data/accounts.txt");
     }
 
@@ -57,12 +58,12 @@ public class AccountService {
     }
 
     // Them tai khoan moi (Kiem tra trung username truoc khi them)
-    public boolean addAccount(Account acc) {
+    public boolean checkAccount(Account acc) {
         if (accountDAO.findByUsername(acc.getUsername()) != null) {
             System.out.println("[Loi] Ten dang nhap da ton tai!");
             return false;
         }
-        accountDAO.add(acc); 
+        accountDAO.add(acc);
         return true;
     }
 
@@ -87,41 +88,114 @@ public class AccountService {
     public void showAllAccounts() {
         accountDAO.displayAll();
     }
-    //Thao tac doi mat khau
 
-    public void changePassword(String username) {
-      
-        Account acc = accountDAO.findByUsername(username);
+    public void addNewAccount() {
+        System.out.println("\n--- THEM TAI KHOAN MOI ---");
+        String accountId = Validation.getNonEmptyString("Nhap Ma Tai Khoan (VD: ACC01): ");
+        String username = Validation.getNonEmptyString("Nhap Ten dang nhap: ");
+        String password = Validation.getNonEmptyString("Nhap Mat khau: ");
 
-        if(acc == null) {
-            System.out.println("Khong tim thay tai khoan tren he thong!");
+        System.out.println("\nChon Doi tuong so huu tai khoan (Role):");
+        System.out.println("1. Quan ly");
+        System.out.println("2. Nhan vien");
+        System.out.println("3. Khach hang");
+
+        String roleChoice;
+        String role = "";
+        String ownerPrompt = "";
+
+        while (true) {
+            roleChoice = Validation.getNonEmptyString("Chon (1, 2 hoac 3): ");
+            if (roleChoice.equals("1")) {
+                role = "Quan ly";
+                ownerPrompt = "Nhap Ma Quan ly (VD: QL001): ";
+                break;
+            } else if (roleChoice.equals("2")) {
+                role = "Nhan vien";
+                ownerPrompt = "Nhap Ma Nhan vien (VD: NV002): ";
+                break;
+            } else if (roleChoice.equals("3")) {
+                role = "Khach hang";
+                ownerPrompt = "Nhap Ma Khach hang (VD: KH001): ";
+                break;
+            } else {
+                System.out.println("[Loi] Lua chon khong hop le!");
+            }
         }
 
-        System.out.println("Moi nhap mat khau hien tai:");
+        String ownerId = Validation.getNonEmptyString(ownerPrompt);
+
+        Account newAcc = new Account(accountId, username, password, role, true, ownerId);
+
+        if (checkAccount(newAcc)) {
+            System.out.println("[Thong bao] Da them tai khoan thanh cong (Hien dang luu tren RAM).");
+        }
+        saveToFile();
+    }
+
+    public void toggleStatus() {
+        System.out.println("\n--- KHOA / MO KHOA TAI KHOAN ---");
+        String accountId = Validation.getNonEmptyString("Nhap Ma Tai Khoan can thay doi (VD: ACC01): ");
+        System.out.println("Chon trang thai moi:");
+        System.out.println("1. Hoat dong (Mo khoa)");
+        System.out.println("2. Bi khoa");
+        String statusChoice = Validation.getNonEmptyString("Chon (1 hoac 2): ");
+        boolean isActive = statusChoice.equals("1");
+
+        toggleAccountStatus(accountId, isActive);
+        saveToFile();
+    }
+
+    public void deleteAccount() {
+        System.out.println("\n--- XOA TAI KHOAN ---");
+        String accountId = Validation.getNonEmptyString("Nhap Ma Tai Khoan can xoa: ");
+        System.out.print("Ban co chac chan muon xoa? (Y/N): ");
+        if (sc.nextLine().trim().equalsIgnoreCase("Y")) {
+            deleteAccount(accountId);
+        } else {
+            System.out.println("[Thong bao] Da huy thao tac xoa.");
+        }
+        saveToFile();
+    }
+
+    //Ham doi mat khau 
+    public void changePassword(String username) {
+        // 1. Nhờ DAO móc tài khoản dưới kho lên
+        Account acc = accountDAO.findByUsername(username);
+        
+        if (acc == null) {
+            System.out.println("-> Loi: Khong tim thay tai khoan tren he thong!");
+            return; // Dừng hàm luôn
+        }
+
+        // 2. Kiểm tra mật khẩu cũ
+        System.out.print("Moi nhap mat khau hien tai: ");
         String oldPass = sc.nextLine();
 
         if (!acc.getPassword().equals(oldPass)) {
-            System.out.println("Mat khau hien tai khong chinh xac");
-            return;// co the bat khach hang nhap lai
+            System.out.println("-> Loi: Mat khau hien tai khong chinh xac!");
+            return; // Sai pass thì đuổi ra ngoài luôn, chặn đứng ý đồ hack
         }
 
+        // 3. Cho phép nhập mật khẩu mới
         System.out.print("Moi nhap mat khau moi: ");
         String newPass = sc.nextLine();
         
         System.out.print("Xac nhan lai mat khau moi: ");
         String confirmPass = sc.nextLine();
-        
-        //Kiem tra mk moi va xac nhan mk moi
+
+        // 4. Validate (Kiểm tra xem 2 lần nhập pass mới có khớp nhau không)
         if (!newPass.equals(confirmPass)) {
             System.out.println("-> Loi: Mat khau xac nhan khong khop!");
             return;
         }
 
-        acc.setPassword(newPass);
+        // 5. Cập nhật và Lưu xuống File
+        acc.setPassword(newPass); // Set pass mới vào Object
         
-        //savefile
+        // Gọi hàm lưu file của bro ở đây để chốt sổ xuống Database (ví dụ: accountDAO.writeFile())
+        accountDAO.writeFile("src/data/accounts.txt"); 
         
-        System.out.println("Doi mat khau thanh cong!");
-
+        System.out.println("-> DOI MAT KHAU THANH CONG!");
     }
 }

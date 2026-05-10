@@ -1,20 +1,19 @@
 package BUS;
 
 import DAO.EmployeeDAO;
+import DAO.GoodsReceiptItemListDAO;
+import DAO.GoodsReceiptListDAO;
 import DAO.ProductListDAO;
 import DAO.SupplierDAO;
+import DTO.Employee;
 import DTO.GoodsReceiptDTO;
 import DTO.GoodsReceiptItemDTO;
 import DTO.ProductsDTO;
-import DTO.Employee;
 import DTO.Supplier;
-import DAO.GoodsReceiptListDAO;
-import DAO.GoodsReceiptItemListDAO;
-
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Scanner;
-import java.text.SimpleDateFormat;
 
 public class GoodsReceiptBUS {
     Scanner sc = new Scanner(System.in);
@@ -24,6 +23,43 @@ public class GoodsReceiptBUS {
     private final EmployeeDAO employeeDAO = new EmployeeDAO();
     private final ProductListDAO productsDAO = new ProductListDAO();
     private final SupplierDAO supplierDAO = new SupplierDAO();
+
+    private static final String FILE_RECEIPT = "src/data/GoodsReceipt.txt";
+    private static final String FILE_RECEIPT_ITEM = "src/data/GoodsReceiptItem.txt";
+
+    // ==================== LOAD / SAVE ====================
+
+    public void loadFile() {
+        grDAO.readFile(FILE_RECEIPT);
+        grItemDAO.readFile(FILE_RECEIPT_ITEM);
+
+        // Liên kết items + Resolve stub Supplier/Employee thành đối tượng thật
+        DTO.GoodsReceiptDTO[] allReceipts = grDAO.getAll();
+        for (DTO.GoodsReceiptDTO rec : allReceipts) {
+            if (rec != null) {
+                // Liên kết items
+                DTO.GoodsReceiptItemDTO[] items = grItemDAO.findByReceiptId(rec.getReceiptId());
+                rec.setItems(items);
+
+                // Resolve Supplier thật từ SupplierDAO
+                DTO.Supplier realSupplier = supplierDAO.findById(rec.getSupplierId());
+                if (realSupplier != null) {
+                    rec.setSupplier(realSupplier);
+                }
+
+                // Resolve Employee thật từ EmployeeDAO
+                DTO.Employee realEmployee = employeeDAO.findById(rec.getReceiverId());
+                if (realEmployee != null) {
+                    rec.setReceiver(realEmployee);
+                }
+            }
+        }
+    }
+
+    public void saveFile() {
+        grDAO.writeFile(FILE_RECEIPT);
+        grItemDAO.writeFile(FILE_RECEIPT_ITEM);
+    }
 
     // --- NHẬP PHIẾU NHẬP HÀNG ---
     public void inputReceipt() {
@@ -141,23 +177,9 @@ public class GoodsReceiptBUS {
         System.out.printf(" Ma phieu: %-15s | Ngay: %s%n", 
                 rec.getReceiptId(), 
                 new SimpleDateFormat("dd/MM/yyyy").format(rec.getCreatedDate()));
-        String supplierInfo;
-        if (rec.getSupplier() == null) {
-            supplierInfo = "N/A";
-        } else if (rec.getSupplier().getSupplierName() != null) {
-            supplierInfo = rec.getSupplier().getSupplierName();
-        } else {
-            supplierInfo = rec.getSupplier().getSupplierId();
-        }
-        String receiverInfo;
-        if (rec.getReceiver() == null) {
-            receiverInfo = "N/A";
-        } else if (rec.getReceiver().getFullName() != null) {
-            receiverInfo = rec.getReceiver().getFullName();
-        } else {
-            receiverInfo = rec.getReceiver().getEmployeeId();
-        }
-        System.out.printf(" NCC     : %-15s | NV Nhan: %s%n", supplierInfo, receiverInfo);
+        System.out.printf(" NCC     : %-15s | NV Nhan: %s%n", 
+                rec.getSupplier().getSupplierName(), 
+                rec.getReceiver().getFullName());
         System.out.printf(" Giao    : %-15s | Nhan   : %s%n", 
                 rec.getCourier(), rec.getConsignee());
         System.out.println("-".repeat(85));
@@ -190,6 +212,11 @@ public class GoodsReceiptBUS {
         System.out.println("=".repeat(85) + "\n");
     }
 
+
+    // Xem danh sach tat ca phieu nhap hang
+    public void printAllReceipts() {
+        grDAO.displayAll();
+    }
 
     public void cancelReceipt() {
         System.out.print("Nhap ma phieu nhap can huy: ");

@@ -1,52 +1,37 @@
 package DAO;
 
 import DTO.RepairRecordDTO;
-import java.util.Arrays;
-import java.text.SimpleDateFormat;
+import DTO.TechnicianEmployee;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
 
 public class RepairRecordListDAO implements IRepository<RepairRecordDTO> {
     private static RepairRecordDTO[] records = new RepairRecordDTO[0];
     private final String filePath = "data/repairrecord.txt";
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-    public RepairRecordListDAO() {
-        loadFile();
-    }
-
-    public void loadFile() {
-        readFile(this.filePath);
-        System.out.println("Da tai du lieu thanh cong tu file: " + filePath);
-    }
-
-    public void saveFile() {
-        writeFile(this.filePath);
-        System.out.println("Da luu du lieu vao file: " + filePath);
-    }
+    
 
     @Override
     public void add(RepairRecordDTO obj) {
         records = Arrays.copyOf(records, records.length + 1);
         records[records.length - 1] = obj;
+        System.out.println("Da them ban ghi sua chua thanh cong: " + obj.getRepairId() + ".");
     }
 
     @Override
     public void remove(String repairId) {
-        boolean found = false;
         for (RepairRecordDTO record : records) {
             if (record != null && record.getRepairId().equals(repairId)) {
                 record.setStatus(false);
-                found = true;
-                break;
+                System.out.println("Da huy ban ghi sua chua: " + repairId + ".");
+                return;
             }
         }
-        if (found) {
-            System.out.println("Da huy ban ghi sua chua: " + repairId + ".");
-        } else {
-            System.out.println("Khong tim thay ban ghi sua chua: " + repairId + ".");
-        }
+        System.out.println("Khong tim thay ban ghi sua chua: " + repairId + ".");
     }
 
     @Override
@@ -54,9 +39,11 @@ public class RepairRecordListDAO implements IRepository<RepairRecordDTO> {
         for (int i = 0; i < records.length; i++) {
             if (records[i] != null && records[i].getRepairId().equals(obj.getRepairId())) {
                 records[i] = obj;
+                System.out.println("Da cap nhat ban ghi sua chua thanh cong: " + obj.getRepairId() + ".");
                 return;
             }
         }
+        System.out.println("Khong tim thay ban ghi sua chua de cap nhat!");
     }
 
     @Override
@@ -92,17 +79,14 @@ public class RepairRecordListDAO implements IRepository<RepairRecordDTO> {
 
     @Override
     public void displayAll() {
-        if (records.length == 0) {
-            System.out.println("Danh sach ban ghi sua chua trong!");
-            return;
-        }
+        boolean hasActive = false;
         System.out.println("=".repeat(130));
         System.out.printf("%-10s | %-10s | %-12s | %-8s | %-20s | %-15s | %-15s%n",
                 "Ma SR", "Ma BH", "Ngay SR", "Lan thu", "Loi", "Gia SR", "Trang thai");
         System.out.println("-".repeat(130));
 
         for (RepairRecordDTO record : records) {
-            if (record != null) {
+            if (record != null && record.isStatus()) {
                 System.out.printf("%-10s | %-10s | %-12s | %-8d | %-20s | %,15.0f | %-15s%n",
                         record.getRepairId(),
                         record.getWarrantyId(),
@@ -111,7 +95,12 @@ public class RepairRecordListDAO implements IRepository<RepairRecordDTO> {
                         record.getErrorDescription(),
                         record.getRepairCost(),
                         record.getProcessStatus());
+                hasActive = true;
             }
+        }
+
+        if (!hasActive) {
+            System.out.println("Danh sach ban ghi sua chua trong hoac da bi huy het!");
         }
         System.out.println("=".repeat(130));
     }
@@ -145,9 +134,17 @@ public class RepairRecordListDAO implements IRepository<RepairRecordDTO> {
                     String note              = data[8];
                     String processStatus     = data[9];
 
+                    boolean status = data.length > 10 && data[10].equalsIgnoreCase("Active");
+
+                    TechnicianEmployee technician = null;
+                    if (data.length > 11 && !data[11].equalsIgnoreCase("N/A")) {
+                        technician = new TechnicianEmployee();
+                        technician.setEmployeeId(data[11]);
+                    }
+
                     RepairRecordDTO r = new RepairRecordDTO(warrantyId, repairId, repairDate,
                             attemptNumber, errorDescription, solution, replacedParts,
-                            repairCost, note, null, processStatus, true);
+                            repairCost, note, technician, processStatus, status);
 
                     tempArr = Arrays.copyOf(tempArr, tempArr.length + 1);
                     tempArr[tempArr.length - 1] = r;
@@ -169,6 +166,8 @@ public class RepairRecordListDAO implements IRepository<RepairRecordDTO> {
 
             for (RepairRecordDTO r : records) {
                 if (r != null) {
+                    String statusStr = r.isStatus() ? "Active" : "Cancelled";
+                    String technicianId = (r.getTechnician() != null) ? r.getTechnician().getEmployeeId() : "N/A";
                     String line = r.getRepairId() + "," +
                                  r.getWarrantyId() + "," +
                                  sdf.format(r.getRepairDate()) + "," +
@@ -178,7 +177,9 @@ public class RepairRecordListDAO implements IRepository<RepairRecordDTO> {
                                  r.getReplacedParts() + "," +
                                  r.getRepairCost() + "," +
                                  r.getNote() + "," +
-                                 r.getProcessStatus();
+                                 r.getProcessStatus() + "," +
+                                 statusStr + "," +
+                                 technicianId;
 
                     bw.write(line);
                     bw.newLine();

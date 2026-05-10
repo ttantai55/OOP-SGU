@@ -68,12 +68,16 @@ public class EmployeeDAO implements IRepository<Employee> {
         Employee[] temp = new Employee[count];
         int size = 0;
         for (int i = 0; i < count; i++) {
-            if (employees[i].getFullName().toLowerCase().contains(name.toLowerCase())) {
+            // [ĐÃ SỬA] Thêm điều kiện != null để chống sập chương trình
+            if (employees[i] != null 
+                && employees[i].getFullName() != null 
+                && employees[i].getFullName().toLowerCase().contains(name.toLowerCase())) {
                 temp[size++] = employees[i];
             }
         }
         Employee[] result = new Employee[size];
-        for (int i = 0; i < size; i++) result[i] = temp[i];
+        for (int i = 0; i < size; i++)
+            result[i] = temp[i];
         return result;
     }
 
@@ -83,22 +87,21 @@ public class EmployeeDAO implements IRepository<Employee> {
             System.out.println("Danh sach nhan vien rong.");
             return;
         }
-        System.out.println("=".repeat(210));
-        System.out.printf("%-5s | %-30s | %-13s | %-25s | %-45s | %-10s | %-15s | %-15s | %-12s | %s%n",
-                "STT", "Ho Ten", "So DT", "Email", "Dia Chi", "Ma NV", "Chuc Vu", "Luong CB", "Ngay VL", "Thong Tin Them");
-        System.out.println("=".repeat(210));
+        System.out.println("=".repeat(220));
+        System.out.printf("%-5s | %-25s | %-12s | %-25s | %-50s | %-10s | %-14s | %-15s | %15s | %-17s%n",
+                "STT", "Ho Ten", "So DT", "Email", "Dia Chi", "Ma NV", "CCCD", "Chuc Vu", "Luong co ban", "Ngay vao lam");
+        System.out.println("=".repeat(220));
         for (int i = 0; i < count; i++) {
-            System.out.printf("%-5d | ", i + 1);
-            employees[i].displayInfo();
+            System.out.printf("%-5d | %s%n", i + 1, employees[i].toCommonString());
         }
-        System.out.println("=".repeat(210));
+        System.out.println("=".repeat(220));
         System.out.println("Tong so: " + count + " nhan vien.");
     }
 
     // Format file: type(M/S/D/T),employeeId,fullName,phoneNumber,email,
-    //              houseNumber,street,ward,district,city,
-    //              position,baseSalary,startDate(dd/MM/yyyy),
-    //              [tham so rieng tung loai]
+    // houseNumber,street,ward,district,city,
+    // position,baseSalary,startDate(dd/MM/yyyy),
+    // [tham so rieng tung loai]
     @Override
     public void readFile(String filePath) {
         try {
@@ -236,7 +239,8 @@ public class EmployeeDAO implements IRepository<Employee> {
 
     public Employee[] getAll() {
         Employee[] result = new Employee[count];
-        for (int i = 0; i < count; i++) result[i] = employees[i];
+        for (int i = 0; i < count; i++)
+            result[i] = employees[i];
         return result;
     }
 

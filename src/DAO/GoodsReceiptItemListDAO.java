@@ -1,49 +1,33 @@
 package DAO;
 
 import DTO.GoodsReceiptItemDTO;
-import DTO.ProductsDTO;
-import java.util.Arrays;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Scanner;
+import java.util.Arrays;
 
-public class GoodsReceiptItemListDAO implements IRepository<GoodsReceiptItemDTO> {
+public class GoodsReceiptItemListDAO implements IInvoiceManage<GoodsReceiptItemDTO> {
     private static GoodsReceiptItemDTO[] details = new GoodsReceiptItemDTO[0];
-    private final String filePath = "data/goodsreceiptitem.txt";
 
-    public GoodsReceiptItemListDAO() {
-        loadFile();
-    }
 
-    public void loadFile() {
-        readFile(this.filePath);
-    }
-
-    public void saveFile() {
-        writeFile(this.filePath);
-    }
-Scanner scanner = new Scanner(System.in);
+   
+    
     @Override
     public void add(GoodsReceiptItemDTO obj) {
         details = Arrays.copyOf(details, details.length + 1);
         details[details.length - 1] = obj;
+        System.out.println("Da them chi tiet phieu nhap thanh cong: " + obj.getProductId() + ".");
     }
 
     @Override
-    // nên nhập cả 2 tham số receiptId, productId để không bị xóa nhầm 1 chi tiết của 1 phiếu nhập khác
-    public void remove(String productId) {
-        System.out.printf(" Hay su dung ham removeDetails(receiptId, productId). ");
-    }
-
-    public void removeDetails(String receiptId, String productId) {
+    public void remove(String receiptId, String productId) {
         boolean found = false;
-        GoodsReceiptItemDTO[] temp = new GoodsReceiptItemDTO[0]; // tạo mảng temp để giữ lại các item không bị xóa
+        GoodsReceiptItemDTO[] temp = new GoodsReceiptItemDTO[0];
 
         for (GoodsReceiptItemDTO item : details) {
             if (item != null) {
                 if (item.getReceiptId().equals(receiptId) && item.getProductId().equals(productId)) {
-                    found = true; // bỏ qua phần tử cần xóa
+                    found = true;
                 } else {
                     temp = Arrays.copyOf(temp, temp.length + 1);
                     temp[temp.length - 1] = item;
@@ -51,10 +35,10 @@ Scanner scanner = new Scanner(System.in);
             }
         }
 
-        this.details = temp; // mảng chỉ còn lại các item không bị xóa
+        this.details = temp;
 
         if (found) {
-            System.out.println("Da xoa san pham " + productId + " khoi phieu nhap " + receiptId);
+            System.out.println("Da xoa san pham " + productId + " khoi phieu nhap " + receiptId + ".");
         } else {
             System.out.println("Khong tim thay dong chi tiet de xoa.");
         }
@@ -67,19 +51,15 @@ Scanner scanner = new Scanner(System.in);
                 && details[i].getReceiptId().equals(obj.getReceiptId())
                 && details[i].getProductId().equals(obj.getProductId())) {
                 details[i] = obj;
+                System.out.println("Da cap nhat chi tiet phieu nhap thanh cong: " + obj.getProductId() + ".");
                 return;
             }
         }
+        System.out.println("Khong tim thay dong chi tiet de cap nhat!");
     }
 
     @Override
-    // nên dùng hàm findDetail(receiptId, productId) để tránh trả nhầm chi tiết của phiếu nhập khác
-    public GoodsReceiptItemDTO findById(String productId) {
-        System.out.println("Hay su dung ham findDetail(receiptId, productId).");
-        return null;
-    }
-
-    public GoodsReceiptItemDTO findDetail(String receiptId, String productId) {
+    public GoodsReceiptItemDTO findById(String receiptId, String productId) {
         for (GoodsReceiptItemDTO d : details) {
             if (d != null
                 && d.getReceiptId().equals(receiptId)
@@ -134,43 +114,36 @@ Scanner scanner = new Scanner(System.in);
 
    @Override
     public void readFile(String filePath) {
-        GoodsReceiptItemDTO[] tempArr = new GoodsReceiptItemDTO[0];
-        
-        // Kiểm tra file tồn tại
-        java.io.File file = new java.io.File(filePath);
-        if (!file.exists()) {
-            this.details = tempArr; 
-            return; 
-        }
+        try (java.io.BufferedReader br = new java.io.BufferedReader(new java.io.FileReader(filePath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                line = line.trim();
+                if (line.isEmpty()) continue;
+                String[] parts = line.split(",");
+                if (parts.length < 6) continue;
 
-        try (java.util.Scanner scanner = new java.util.Scanner(file)) {
-            
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-                if (line.trim().isEmpty()) continue;
+                // Format: receiptId,productId,productName,quantity,importPrice,subTotal
+                GoodsReceiptItemDTO item = new GoodsReceiptItemDTO();
+                item.setReceiptId(parts[0].trim());
 
-                String[] data = line.split(",");
+                // Tạo stub ProductsDTO với thông tin cơ bản
+                DTO.ProductsDTO product = new DTO.ProductsDTO();
+                product.setProductID(parts[1].trim());
+                product.setProductName(parts[2].trim());
+                product.setWarrantyPeriod(0);
+                item.setProduct(product);
 
-                try {
-                    // Khởi tạo đối tượng ngay lập tức
-                    ProductsDTO product = new ProductsDTO();
-                    product.setProductID(data[1]);
-                    product.setProductName(data[2]);
-                    GoodsReceiptItemDTO item = new GoodsReceiptItemDTO(product, data[0], Integer.parseInt(data[3]), Double.parseDouble(data[4]));
-                    // Thêm vào mảng
-                    tempArr = Arrays.copyOf(tempArr, tempArr.length + 1);
-                    tempArr[tempArr.length - 1] = item;
+                item.setQuantity(Integer.parseInt(parts[3].trim()));
+                item.setImportPrice(Double.parseDouble(parts[4].trim()));
+                // parts[5] = subTotal (tính từ quantity * importPrice, bỏ qua)
 
-                } catch (Exception ex) {
-                    System.out.println("Loi du lieu dong: " + line);
-                }
+                add(item);
             }
+        } catch (java.io.FileNotFoundException e) {
+            System.out.println("[Thong bao] Chua co file GoodsReceiptItem.txt (Se tu tao khi them moi).");
         } catch (Exception e) {
-            System.out.println("Loi khi doc File: " + e.getMessage());
+            System.out.println("[Loi] Loi khi doc file GoodsReceiptItem: " + e.getMessage());
         }
-        
-        // Nạp mảng vào biến gốc
-        this.details = tempArr;
     }
 
     @Override

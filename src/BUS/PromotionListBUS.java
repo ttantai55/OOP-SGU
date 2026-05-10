@@ -1,9 +1,9 @@
 package BUS;
 
-import DAO.PromotionListDAO;
 import DAO.ProductListDAO;
-import DTO.PromotionDTO;
+import DAO.PromotionListDAO;
 import DTO.ProductsDTO;
+import DTO.PromotionDTO;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;

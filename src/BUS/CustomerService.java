@@ -9,10 +9,11 @@ public class CustomerService {
     private final CustomerDAO customerDAO;
     static Scanner sc = new Scanner(System.in);
 
-    private static final String FILE_CUSTOMERS = "data/Customer.txt";
+    private static final String FILE_CUSTOMERS = "src/data/Customer.txt";
 
     public CustomerService() {
         customerDAO = new CustomerDAO();
+        customerDAO.readFile(FILE_CUSTOMERS);
     }
 
     // ==================== LOAD / SAVE ====================
@@ -34,6 +35,7 @@ public class CustomerService {
         c.input();
         customerDAO.add(c);
         System.out.println("Them khach hang thanh cong!");
+        saveToFile();
     }
 
     // ==================== XOA KHACH HANG ====================
@@ -45,6 +47,7 @@ public class CustomerService {
         }
         customerDAO.remove(id);
         System.out.println("Da xoa khach hang co ma: " + id);
+        saveToFile();
     }
 
     // ==================== CAP NHAT KHACH HANG ====================
@@ -58,6 +61,7 @@ public class CustomerService {
         c.input();
         customerDAO.update(c);
         System.out.println("Cap nhat khach hang thanh cong!");
+        saveToFile();
     }
 
     // ==================== TIM KIEM ====================
@@ -78,8 +82,7 @@ public class CustomerService {
             return;
         }
         System.out.println("=".repeat(150));
-        System.out.printf("%-5s | %-30s | %-13s | %-25s | %-45s | %-10s | %-10d | %-10s | %-12s%n",
-                "STT", "Ho Ten", "So DT", "Email", "Dia Chi", "Ma KH", 0, "Loai", "Ngay DK");
+
         System.out.printf("%-5s | %-30s | %-13s | %-25s | %-45s | %-10s | %-10s | %-10s | %-12s%n",
                 "---", "Ho Ten", "So DT", "Email", "Dia Chi", "Ma KH", "Diem TL", "Loai", "Ngay DK");
         System.out.println("=".repeat(150));
@@ -117,7 +120,7 @@ public class CustomerService {
             System.out.println("\n" + "=".repeat(40));
             System.out.println("  QUAN LY KHACH HANG");
             System.out.println("=".repeat(40));
-            System.out.println("  1. Hien thi tat ca khach hang");
+            System.out.println("  1. Hien thi thong tin tat ca khach hang");
             System.out.println("  2. Them khach hang");
             System.out.println("  3. Xoa khach hang");
             System.out.println("  4. Cap nhat khach hang");
@@ -126,8 +129,7 @@ public class CustomerService {
             System.out.println("  7. Sap xep theo ten");
             System.out.println("  8. Sap xep theo diem tich luy");
             System.out.println("  9. Thong ke theo loai");
-            System.out.println(" 10. Luu du lieu ra file");
-            System.out.println(" 11. Tai du lieu tu file");
+            System.out.println(" 10. Tai du lieu tu file");
             System.out.println("  0. Thoat");
             System.out.println("=".repeat(40));
             System.out.print("Chon: ");
@@ -169,9 +171,6 @@ public class CustomerService {
                     statsByType();
                     break;
                 case 10:
-                    saveToFile();
-                    break;
-                case 11:
                     loadFromFile();
                     break;
                 case 0:

@@ -1,5 +1,6 @@
 package DTO;
 import java.util.Scanner;
+import BUS.Validation;
 
 public class ProductsDTO {
     private String productIMEI; // duy nhat 
@@ -101,25 +102,23 @@ public class ProductsDTO {
     }
 
     public void setStatus(boolean status) {
-        this.status = true;
+        this.status = status;
     }
   
     
     
-    public void input(){
-        System.out.println("Moi nhap Thong tin cho san pham: ");
-        System.out.println("Moi nhap ma IMEI:"); 
-        setProductIMEI(sc.nextLine());
-        System.out.println("Moi nhap ma San Pham:");
-        setProductID(sc.nextLine());
+     public void input(){
+
         System.out.println("Moi nhap ten San Pham:");
         setProductName(sc.nextLine());
-        System.out.println("Moi nhap gia San Pham:");
-        setPrice(Double.parseDouble(sc.nextLine()));
+
+        setPrice(Validation.inputPrice(sc));
+
         this.category.input();
         this.brand.input();
+        
         System.out.println("Moi nhap thoi gian bao hanh cua san pham:");
-        setWarrantyPeriod(Integer.parseInt(sc.nextLine()));
+        setWarrantyPeriod(Validation.inputPositiveInt(sc));
         System.out.println("Moi nhap nguon goc san pham: ");
         setOrigin(sc.nextLine());
 

@@ -1,12 +1,11 @@
 package BUS;
 
 import DAO.EmployeeDAO;
+import DTO.DeliveryEmployee;
 import DTO.Employee;
 import DTO.Manager;
 import DTO.SalesEmployee;
-import DTO.DeliveryEmployee;
 import DTO.TechnicianEmployee;
-
 import java.util.Scanner;
 
 // EmployeeService.java - xu ly nghiep vu nhan vien
@@ -15,11 +14,13 @@ public class EmployeeService {
     static Scanner sc = new Scanner(System.in);
 
     // Duong dan file
-    private static final String FILE_EMPLOYEES = "data/Employee.txt";
+    private static final String FILE_EMPLOYEES = "src/data/Employee.txt";
 
     public EmployeeService() {
         employeeDAO = new EmployeeDAO();
+        employeeDAO.readFile(FILE_EMPLOYEES);
     }
+
 
     // ==================== LOAD / SAVE ====================
 
@@ -40,6 +41,7 @@ public class EmployeeService {
         m.input();
         employeeDAO.add(m);
         System.out.println("Them quan ly thanh cong!");
+        saveToFile();
     }
 
     public void addSalesEmployee() {
@@ -47,6 +49,7 @@ public class EmployeeService {
         s.input();
         employeeDAO.add(s);
         System.out.println("Them nhan vien ban hang thanh cong!");
+        saveToFile();
     }
 
     public void addDeliveryEmployee() {
@@ -54,6 +57,7 @@ public class EmployeeService {
         d.input();
         employeeDAO.add(d);
         System.out.println("Them nhan vien giao hang thanh cong!");
+        saveToFile();
     }
 
     public void addTechnicianEmployee() {
@@ -61,6 +65,7 @@ public class EmployeeService {
         t.input();
         employeeDAO.add(t);
         System.out.println("Them nhan vien ky thuat thanh cong!");
+        saveToFile();
     }
 
     // ==================== XOA NHAN VIEN ====================
@@ -73,6 +78,7 @@ public class EmployeeService {
         }
         employeeDAO.remove(id);
         System.out.println("Da xoa nhan vien co ma: " + id);
+        saveToFile();
     }
 
     // ==================== CAP NHAT NHAN VIEN ====================
@@ -86,6 +92,7 @@ public class EmployeeService {
         e.input();
         employeeDAO.update(e);
         System.out.println("Cap nhat nhan vien thanh cong!");
+        saveToFile();
     }
 
     // ==================== TIM KIEM ====================
@@ -104,15 +111,17 @@ public class EmployeeService {
         employeeDAO.displayAll();
     }
 
-    private void printHeader(String typeInfo) {
-        System.out.println("=".repeat(210));
-        System.out.printf("%-5s | %-30s | %-13s | %-25s | %-45s | %-10s | %-15s | %-15s | %-12s | %s%n",
-                "STT", "Ho Ten", "So DT", "Email", "Dia Chi", "Ma NV", "Chuc Vu", "Luong CB", "Ngay VL", typeInfo);
-        System.out.println("=".repeat(210));
-    }
+    // Common part of the header (shared columns)
+    private static final String COMMON_HEADER = String.format(
+            "%-5s | %-25s | %-12s | %-25s | %-50s | %-10s | %-14s | %-15s | %15s | %-17s",
+            "STT", "Ho Ten", "So DT", "Email", "Dia Chi", "Ma NV", "CCCD", "Chuc Vu", "Luong co ban", "Ngay vao lam");
 
     public void displayManagers() {
-        printHeader("Thong Tin Them (Quan Ly)");
+        int width = 270;
+        System.out.println("=".repeat(width));
+        System.out.printf("%s | %-15s | %12s | %15s%n",
+                COMMON_HEADER, "Phong Ban", "Phu Cap", "Tong Luong");
+        System.out.println("=".repeat(width));
         int stt = 1;
         for (Employee e : employeeDAO.getAll()) {
             if (e instanceof Manager) {
@@ -120,12 +129,16 @@ public class EmployeeService {
                 e.displayInfo();
             }
         }
-        System.out.println("=".repeat(210));
+        System.out.println("=".repeat(width));
         System.out.println("Tong so: " + (stt - 1) + " quan ly.");
     }
 
     public void displaySalesEmployees() {
-        printHeader("Thong Tin Them (Ban Hang)");
+        int width = 270;
+        System.out.println("=".repeat(width));
+        System.out.printf("%s | %12s | %15s | %15s%n",
+                COMMON_HEADER, "Tien Thuong", "Hoa Hong", "Tong Luong");
+        System.out.println("=".repeat(width));
         int stt = 1;
         for (Employee e : employeeDAO.getAll()) {
             if (e instanceof SalesEmployee) {
@@ -133,12 +146,16 @@ public class EmployeeService {
                 e.displayInfo();
             }
         }
-        System.out.println("=".repeat(210));
+        System.out.println("=".repeat(width));
         System.out.println("Tong so: " + (stt - 1) + " nhan vien ban hang.");
     }
 
     public void displayDeliveryEmployees() {
-        printHeader("Thong Tin Them (Giao Hang)");
+        int width = 300;
+        System.out.println("=".repeat(width));
+        System.out.printf("%s | %-15s | %-20s | %-10s | %12s | %15s%n",
+                COMMON_HEADER, "Bien So Xe", "Khu Vuc GH", "So Don", "Phi/Don", "Tong Luong");
+        System.out.println("=".repeat(width));
         int stt = 1;
         for (Employee e : employeeDAO.getAll()) {
             if (e instanceof DeliveryEmployee) {
@@ -146,12 +163,16 @@ public class EmployeeService {
                 e.displayInfo();
             }
         }
-        System.out.println("=".repeat(210));
+        System.out.println("=".repeat(width));
         System.out.println("Tong so: " + (stt - 1) + " nhan vien giao hang.");
     }
 
     public void displayTechnicianEmployees() {
-        printHeader("Thong Tin Them (Ky Thuat)");
+        int width = 270;
+        System.out.println("=".repeat(width));
+        System.out.printf("%s | %-10s | %12s | %15s%n",
+                COMMON_HEADER, "So Sua Chua", "Chi Tieu", "Tong Luong");
+        System.out.println("=".repeat(width));
         int stt = 1;
         for (Employee e : employeeDAO.getAll()) {
             if (e instanceof TechnicianEmployee) {
@@ -159,7 +180,7 @@ public class EmployeeService {
                 e.displayInfo();
             }
         }
-        System.out.println("=".repeat(210));
+        System.out.println("=".repeat(width));
         System.out.println("Tong so: " + (stt - 1) + " nhan vien ky thuat.");
     }
 
@@ -215,7 +236,7 @@ public class EmployeeService {
             System.out.println("\n" + "=".repeat(40));
             System.out.println("  QUAN LY NHAN VIEN");
             System.out.println("=".repeat(40));
-            System.out.println("  1. Hien thi tat ca nhan vien");
+            System.out.println("  1. Hien thi thong tin nhan vien");
             System.out.println("  2. Them nhan vien");
             System.out.println("  3. Xoa nhan vien");
             System.out.println("  4. Cap nhat nhan vien");
@@ -225,8 +246,7 @@ public class EmployeeService {
             System.out.println("  8. Sap xep theo luong");
             System.out.println("  9. Thong ke theo vai tro");
             System.out.println(" 10. Tong quy luong");
-            System.out.println(" 11. Luu du lieu ra file");
-            System.out.println(" 12. Tai du lieu tu file");
+            System.out.println(" 11. Tai du lieu tu file");
             System.out.println("  0. Thoat");
             System.out.println("=".repeat(40));
             System.out.print("Chon: ");
@@ -271,9 +291,6 @@ public class EmployeeService {
                     System.out.printf("Tong quy luong: %.2f%n", totalSalary());
                     break;
                 case 11:
-                    saveToFile();
-                    break;
-                case 12:
                     loadFromFile();
                     break;
                 case 0:

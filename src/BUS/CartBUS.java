@@ -8,7 +8,7 @@ import java.util.Scanner;
 public class CartBUS {
     private final CartDAO cartDAO;
     private final String username;
-    private final String FILE_CART = "data/cart.txt";
+
     static Scanner sc = new Scanner(System.in);
 
     public CartBUS(String username) {
@@ -16,24 +16,13 @@ public class CartBUS {
         this.username = username;
     }
 
-    //====LOAD/SAVE====
-
-    public void loadFile(){
-        cartDAO.readFile(FILE_CART);
-        System.out.println("Da tai du lieu thanh cong tu file" + FILE_CART);
-    }
-
-    public void saveFile(){
-        cartDAO.writeFile(FILE_CART);
-        System.out.println("Da luu du lieu vao file: "+ FILE_CART);
-    }
+    
 
     // Them SP vao Gio Hang 
 
     public void addToCart(ProductsDTO sp, int quantity) {
-        System.out.println("Moi nhap so luong SP ban muon mua: ");
-        quantity = Integer.parseInt(sc.nextLine()); // nho viet ham kiem tra
-
+    
+   
         // Tu giac lay thong tin san pham
 
         String id = sp.getProductID();
@@ -57,7 +46,7 @@ public class CartBUS {
             cartDAO.add(newItem);
             System.out.println("-> Da them [" + quantity +"] san pham " + name + " vao gio hang!");
         }
-        saveFile();
+        
     }
 
     public void removeCartItem(String productID) {
@@ -67,17 +56,17 @@ public class CartBUS {
         } else {
             System.out.println("-> Khong tim thay san pham trong gio hang!");
         }
-        saveFile();
+        
     }
 
     public void updateCartItem(CartItemDTO item){
         cartDAO.update(item);
-        saveFile();
+        
     }
 
     public void clearMyCart() {
         cartDAO.clearCartByUser(username);
-        saveFile();
+        
     }
 
     //======Hien thi======
@@ -103,9 +92,11 @@ public class CartBUS {
         CartItemDTO[] myCart = new CartItemDTO[count];
         int index = 0;
         for (CartItemDTO item : cartList) {
-            if(item != null && item.getUsername().equals(username))
+            if(item != null && item.getUsername().equals(username)) {
                 myCart[index] = item;
                 index++;
+            }
+            
         }
         return myCart;
     }

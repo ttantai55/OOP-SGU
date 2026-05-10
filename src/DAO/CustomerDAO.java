@@ -52,13 +52,15 @@ public class CustomerDAO implements IRepository<Customer> {
         return null;
     }
 
+    @Override
     public Customer[] findByName(String name) {
         Customer[] temp = new Customer[count];
         int size = 0;
         for (int i = 0; i < count; i++) {
-            if (customers[i].getFullName()
-                    .toLowerCase()
-                    .contains(name.toLowerCase())) {
+            // [ĐÃ SỬA] Thêm điều kiện != null để chống sập chương trình
+            if (customers[i] != null 
+                && customers[i].getFullName() != null 
+                && customers[i].getFullName().toLowerCase().contains(name.toLowerCase())) {
                 temp[size++] = customers[i];
             }
         }
@@ -68,6 +70,7 @@ public class CustomerDAO implements IRepository<Customer> {
     }
 
     public Customer findByUsername (String username) {
+        boolean found = false;
         for (Customer cus : customers) {
             if(cus != null && cus.getUsername().equals(username)) {
                 found = true;
@@ -119,6 +122,7 @@ public class CustomerDAO implements IRepository<Customer> {
     @Override
     public void writeFile(String filePath) {
         try {
+
             java.io.BufferedWriter bw = new java.io.BufferedWriter(
                     new java.io.FileWriter(filePath));
             java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy");

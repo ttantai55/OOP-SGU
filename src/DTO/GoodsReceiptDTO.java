@@ -136,7 +136,7 @@ public class GoodsReceiptDTO {
     }
 
     public String getReceiverName(){
-        return receiver.getEmployeeName();
+        return receiver.getFullName();
     }
 
 

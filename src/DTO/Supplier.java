@@ -2,7 +2,7 @@ package DTO;
 
 // [OOP] Class: Ban thiet ke cho doi tuong Nha Cung Cap
 public class Supplier {
-    
+
     // [OOP] Encapsulation: Bao ve thuoc tinh bang 'private'
     private String supplierId;
     private String supplierName;
@@ -45,7 +45,7 @@ public class Supplier {
     public void setContactPhone(String contactPhone) {
         this.contactPhone = contactPhone;
     }
-    
+
     public String getEmail() {
         return email;
     }
@@ -55,20 +55,20 @@ public class Supplier {
     }
 
     public void displayInfo() {
-      System.out.println(toString());
+        System.out.println(toString());
     }
 
     // [OOP] Polymorphism: Ghi de phuong thuc toString() cua lop cha Object
     @Override
-    public String toString(){
+    public String toString() {
         // Canh le trai bang dau tru (-), giu khung hien thi co dinh
         String supplierFormat = "%-15s|%-15s|%-15s|%-20s|";
         return String.format(supplierFormat, supplierId, supplierName, contactPhone, email);
     }
 
-    public void input(){
+    public void input() {
         System.out.println("\n--- NHAP THONG TIN NHA CUNG CAP ---");
-        
+
         // Dung Validation de ep nguoi dung khong duoc bo trong va nhap dung dinh dang
         setSupplierId(BUS.Validation.getNonEmptyString("Moi nhap ID nha cung cap: "));
         setSupplierName(BUS.Validation.getNonEmptyString("Moi nhap ten nha cung cap: "));

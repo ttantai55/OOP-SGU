@@ -13,13 +13,27 @@ import DTO.WarrantyDTO;
 import java.util.Scanner;
 
 public class InvoiceItemListBUS {
+    private final String FILE_PATH = "data/invoice.txt";
     Scanner sc = new Scanner(System.in);
 
-    private InvoiceItemListDAO invItemDAO = new InvoiceItemListDAO();
-    private InvoiceListDAO invDAO = new InvoiceListDAO();
-    private ProductListDAO productsDAO = new ProductListDAO();
-    private PromotionListDAO promotionDAO = new PromotionListDAO();
-    private WarrantyListDAO warrantyDAO = new WarrantyListDAO();
+    private InvoiceItemListDAO invItemDAO;
+    private InvoiceListDAO invDAO;
+    private ProductListDAO productsDAO;
+    private PromotionListDAO promotionDAO;
+    private WarrantyListDAO warrantyDAO;
+
+    public InvoiceItemListBUS() {
+        this.invDAO = new InvoiceListDAO();
+        this.invItemDAO = new InvoiceItemListDAO();
+        this.productsDAO = new ProductListDAO();
+        this.promotionDAO = new PromotionListDAO();
+        this.warrantyDAO = new WarrantyListDAO();
+        
+        invItemDAO.readFile(FILE_PATH);
+    }
+
+    
+    
 
     public void inputInvoiceItem() {
         System.out.print("Nhap ma hoa don: ");

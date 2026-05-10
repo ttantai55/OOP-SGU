@@ -4,31 +4,22 @@ import DTO.InvoiceItemDTO;
 import DTO.ProductsDTO;
 import DTO.PromotionDTO;
 import DTO.WarrantyDTO;
-import java.util.Arrays;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 
 public class InvoiceItemListDAO implements IInvoiceManage<InvoiceItemDTO> {
     private static InvoiceItemDTO[] itemList = new InvoiceItemDTO[0];
-    private final String filePath = "data/invoiceitem.txt";
 
-    public InvoiceItemListDAO() {
-        loadFile();
-    }
 
-    public void loadFile() {
-        readFile(this.filePath);
-    }
 
-    public void saveFile() {
-        writeFile(this.filePath);
-    }
 
     @Override
     public void add(InvoiceItemDTO item) {
         itemList = Arrays.copyOf(itemList, itemList.length + 1);
         itemList[itemList.length - 1] = item;
+        System.out.println("Da them chi tiet hoa don thanh cong: " + item.getProductId() + ".");
     }
 
     // khi xóa 1 chi tiết thì nên nhập cả mã hóa đơn(invoiceId) và mã sản phẩm(productId) để tránh xóa nhầm 1 chi tiết của hóa đơn khác
@@ -64,9 +55,11 @@ public class InvoiceItemListDAO implements IInvoiceManage<InvoiceItemDTO> {
                 itemList[i].getInvoiceId().equals(updatedItem.getInvoiceId()) &&
                 itemList[i].getProductId().equals(updatedItem.getProductId())) {
                 itemList[i] = updatedItem;
+                System.out.println("Da cap nhat chi tiet hoa don thanh cong: " + updatedItem.getProductId() + ".");
                 return;
             }
         }
+        System.out.println("Khong tim thay chi tiet hoa don de cap nhat!");
     }
 
     // hàm riêng, tìm kiếm theo id của hóa đơn
@@ -117,55 +110,56 @@ public class InvoiceItemListDAO implements IInvoiceManage<InvoiceItemDTO> {
 
     @Override
     public void readFile(String filePath) {
-        InvoiceItemDTO[] tempArr = new InvoiceItemDTO[0];
+        try (java.io.BufferedReader br = new java.io.BufferedReader(new java.io.FileReader(filePath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                line = line.trim();
+                if (line.isEmpty()) continue;
+                String[] parts = line.split(",");
+                if (parts.length < 9) continue;
 
-        java.io.File file = new java.io.File(filePath);
-        if (!file.exists()) {
-            this.itemList = tempArr;
-            return;
-        }
+                // Format: invoiceId,productId,productName,quantity,unitPrice,promotionId,discountPercent,warrantyId,subTotal
+                InvoiceItemDTO item = new InvoiceItemDTO();
+                item.setInvoiceId(parts[0].trim());
 
-        try (java.util.Scanner scanner = new java.util.Scanner(file)) {
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-                if (line.trim().isEmpty()) continue;
+                // Tạo stub ProductsDTO với thông tin cơ bản
+                DTO.ProductsDTO product = new DTO.ProductsDTO();
+                product.setProductID(parts[1].trim());
+                product.setProductName(parts[2].trim());
+                product.setPrice(Double.parseDouble(parts[4].trim()));
+                product.setWarrantyPeriod(0);
+                item.setProduct(product);
 
-                String[] data = line.split(",");
+                item.setQuantity(Integer.parseInt(parts[3].trim()));
 
-                try {
-                    ProductsDTO product = new ProductsDTO();
-                    product.setProductID(data[1]);
-                    product.setProductName(data[2]);
-                    product.setPrice(Double.parseDouble(data[4]));
-
-                    int quantity = Integer.parseInt(data[3]);
-
-                    PromotionDTO promotion = null;
-                    if (!data[5].equalsIgnoreCase("N/A")) {
-                        promotion = new PromotionDTO();
-                        promotion.setPromotionId(data[5]);
-                    }
-
-                    WarrantyDTO warranty = null;
-                    if (!data[6].equalsIgnoreCase("N/A")) {
-                        warranty = new WarrantyDTO();
-                        warranty.setWarrantyId(data[6]);
-                    }
-
-                    InvoiceItemDTO item = new InvoiceItemDTO(product, data[0], quantity, warranty, promotion);
-
-                    tempArr = Arrays.copyOf(tempArr, tempArr.length + 1);
-                    tempArr[tempArr.length - 1] = item;
-
-                } catch (Exception ex) {
-                    System.out.println("Loi du lieu dong: " + line);
+                // Promotion (parts[5] = promotionId, parts[6] = discountPercent)
+                String promotionId = parts[5].trim();
+                if (!promotionId.equals("N/A")) {
+                    DTO.PromotionDTO promo = new DTO.PromotionDTO();
+                    promo.setPromotionId(promotionId);
+                    promo.setDiscountPercent(Double.parseDouble(parts[6].trim()));
+                    item.setPromotion(promo);
+                } else {
+                    item.setPromotion(null);
                 }
-            }
-        } catch (Exception e) {
-            System.out.println("Loi khi doc File: " + e.getMessage());
-        }
 
-        this.itemList = tempArr;
+                // Warranty (parts[7] = warrantyId)
+                String warrantyId = parts[7].trim();
+                if (!warrantyId.equals("N/A")) {
+                    DTO.WarrantyDTO warranty = new DTO.WarrantyDTO();
+                    warranty.setWarrantyId(warrantyId);
+                    item.setWarranty(warranty);
+                } else {
+                    item.setWarranty(null);
+                }
+
+                add(item);
+            }
+        } catch (java.io.FileNotFoundException e) {
+            System.out.println("[Thong bao] Chua co file InvoiceItem.txt (Se tu tao khi them moi).");
+        } catch (Exception e) {
+            System.out.println("[Loi] Loi khi doc file InvoiceItem: " + e.getMessage());
+        }
     }
 
     @Override
@@ -175,10 +169,13 @@ public class InvoiceItemListDAO implements IInvoiceManage<InvoiceItemDTO> {
             for (InvoiceItemDTO item : itemList) {
                 if (item != null) {
                     String promotionId;
+                    double discountPercent;
                     if (item.getPromotion() != null) {
                         promotionId = item.getPromotion().getPromotionId();
+                        discountPercent = item.getDiscountPercent();
                     } else {
                         promotionId = "N/A";
+                        discountPercent = 0.0;
                     }
 
                     String warrantyId;
@@ -188,12 +185,17 @@ public class InvoiceItemListDAO implements IInvoiceManage<InvoiceItemDTO> {
                         warrantyId = "N/A";
                     }
 
+                    discountPercent = item.getDiscountPercent();
+
+                    // Format: invoiceId,productId,productName,quantity,unitPrice,promotionId,discountPercent,warrantyId,subTotal
+
                     String line = item.getInvoiceId() + "," +
                                  item.getProductId() + "," +
                                  item.getProductName() + "," +
                                  item.getQuantity() + "," +
                                  item.getUnitPrice() + "," +
                                  promotionId + "," +
+                                 discountPercent + "," +
                                  warrantyId + "," +
                                  calculateSubTotal(item);
 

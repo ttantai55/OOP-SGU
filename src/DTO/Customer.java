@@ -84,6 +84,7 @@ public class Customer extends Person {
         return super.toString() + String.format(" | %-10s | %-10d | %-10s | %-12s",
                 customerId, loyaltyPoints, customerType, sdf.format(registeredDate));
     }
+
     public void displayInfo() {
         System.out.println(toString());
     }

@@ -9,7 +9,7 @@ public class CategoryDTO {
     Scanner sc = new Scanner(System.in);
 
     public CategoryDTO(){
-
+        
     }
 
     public CategoryDTO(String categoryID, String categoryName){

@@ -11,8 +11,8 @@ public class DeliveryEmployee extends Employee{
     static Scanner sc = new Scanner(System.in);
     public DeliveryEmployee(){}
 
-    public DeliveryEmployee(String employeeId, String position, float baseSalary, Date startDate, String deliveryArea, String licensePlate, float feePerOrder, int deliveryCount) {
-        super(employeeId, position, baseSalary, startDate);
+    public DeliveryEmployee(String employeeId,String CCCD, String position, float baseSalary, Date startDate, String deliveryArea, String licensePlate, float feePerOrder, int deliveryCount) {
+        super(employeeId,CCCD, position, baseSalary, startDate);
         this.deliveryArea = deliveryArea;
         this.licensePlate = licensePlate;
         this.feePerOrder = feePerOrder;
@@ -55,14 +55,30 @@ public class DeliveryEmployee extends Employee{
     @Override
     public void input(){
         super.input();
-        System.out.println("Bien so xe: ");
-        setLicensePlate(sc.nextLine());
-        System.out.println("khu vuc giao hang: ");
-        setDeliveryArea(sc.nextLine());
-        System.out.println("so don giao: ");
-        setDeliveryCount(Integer.parseInt(sc.nextLine()));
-        System.out.println("phi moi don");
-        setFeePerOrder(Float.parseFloat(sc.nextLine()));
+        setLicensePlate(BUS.Validation.getNonEmptyString("Bien so xe: "));
+        setDeliveryArea(BUS.Validation.getNonEmptyString("Khu vuc giao hang: "));
+        while (true) {
+            try {
+                String str = BUS.Validation.getNonEmptyString("So don giao: ");
+                int count = Integer.parseInt(str);
+                if (count < 0) { System.out.println("[Loi] So don phai >= 0!"); continue; }
+                setDeliveryCount(count);
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("[Loi] Phai nhap so nguyen! Vui long nhap lai.");
+            }
+        }
+        while (true) {
+            try {
+                String str = BUS.Validation.getNonEmptyString("Phi moi don: ");
+                float fee = Float.parseFloat(str);
+                if (fee < 0) { System.out.println("[Loi] Phi phai >= 0!"); continue; }
+                setFeePerOrder(fee);
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("[Loi] Phai nhap so! Vui long nhap lai.");
+            }
+        }
     }
     //***
     @Override
