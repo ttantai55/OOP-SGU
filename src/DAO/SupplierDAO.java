@@ -7,7 +7,7 @@ import java.util.Arrays;
 public class SupplierDAO implements IRepository<Supplier> {
     private Supplier[] suppliers;
     private int count;
-    private final String defaultPath = "OOP-SGU/src/data/suppliers.txt";
+    private final String defaultPath = "src/data/suppliers.txt";
 
     public SupplierDAO() {
         this.suppliers = new Supplier[100]; 

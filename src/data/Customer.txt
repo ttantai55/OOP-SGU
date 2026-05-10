@@ -5,3 +5,6 @@ KH004,Chu nguyen chuong,0777777777,chuataydau@gmail.com,Chua cap nhat,Chua cap n
 KH001,Nguyen van thanh,82716482920,ghdaj@gmail.com,12,23,41,24,2,300,thuong,04/05/2026
 1,Chu Van thanh,2816283902,gha@gmail.com,21,43,24,2,4,5,moi,04/05/2026
 KH007,Truong VO ky,08274819290,yah@gmail.com,Chua cap nhat,Chua cap nhat,Chua cap nhat,Chua cap nhat,Chua cap nhat,0,Moi,04/05/2026
+KH008,ToTanTai,0846550565,ttt@gmail.com,Chua cap nhat,Chua cap nhat,Chua cap nhat,Chua cap nhat,Chua cap nhat,0,Moi,06/05/2026
+KH009,TTT,08456821111,khongconloi@gmail.com,Chua cap nhat,Chua cap nhat,Chua cap nhat,Chua cap nhat,Chua cap nhat,0,Moi,06/05/2026
+KH010,MMM,04446665222,MMm@gmail.com,Chua cap nhat,Chua cap nhat,Chua cap nhat,Chua cap nhat,Chua cap nhat,0,Moi,06/05/2026

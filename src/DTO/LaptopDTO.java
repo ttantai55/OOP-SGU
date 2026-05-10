@@ -117,7 +117,8 @@ public class LaptopDTO extends ProductsDTO {
 
     @Override
     public String toFileString() {
-        return "Laptop," + super.toFileString() + "," + cpu.toFileString() + "," + gpu.toFileString() + "," + ram.toFileString() + "," + screen.toFileString() + "," + storage.toFileString() + "," + battery ;
+
+        return "Laptop," + super.toFileString() + "," + cpu.toFileString() + "," + gpu.toFileString() + "," + ram.toFileString() + "," + screen.toFileString() + "," + storage.toFileString() + "," + battery;
     }
 
     

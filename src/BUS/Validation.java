@@ -1,13 +1,18 @@
 package BUS; 
 
+import DAO.ProductListDAO;
+import DTO.ProductsDTO;
 import java.util.Scanner;
 
 public class Validation {
+
+    ProductListDAO productDAO;
     public static final String PRODUCT_IMEI_REGEX = "^[LA]IMEI-\\d{3}$";
     public static final String PRODUCT_ID_REGEX = "^(LT|AC)\\d{3}$";
     public static final String POSITIVE_NUMBER_REGEX = "^[1-9]\\d*$";//Su dung cho nhom tien va time
-    public static final String STATUS_REGEX = "^(?i)(Dang ban|Ngung ban)$";
-    public static final String RAM_STORAGE_REGEX = "^(4|8|16|32)$";
+    public static final String STATUS_REGEX = "^(?i)(Dang ban| Tam ngung)$";
+    public static final String RAM_REGEX = "^(4|8|16|32)$";
+    public static final String STORAGE_REGEX = "^(128|256|512|1024|2048)$";
 
     static Scanner sc = new Scanner(System.in);
 
@@ -94,6 +99,81 @@ public class Validation {
             } else {
                 System.out.println("[Loi] Nhap dung dinh dang ten tieng viet (viet hoa chu cai dau tien)! Vui long nhap lai.");
             }
+        }
+    }
+
+     
+
+
+    // Ép nhập Mã Sản Phẩm chuẩn
+    public static String inputProductID(Scanner sc) {
+        String id;
+        while (true) {
+            System.out.print("Nhap Ma San Pham (VD: LT001, AC099): ");
+            id = sc.nextLine().trim();
+            if (id.matches(PRODUCT_ID_REGEX)) {
+                return id.toUpperCase(); // Trả về dạng viết hoa cho đồng bộ
+            }
+            System.out.println("-> Loi: Ma SP phai bat dau bang 'LT' hoac 'AC', kem theo 3 chu so!");
+        }
+    }
+
+    // Ép nhập Tên, Xuất xứ, Mô tả (Cấm để trống)
+    public static String inputNonEmptyString(Scanner sc, String message) {
+        String input;
+        while (true) {
+            System.out.print(message + ": ");
+            input = sc.nextLine().trim();
+            if (!input.isEmpty()) {
+                return input;
+            }
+            System.out.println("-> Loi: Truong nay khong duoc bo trong hoac chi chua khoang trang!");
+        }
+    }
+
+    // Ép nhập Tiền (Giá bán phải là số thực dương)
+    public static double inputPrice(Scanner sc) {
+        double price;
+        while (true) {
+            System.out.print("Nhap gia ban san pham (VND): ");
+            try {
+                price = Double.parseDouble(sc.nextLine().trim());
+                if (price > 0) {
+                    return price;
+                }
+                System.out.println("-> Loi: Gia ban phai lon hon 0!");
+            } catch (NumberFormatException e) {
+                System.out.println("-> Loi: Vui long chi nhap so, khong nhap chu hoac ky tu la!");
+            }
+        }
+    }
+
+    // Ép nhập Số nguyên dương (Dùng cho Thời gian bảo hành, Số nhân CPU...)
+    public static int inputPositiveInt(Scanner sc) {
+        int number;
+        while (true) {
+            try {
+                number = Integer.parseInt(sc.nextLine().trim());
+                if (number >= 0) {
+                    return number; // Trả về nếu là số nguyên >= 0
+                }
+                System.out.println("-> Loi: Gia tri phai lon hon hoac bang 0!");
+            } catch (NumberFormatException e) {
+                System.out.println("-> Loi: Vui long chi nhap so nguyen!");
+            }
+        }
+    }
+
+    // Ép nhập RAM / Storage theo đúng chuẩn (Kết hợp Regex)
+    public static int inputTechSpec(Scanner sc, String message, String regexRegex) {
+        String input;
+        while (true) {
+            System.out.print(message + ": ");
+            input = sc.nextLine().trim();
+            if (input.matches(regexRegex)) {
+                return Integer.parseInt(input); // Khớp khuôn thì mới ép kiểu về số
+            }
+            System.out.println("-> Loi: Thong so khong dat chuan. Vui long kiem tra lai!");
         }
     }
 }

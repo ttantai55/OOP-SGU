@@ -7,6 +7,7 @@ import BUS.ProductListBUS;
 import DTO.CartItemDTO;
 import DTO.ProductsDTO;
 import java.util.Scanner;
+import BUS.Validation;
 
 // Giao dien chinh danh rieng cho Khach Hang
 public class CustomerMainMenu {
@@ -29,6 +30,8 @@ public class CustomerMainMenu {
         int choice;
 
         do {
+            accountBUS.loadFromFile();
+            productBUS.loadFile();
             System.out.println("\n" + "=".repeat(50));
             System.out.println("     KHACH HANG - HE THONG CUA HANG LAPTOP");
             System.out.println("=".repeat(50));
@@ -64,9 +67,10 @@ public class CustomerMainMenu {
                 case 4:
                     cartBUS.displayMyCart();
                     cartManage(cartBUS, invoiceBUS);
+                    //Thanh toan 
                     break;
                 case 5:
-                    System.out.println("\n[Thong bao] Tinh nang Xem lich su mua hang dang duoc phat trien...");
+                    invoiceBUS.printInvoicesByCustomer(username);
                     break;
                 case 6:
                     accountBUS.changePassword(username);
@@ -97,11 +101,11 @@ public class CustomerMainMenu {
             if (sp == null) {
                 System.out.println("Khong tim thay Ma SP nay hoac SP da het hang!");
             } else {
-                System.out.println("-> Ban dang chon SP: " + sp.getProductName() + " | Gia: " + sp.getPrice() + " VND");
+                System.out.printf("-> Ban dang chon SP: %s | Gia: %,.0f VND\n", sp.getProductName(), sp.getPrice());
                 System.out.print("Nhap so luong muon mua: ");
-
+                
                 try {
-                    int amount = Integer.parseInt(sc.nextLine());
+                    int amount = Validation.inputPositiveInt(sc);
                     int available = productBUS.checkStock(option);
 
                     if (amount > available) {
@@ -173,4 +177,6 @@ public class CustomerMainMenu {
             }
         } while (choice != 0);
     }
+    
+    
 }

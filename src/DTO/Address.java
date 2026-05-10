@@ -1,14 +1,11 @@
 package DTO;
 
-import java.util.Scanner;
-
 public class Address {
     private String houseNumber;
     private String street;
     private String ward;
     private String district;
     private String city;
-    static Scanner sc = new Scanner(System.in);
     public Address() {
     }
 

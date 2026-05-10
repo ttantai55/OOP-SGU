@@ -1,39 +1,19 @@
 package DAO;
 
-import DTO.Cash;
-import DTO.Credit;
-import DTO.Customer;
-import DTO.Installment;
 import DTO.InvoiceDTO;
 import DTO.InvoiceItemDTO;
-import DTO.PaymentDTO;
-import DTO.SalesEmployee;
-import DTO.Transfer;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
-
 public class InvoiceListDAO implements IRepository<InvoiceDTO> {
-   
+
     private static InvoiceDTO[] invoiceList = new InvoiceDTO[0];
-    private final String filePath = "data/invoice.txt";
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     public InvoiceListDAO() {
-        loadFile();
-    }
-
-    public void loadFile() {
-        readFile(this.filePath);
-        System.out.println("Da tai du lieu thanh cong tu file: " + filePath);
-    }
-
-    public void saveFile() {
-        writeFile(this.filePath);
-        System.out.println("Da luu du lieu vao file: " + filePath);
     }
 
     @Override
@@ -70,7 +50,6 @@ public class InvoiceListDAO implements IRepository<InvoiceDTO> {
             System.out.println("Khong tim thay hoa don de cap nhat!");
         }
 
-
     @Override
     public InvoiceDTO findById(String id) {
         for (InvoiceDTO inv : invoiceList) {
@@ -94,215 +73,194 @@ public class InvoiceListDAO implements IRepository<InvoiceDTO> {
         return result;
     }
 
-    // tìm hóa đơn theo mã khách hàng
-    public InvoiceDTO[] findByCustomerId(String customerId) {
-        InvoiceDTO[] result = new InvoiceDTO[0];
-        for (InvoiceDTO inv : invoiceList) {
-            if (inv != null && inv.getCustomerId().equals(customerId)) {
-                result = Arrays.copyOf(result, result.length + 1);
-                result[result.length - 1] = inv;
-            }
-        }
-        return result;
+    public InvoiceDTO[] getAll() {
+        return java.util.Arrays.copyOf(invoiceList, invoiceList.length);
     }
-
 
     @Override
     public void displayAll() {
         boolean hasActive = false;
-        System.out.println("=".repeat(100));
-        System.out.printf("%-10s | %-10s | %-15s | %-12s | %-12s | %-15s%n",
-                "Ma HD", "Ma KH", "Nhan Vien", "Ngay Lap", "Trang Thai", "Tong Tien");
-        System.out.println("-".repeat(100));
+        System.out.println("=".repeat(115));
+        System.out.println("                         DANH SACH HOA DON BAN HANG                         ");
+        System.out.println("=".repeat(115));
+        System.out.printf("%-10s | %-20s | %-20s | %-12s | %-12s | %-15s%n",
+                "Mã HD", "Khách Hàng", "Nhân Viên", "Ngày Tạo", "Trạng Thái", "Tổng Tiền");
+        System.out.println("-".repeat(115));
 
         for (InvoiceDTO inv : invoiceList) {
             if (inv != null && inv.isStatus()) {
-                System.out.printf("%-10s | %-10s | %-15s | %-12s | %-12s | %,15.0f VND%n",
+                String tenKH = inv.getCustomerName();
+                String tenNV = inv.getEmployeeName();
+                String trangThai = inv.isStatus() ? "Hoạt động" : "Đã hủy";
+
+                System.out.printf("%-10s | %-20s | %-20s | %-12s | %-12s | %,15.0f VNĐ%n",
                         inv.getInvoiceId(),
-                        inv.getCustomerId(),
-                        inv.getEmployeeId(),
+                        tenKH,
+                        tenNV,
                         sdf.format(inv.getCreatedDate()),
-                        "Hoat dong",
+                        trangThai,
                         calculateTotalPrice(inv));
                 hasActive = true;
             }
         }
 
         if (!hasActive) {
-            System.out.println("Danh sach hoa don trong hoac tat ca da bi huy!");
+            System.out.println(" (Khong co hoa don nao kha dung!)");
         }
-        System.out.println("=".repeat(100));
+        System.out.println("=".repeat(115));
     }
 
-@Override
-public void readFile(String filePath) {
-    InvoiceDTO[] tempArr = new InvoiceDTO[0];
+    @Override
+    public void readFile(String filePath) {
+        try (java.io.BufferedReader br = new java.io.BufferedReader(new java.io.FileReader(filePath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                line = line.trim();
+                if (line.isEmpty()) continue;
+                String[] parts = line.split(",");
+                if (parts.length < 7) continue;
 
-    java.io.File file = new java.io.File(filePath);
-    if (!file.exists()) {
-        this.invoiceList = tempArr;
-        return;
+                // Format: invoiceId,customerId,employeeId,date,status,totalPrice,paymentId,paymentDate,paymentType,...paymentDetails
+                InvoiceDTO invoice = new InvoiceDTO();
+                invoice.setInvoiceId(parts[0].trim());
+
+                // Tạo stub Customer với ID
+                DTO.Customer customer = new DTO.Customer();
+                customer.setCustomerId(parts[1].trim());
+                customer.setFullName(parts[1].trim()); // Dùng ID làm tên tạm
+                invoice.setCustomer(customer);
+
+                // Tạo stub Employee với ID
+                DTO.Employee employee = new DTO.Employee() {
+                    @Override
+                    public float calculateSalary() { return 0; }
+                    @Override
+                    public String getRole() { return "N/A"; }
+                };
+                employee.setEmployeeId(parts[2].trim());
+                employee.setFullName(parts[2].trim()); // Dùng ID làm tên tạm
+                invoice.setEmployee(employee);
+
+                invoice.setCreatedDate(sdf.parse(parts[3].trim()));
+                invoice.setStatus(parts[4].trim().equals("Active"));
+                // parts[5] = totalPrice (tính từ items, bỏ qua)
+
+                // Đọc thông tin thanh toán: parts[6]=paymentId, parts[7]=paymentDate, parts[8]=type
+                if (parts.length >= 9) {
+                    String paymentId = parts[6].trim();
+                    java.util.Date paymentDate = sdf.parse(parts[7].trim());
+                    String paymentType = parts[8].trim();
+
+                    DTO.PaymentDTO payment = null;
+                    switch (paymentType) {
+                        case "Cash":
+                            double cashReceived = Double.parseDouble(parts[9].trim());
+                            payment = new DTO.Cash(paymentId, paymentDate, cashReceived);
+                            break;
+                        case "Credit":
+                            payment = new DTO.Credit(paymentId, paymentDate,
+                                    parts[9].trim(), parts[10].trim(), parts[11].trim());
+                            break;
+                        case "Transfer":
+                            payment = new DTO.Transfer(paymentId, paymentDate,
+                                    parts[9].trim(), parts[10].trim(), parts[11].trim());
+                            break;
+                        case "Installment":
+                            payment = new DTO.Installment(paymentId, paymentDate,
+                                    parts[9].trim(), parts[10].trim(),
+                                    Integer.parseInt(parts[11].trim()),
+                                    Double.parseDouble(parts[12].trim()));
+                            break;
+                    }
+                    invoice.setPayment(payment);
+                }
+
+                add(invoice);
+            }
+        } catch (java.io.FileNotFoundException e) {
+            System.out.println("[Thong bao] Chua co file Invoice.txt (Se tu tao khi them moi).");
+        } catch (Exception e) {
+            System.out.println("[Loi] Loi khi doc file Invoice: " + e.getMessage());
+        }
     }
 
-    try (java.util.Scanner scanner = new java.util.Scanner(file)) {
-        while (scanner.hasNextLine()) {
-            String line = scanner.nextLine();
-            if (line.trim().isEmpty()) continue;
+    @Override
+    public void writeFile(String filePath) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
 
-            String[] data = line.split(",");
+            for (InvoiceDTO inv : invoiceList) {
+                if (inv != null) {
+                    String customerId = inv.getCustomerId();
+                    String employeeId = inv.getEmployeeId();
+                    double totalPrice = calculateTotalPrice(inv);
 
-            try {
-                String invoiceId = data[0];
+                    String status;
+                    if (inv.isStatus()) {
+                        status = "Active";
+                    } else {
+                        status = "Cancelled";
+                    }
 
-                String customerId = data[1];
-                Customer customer = null;
-                if (!customerId.equalsIgnoreCase("N/A")) {
-                    customer = new Customer();
-                    customer.setCustomerId(customerId);
-                }
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(inv.getInvoiceId()).append(",")
+                      .append(customerId).append(",")
+                      .append(employeeId).append(",")
+                      .append(sdf.format(inv.getCreatedDate())).append(",")
+                      .append(status).append(",")
+                      .append(totalPrice);
 
-                String employeeId = data[2];
-                SalesEmployee employee = null;
-                if (!employeeId.equalsIgnoreCase("N/A")) {
-                    employee = new SalesEmployee();
-                    employee.setEmployeeId(employeeId);
-                }
+                    // Ghi thông tin thanh toán
+                    DTO.PaymentDTO pay = inv.getPayment();
+                    if (pay != null) {
+                        sb.append(",").append(pay.getPaymentId());
+                        sb.append(",").append(sdf.format(pay.getPaymentDate()));
 
-                java.util.Date createdDate = sdf.parse(data[3]);
-                boolean status = data[4].equalsIgnoreCase("Active");
-                // data[5] is totalPrice — skip, it is calculated
-
-                String paymentId = data[6];
-                PaymentDTO payment = null;
-
-                if (!paymentId.equalsIgnoreCase("N/A")) {
-                    if (data.length > 8) {
-                        java.util.Date paymentDate = data[7].equalsIgnoreCase("N/A") ? null : sdf.parse(data[7]);
-                        String paymentType = data[8];
-                        switch (paymentType) {
-                            case "Cash":
-                                payment = new Cash(paymentId, paymentDate, Double.parseDouble(data[9]));
-                                break;
-                            case "Credit":
-                                payment = new Credit(paymentId, paymentDate, data[9], data[10], data[11]);
-                                break;
-                            case "Transfer":
-                                payment = new Transfer(paymentId, paymentDate, data[9], data[10], data[11]);
-                                break;
-                            case "Installment":
-                                payment = new Installment(paymentId, paymentDate, data[9], data[10],
-                                        Integer.parseInt(data[11]), Double.parseDouble(data[12]));
-                                break;
-                            default:
-                                Cash stub = new Cash();
-                                stub.setPaymentId(paymentId);
-                                payment = stub;
+                        if (pay instanceof DTO.Cash) {
+                            DTO.Cash c = (DTO.Cash) pay;
+                            sb.append(",Cash,").append(c.getCashReceived())
+                              .append(",N/A,N/A,N/A");
+                        } else if (pay instanceof DTO.Credit) {
+                            DTO.Credit cr = (DTO.Credit) pay;
+                            sb.append(",Credit,").append(cr.getNumberId())
+                              .append(",").append(cr.getNameOnCard())
+                              .append(",").append(cr.getBank())
+                              .append(",N/A");
+                        } else if (pay instanceof DTO.Transfer) {
+                            DTO.Transfer t = (DTO.Transfer) pay;
+                            sb.append(",Transfer,").append(t.getAccountNumber())
+                              .append(",").append(t.getAccountName())
+                              .append(",").append(t.getBank())
+                              .append(",N/A");
+                        } else if (pay instanceof DTO.Installment) {
+                            DTO.Installment ins = (DTO.Installment) pay;
+                            sb.append(",Installment,").append(ins.getFinanceCompanyName())
+                              .append(",").append(ins.getContractNumber())
+                              .append(",").append(ins.getInstallmentMonths())
+                              .append(",").append(ins.getDownPayment());
                         }
-                    } else {
-                        // file cũ — chỉ có paymentId
-                        Cash stub = new Cash();
-                        stub.setPaymentId(paymentId);
-                        payment = stub;
                     }
+
+                    bw.write(sb.toString());
+                    bw.newLine();
                 }
-
-                InvoiceDTO inv = new InvoiceDTO(invoiceId, customer, employee, createdDate, payment);
-                inv.setStatus(status);
-
-                tempArr = Arrays.copyOf(tempArr, tempArr.length + 1);
-                tempArr[tempArr.length - 1] = inv;
-
-            } catch (Exception ex) {
-                System.out.println("Loi du lieu dong: " + line);
             }
+
+            System.out.println("Ghi dữ liệu vào file " + filePath + " thành công!");
+
+        } catch (IOException e) {
+            System.err.println("Lỗi khi ghi file: " + e.getMessage());
         }
-    } catch (Exception e) {
-        System.out.println("Loi khi doc File: " + e.getMessage());
     }
 
-    this.invoiceList = tempArr;
-}
-
-@Override
-public void writeFile(String filePath) {
-    try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
-        
-        for (InvoiceDTO inv : invoiceList) {
-            if (inv != null) {
-                String customerId = inv.getCustomerId();
-                String employeeId = inv.getEmployeeId();
-                
-                String status = inv.isStatus() ? "Active" : "Cancelled";
-                double totalPrice = calculateTotalPrice(inv);
-
-                String paymentId, paymentDateStr, paymentType, f1, f2, f3, f4;
-                PaymentDTO pay = inv.getPayment();
-                if (pay == null) {
-                    paymentId = "N/A";
-                    paymentDateStr = "N/A";
-                    paymentType = "N/A";
-                    f1 = "N/A"; f2 = "N/A"; f3 = "N/A"; f4 = "N/A";
-                } else {
-                    paymentId = pay.getPaymentId();
-                    paymentDateStr = pay.getPaymentDate() != null ? sdf.format(pay.getPaymentDate()) : "N/A";
-                    if (pay instanceof Cash) {
-                        paymentType = "Cash";
-                        f1 = String.valueOf(((Cash) pay).getCashReceived());
-                        f2 = "N/A"; f3 = "N/A"; f4 = "N/A";
-                    } else if (pay instanceof Credit) {
-                        Credit cr = (Credit) pay;
-                        paymentType = "Credit";
-                        f1 = cr.getNumberId(); f2 = cr.getNameOnCard(); f3 = cr.getBank(); f4 = "N/A";
-                    } else if (pay instanceof Transfer) {
-                        Transfer t = (Transfer) pay;
-                        paymentType = "Transfer";
-                        f1 = t.getAccountNumber(); f2 = t.getAccountName(); f3 = t.getBank(); f4 = "N/A";
-                    } else if (pay instanceof Installment) {
-                        Installment ins = (Installment) pay;
-                        paymentType = "Installment";
-                        f1 = ins.getFinanceCompanyName(); f2 = ins.getContractNumber();
-                        f3 = String.valueOf(ins.getInstallmentMonths());
-                        f4 = String.valueOf(ins.getDownPayment());
-                    } else {
-                        paymentType = "N/A";
-                        f1 = "N/A"; f2 = "N/A"; f3 = "N/A"; f4 = "N/A";
-                    }
-                }
-
-                String line = inv.getInvoiceId() + "," +
-                             customerId + "," +
-                             employeeId + "," +
-                             sdf.format(inv.getCreatedDate()) + "," +
-                             status + "," +
-                             totalPrice + "," +
-                             paymentId + "," +
-                             paymentDateStr + "," +
-                             paymentType + "," +
-                             f1 + "," + f2 + "," + f3 + "," + f4;
-                
-                bw.write(line);
-                bw.newLine();
-            }
-        }
-        
-        System.out.println("Ghi du lieu vao file " + filePath + " thanh cong!");
-        
-    } catch (IOException e) {
-        System.err.println("Loi khi ghi file: " + e.getMessage());
-    }
-}
-
-
-// hàm tự động tính tiền của 1 hóa đơn
- public static double calculateTotalPrice(InvoiceDTO invoice) {
-    if (invoice.getInvoiceItemList() == null || invoice.getInvoiceItemList().length == 0)
-        return 0;
+    public static double calculateTotalPrice(InvoiceDTO invoice) {
+        if (invoice.getInvoiceItemList() == null || invoice.getInvoiceItemList().length == 0)
+            return 0;
         double total = 0;
         for (InvoiceItemDTO item : invoice.getInvoiceItemList()) {
-            if (item != null) total += InvoiceItemListDAO.calculateSubTotal(item);
+            if (item != null)
+                total += InvoiceItemListDAO.calculateSubTotal(item);
         }
         return total;
     }
-
 
 }

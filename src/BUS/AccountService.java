@@ -19,10 +19,10 @@ public class AccountService {
 
     // --- [BỔ SUNG] CÁC HÀM ĐỒNG BỘ DỮ LIỆU ---
 
-    // [OOP] Delegation: Uy quyen cho DAO doc du lieu
-   // public void loadFromFile() {
-   //     accountDAO.readFile("src/data/accounts.txt");
-   // }
+   // [OOP] Delegation: Uy quyen cho DAO doc du lieu
+     public void loadFromFile() {
+        accountDAO.readFile("src/data/accounts.txt");
+    }
 
     // [OOP] Delegation: Uy quyen cho DAO ghi du lieu xuong o cung
     public void saveToFile() {

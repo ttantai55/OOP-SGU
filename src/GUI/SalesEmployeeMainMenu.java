@@ -25,10 +25,11 @@ SalesEmployeeMainMenu {
     public void showMenu() {
         ProductListBUS productBUS = new ProductListBUS();
         CustomerService customerService = new CustomerService();
-        customerService.loadFromFile();
+        
 
         int choice;
         do {
+            productBUS.loadFile();
             System.out.println("\n" + "=".repeat(55));
             System.out.println("  NHAN VIEN BAN HANG - HE THONG CUA HANG LAPTOP");
             System.out.println("=".repeat(55));
@@ -136,7 +137,8 @@ SalesEmployeeMainMenu {
                     } else if (amount > available) {
                         System.out.println("[Loi] Khong du hang! (Con lai: " + available + ")");
                     } else {
-                        cartBUS.addToCart(sp, amount);
+                        invoiceBUS.inputInvoice();
+                        //cartBUS.addToCart(sp, amount);
                         System.out.println("[OK] Da them " + amount + " x " + sp.getProductName());
                     }
                 } catch (NumberFormatException e) {

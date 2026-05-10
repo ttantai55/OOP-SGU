@@ -1,7 +1,6 @@
 package DAO;
 
 import DTO.GoodsReceiptItemDTO;
-import DTO.ProductsDTO;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -9,7 +8,7 @@ import java.util.Arrays;
 
 public class GoodsReceiptItemListDAO implements IInvoiceManage<GoodsReceiptItemDTO> {
     private static GoodsReceiptItemDTO[] details = new GoodsReceiptItemDTO[0];
-    private final String filePath = "data/goodsreceiptitem.txt";
+
 
    
     
@@ -115,43 +114,36 @@ public class GoodsReceiptItemListDAO implements IInvoiceManage<GoodsReceiptItemD
 
    @Override
     public void readFile(String filePath) {
-        GoodsReceiptItemDTO[] tempArr = new GoodsReceiptItemDTO[0];
-        
-        // Kiểm tra file tồn tại
-        java.io.File file = new java.io.File(filePath);
-        if (!file.exists()) {
-            this.details = tempArr; 
-            return; 
-        }
+        try (java.io.BufferedReader br = new java.io.BufferedReader(new java.io.FileReader(filePath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                line = line.trim();
+                if (line.isEmpty()) continue;
+                String[] parts = line.split(",");
+                if (parts.length < 6) continue;
 
-        try (java.util.Scanner scanner = new java.util.Scanner(file)) {
-            
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-                if (line.trim().isEmpty()) continue;
+                // Format: receiptId,productId,productName,quantity,importPrice,subTotal
+                GoodsReceiptItemDTO item = new GoodsReceiptItemDTO();
+                item.setReceiptId(parts[0].trim());
 
-                String[] data = line.split(",");
+                // Tạo stub ProductsDTO với thông tin cơ bản
+                DTO.ProductsDTO product = new DTO.ProductsDTO();
+                product.setProductID(parts[1].trim());
+                product.setProductName(parts[2].trim());
+                product.setWarrantyPeriod(0);
+                item.setProduct(product);
 
-                try {
-                    // Khởi tạo đối tượng ngay lập tức
-                    ProductsDTO product = new ProductsDTO();
-                    product.setProductID(data[1]);
-                    product.setProductName(data[2]);
-                    GoodsReceiptItemDTO item = new GoodsReceiptItemDTO(product, data[0], Integer.parseInt(data[3]), Double.parseDouble(data[4]));
-                    // Thêm vào mảng
-                    tempArr = Arrays.copyOf(tempArr, tempArr.length + 1);
-                    tempArr[tempArr.length - 1] = item;
+                item.setQuantity(Integer.parseInt(parts[3].trim()));
+                item.setImportPrice(Double.parseDouble(parts[4].trim()));
+                // parts[5] = subTotal (tính từ quantity * importPrice, bỏ qua)
 
-                } catch (Exception ex) {
-                    System.out.println("Loi du lieu dong: " + line);
-                }
+                add(item);
             }
+        } catch (java.io.FileNotFoundException e) {
+            System.out.println("[Thong bao] Chua co file GoodsReceiptItem.txt (Se tu tao khi them moi).");
         } catch (Exception e) {
-            System.out.println("Loi khi doc File: " + e.getMessage());
+            System.out.println("[Loi] Loi khi doc file GoodsReceiptItem: " + e.getMessage());
         }
-        
-        // Nạp mảng vào biến gốc
-        this.details = tempArr;
     }
 
     @Override

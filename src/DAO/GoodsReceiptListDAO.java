@@ -2,8 +2,6 @@ package DAO;
 
 import DTO.GoodsReceiptDTO;
 import DTO.GoodsReceiptItemDTO;
-import DTO.SalesEmployee;
-import DTO.Supplier;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -16,20 +14,8 @@ public class GoodsReceiptListDAO implements IRepository<GoodsReceiptDTO>{
     private final String filePath = "data/goodsreceipt.txt";
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-// load dữ liệu từ file vào mảng khi khởi tạo đối tượng DAO
-    public GoodsReceiptListDAO() {
-        loadFile();
-    }
+   
 
-    public void loadFile() {
-        readFile(this.filePath);
-        System.out.println("Da tai du lieu thanh cong tu file: " + filePath);
-    }
-
-    public void saveFile() {
-        writeFile(this.filePath);
-        System.out.println("Da luu du lieu vao file: " + filePath);
-    }
 
     @Override
     // tương tự với cách hoạt động của hóa đơn bán hàng
@@ -147,63 +133,46 @@ public class GoodsReceiptListDAO implements IRepository<GoodsReceiptDTO>{
 
        @Override
     public void readFile(String filePath) {
-        GoodsReceiptDTO[] tempArr = new GoodsReceiptDTO[0];
-        
-        // Kiểm tra file tồn tại
-        java.io.File file = new java.io.File(filePath);
-        if (!file.exists()) {
-            this.receiptList = tempArr; 
-            return; 
-        }
+        try (java.io.BufferedReader br = new java.io.BufferedReader(new java.io.FileReader(filePath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                line = line.trim();
+                if (line.isEmpty()) continue;
+                String[] parts = line.split(",");
+                if (parts.length < 6) continue;
 
-        try (java.util.Scanner scanner = new java.util.Scanner(file)) {
-            
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-                if (line.trim().isEmpty()) continue;
+                // Format: receiptId,date,supplierId,receiverId,status,totalPrice
+                GoodsReceiptDTO rec = new GoodsReceiptDTO();
+                rec.setReceiptId(parts[0].trim());
+                rec.setCreatedDate(sdf.parse(parts[1].trim()));
 
-                String[] data = line.split(",");
+                // Tạo stub Supplier với ID
+                DTO.Supplier supplier = new DTO.Supplier();
+                supplier.setSupplierId(parts[2].trim());
+                supplier.setSupplierName(parts[2].trim()); // Dùng ID làm tên tạm
+                rec.setSupplier(supplier);
 
-                try {
-                    String receiptId = data[0];
-                    java.util.Date createdDate = sdf.parse(data[1]);
-    
-                    String supplierId = data[2];
-                    Supplier supplier = null;
-                    if (!supplierId.equalsIgnoreCase("N/A")) {
-                        supplier = new Supplier();
-                        supplier.setSupplierId(supplierId); 
-                    }
+                // Tạo stub Employee với ID
+                DTO.Employee receiver = new DTO.Employee() {
+                    @Override
+                    public float calculateSalary() { return 0; }
+                    @Override
+                    public String getRole() { return "N/A"; }
+                };
+                receiver.setEmployeeId(parts[3].trim());
+                receiver.setFullName(parts[3].trim()); // Dùng ID làm tên tạm
+                rec.setReceiver(receiver);
 
-                    String receiverId = data[3];
-                    SalesEmployee receiver = null;
-                    if (!receiverId.equalsIgnoreCase("N/A")) {
-                        receiver = new SalesEmployee();
-                        receiver.setEmployeeId(receiverId);
-                    }
-                    boolean status = data[4].equalsIgnoreCase("Active");
+                rec.setStatus(parts[4].trim().equals("Active"));
+                // totalPrice ở parts[5] - không cần lưu vì tính từ items
 
-                    GoodsReceiptDTO rec = new GoodsReceiptDTO();
-                    rec.setReceiptId(receiptId);
-                    rec.setCreatedDate(createdDate);
-                    rec.setSupplier(supplier);
-                    rec.setReceiver(receiver);
-                    rec.setStatus(status);
-
-                    // Thêm vào mảng
-                    tempArr = Arrays.copyOf(tempArr, tempArr.length + 1);
-                    tempArr[tempArr.length - 1] = rec;
-
-                } catch (Exception ex) {
-                    System.out.println("Loi du lieu dong: " + line);
-                }
+                add(rec);
             }
+        } catch (java.io.FileNotFoundException e) {
+            System.out.println("[Thong bao] Chua co file GoodsReceipt.txt (Se tu tao khi them moi).");
         } catch (Exception e) {
-            System.out.println("Loi khi doc File: " + e.getMessage());
+            System.out.println("[Loi] Loi khi doc file GoodsReceipt: " + e.getMessage());
         }
-        
-        // Nạp mảng vào biến gốc
-        this.receiptList = tempArr;
     }
 
 

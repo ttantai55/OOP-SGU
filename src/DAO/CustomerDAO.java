@@ -52,13 +52,15 @@ public class CustomerDAO implements IRepository<Customer> {
         return null;
     }
 
+    @Override
     public Customer[] findByName(String name) {
         Customer[] temp = new Customer[count];
         int size = 0;
         for (int i = 0; i < count; i++) {
-            if (customers[i].getFullName()
-                    .toLowerCase()
-                    .contains(name.toLowerCase())) {
+            // [ĐÃ SỬA] Thêm điều kiện != null để chống sập chương trình
+            if (customers[i] != null 
+                && customers[i].getFullName() != null 
+                && customers[i].getFullName().toLowerCase().contains(name.toLowerCase())) {
                 temp[size++] = customers[i];
             }
         }
