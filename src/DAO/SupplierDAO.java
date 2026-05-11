@@ -85,7 +85,7 @@ public class SupplierDAO implements IRepository<Supplier> {
         }
         // In tieu de bang cho dep
         System.out.println("-----------------------------------------------------------------------------------------");
-        System.out.printf("%-10s | %-25s | %-15s | %-30s\n", "Ma NCC", "Ten Nha Cung Cap", "So Dien Thoai", "Email");
+        System.out.printf("%-10s|%-25s|%-15s|%-30s\n", "Ma NCC", "Ten Nha Cung Cap", "So Dien Thoai", "Email");
         System.out.println("-----------------------------------------------------------------------------------------");
         for (int i = 0; i < count; i++) {
             suppliers[i].displayInfo(); 

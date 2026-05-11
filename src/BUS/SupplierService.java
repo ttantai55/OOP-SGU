@@ -15,7 +15,7 @@ public class SupplierService {
     public SupplierService() {
         this.supplierDAO = new SupplierDAO();
         this.sc = new Scanner(System.in);
-        supplierDAO.readFile("OOP-SGU/src/data/suppliers.txt");
+        supplierDAO.readFile("src/data/suppliers.txt");
     }
 
     // --- CÁC HÀM ĐỒNG BỘ DỮ LIỆU ---

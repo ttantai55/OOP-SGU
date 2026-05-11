@@ -62,7 +62,7 @@ public class Supplier {
     @Override
     public String toString() {
         // Canh le trai bang dau tru (-), giu khung hien thi co dinh
-        String supplierFormat = "%-15s|%-15s|%-15s|%-20s|";
+        String supplierFormat = "%-10s|%-25s|%-15s|%-30s";
         return String.format(supplierFormat, supplierId, supplierName, contactPhone, email);
     }
 
