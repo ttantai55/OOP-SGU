@@ -9,11 +9,28 @@ import java.util.Date;
 import java.util.Scanner;
 
 public class PromotionListBUS {
+    private final String filePath = "data/promotion.txt";
     Scanner sc = new Scanner(System.in);
 
     private PromotionListDAO promDAO = new PromotionListDAO();
     private ProductListDAO productsDAO = new ProductListDAO();
 
+
+    public PromotionListBUS() {
+        promDAO.readFile(filePath);
+    }
+
+    public void loadFile() {
+        promDAO.readFile(filePath);
+        Logger.debug("Da tai du lieu thanh cong tu file: " + filePath);
+    }
+
+    public void saveFile() {
+        promDAO.writeFile(filePath);
+        System.out.println("Da luu du lieu vao file: " + filePath);
+    }
+
+    
     public void inputPromotion() {
         System.out.print("Nhap ma khuyen mai: ");
         String promotionId = sc.nextLine();

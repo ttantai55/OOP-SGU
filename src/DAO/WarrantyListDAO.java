@@ -14,25 +14,12 @@ public class WarrantyListDAO implements IRepository<WarrantyDTO> {
     private final String filePath = "data/warranty.txt";
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-    public WarrantyListDAO() {
-        loadFile();
-    }
-
-    public void loadFile() {
-        readFile(this.filePath);
-        System.out.println("Da tai du lieu thanh cong tu file: " + filePath);
-    }
-
-    public void saveFile() {
-        writeFile(this.filePath);
-        System.out.println("Da luu du lieu vao file: " + filePath);
-    }
+   
 
     @Override
     public void add(WarrantyDTO obj) {
         warranties = Arrays.copyOf(warranties, warranties.length + 1);
         warranties[warranties.length - 1] = obj;
-        System.out.println("Da them bao hanh thanh cong: " + obj.getWarrantyId() + ".");
     }
 
 

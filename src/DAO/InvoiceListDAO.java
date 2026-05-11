@@ -21,7 +21,6 @@ public class InvoiceListDAO implements IRepository<InvoiceDTO> {
     public void add(InvoiceDTO invoice) {// tạo 1 mảng có độ dài = mảng cũ + 1
         invoiceList = Arrays.copyOf(invoiceList, invoiceList.length + 1); // copy mảng cũ sang mảng mới(mảng mới thừa 1 phần tử)
         invoiceList[invoiceList.length - 1] = invoice; // hóa đơn cũ nằm ở cuối mảng mới
-        System.out.println("Da them hoa don thanh cong: " + invoice.getInvoiceId() + ".");
     }
 
      @Override

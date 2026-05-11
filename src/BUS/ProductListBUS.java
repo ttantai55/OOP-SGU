@@ -5,6 +5,7 @@ import DAO.ProductListDAO;
 import DTO.AccessoryDTO;
 import DTO.LaptopDTO;
 import DTO.ProductsDTO;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class ProductListBUS {
@@ -65,18 +66,51 @@ public class ProductListBUS {
     //===========Xoa SP===========
 
     public void removeProduct() {
-        System.out.println("Moi ban nhap ma SP can xoa: ");
-        String id = sc.nextLine();
-        productDAO.remove(id);
+    productDAO.displayAllProducts();
+    System.out.print("Nhap ma SP (VD: LT001): ");
+    String productId = sc.nextLine().trim();
 
-        saveFile();
+    // Lấy tất cả IMEI cùng dòng
+    ProductsDTO[] all = productDAO.getALL();
+    ProductsDTO[] found = new ProductsDTO[0];
+    for (ProductsDTO p : all) {
+        if (p != null && p.isStatus() && p.getProductID().equalsIgnoreCase(productId)) {
+            found = Arrays.copyOf(found, found.length + 1);
+            found[found.length - 1] = p;
+        }
     }
+
+    if (found.length == 0) {
+        System.out.println("Khong tim thay san pham!");
+        return;
+    }
+
+    // Hiển thị danh sách IMEI
+    System.out.println("--- Danh sach IMEI cua [" + productId + "] ---");
+    for (int i = 0; i < found.length; i++) {
+        System.out.printf("%d. %s%n", i + 1, found[i].getProductIMEI());
+    }
+
+    System.out.print("Chon so thu tu IMEI can xoa (0 = huy): ");
+    try {
+        int idx = Integer.parseInt(sc.nextLine().trim());
+        if (idx == 0) return;
+        if (idx < 1 || idx > found.length) {
+            System.out.println("Lua chon khong hop le!");
+            return;
+        }
+        productDAO.remove(found[idx - 1].getProductIMEI()); // Xóa đúng IMEI
+        saveFile();
+    } catch (NumberFormatException e) {
+        System.out.println("Nhap so khong hop le!");
+    }
+}
     
     //======= CAP NHAT SP==============
 
     public void updateProduct() {
         productDAO.displayAllProducts();
-        System.out.println("Moi ban nhap ma IMEI SP can update: ");
+        System.out.println("Moi ban nhap ma IMEI SP can cap nhat: ");
         String imei = sc.nextLine();
         
         ProductsDTO p = productDAO.findById(imei);

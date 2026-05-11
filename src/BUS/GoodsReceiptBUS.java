@@ -151,6 +151,7 @@ public class GoodsReceiptBUS {
         rec.setItems(items);
 
         grDAO.add(rec);
+        Logger.debug("Da them phieu nhap thanh cong: " + rec.getReceiptId() + ".");
 
         for (GoodsReceiptItemDTO item : items) {
             if (item != null) {

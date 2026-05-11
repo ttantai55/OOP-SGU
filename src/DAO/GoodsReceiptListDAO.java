@@ -22,7 +22,7 @@ public class GoodsReceiptListDAO implements IRepository<GoodsReceiptDTO>{
     public void add(GoodsReceiptDTO receipt) {
         receiptList = Arrays.copyOf(receiptList, receiptList.length + 1);
         receiptList[receiptList.length - 1] = receipt;
-        System.out.println("Da them phieu nhap thanh cong: " + receipt.getReceiptId() + ".");
+        
     }
 
     @Override

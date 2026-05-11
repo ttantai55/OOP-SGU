@@ -55,6 +55,7 @@ public class GoodsReceiptItemListBUS {
         item.setImportPrice(importPrice);
 
         grItemDAO.add(item);
+        Logger.debug("Da them phieu nhap thanh cong: " + receipt.getReceiptId() + ".");
         System.out.println("Da them chi tiet vao phieu nhap thanh cong!");
     }
 

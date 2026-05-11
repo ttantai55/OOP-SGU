@@ -9,22 +9,8 @@ import java.util.Arrays;
 
 public class PromotionListDAO implements IRepository<PromotionDTO> {
     private static PromotionDTO[] promotionList = new PromotionDTO[0];
-    private final String filePath = "data/promotion.txt";
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-    public PromotionListDAO() {
-        loadFile();
-    }
-
-    public void loadFile() {
-        readFile(this.filePath);
-        System.out.println("Da tai du lieu thanh cong tu file: " + filePath);
-    }
-
-    public void saveFile() {
-        writeFile(this.filePath);
-        System.out.println("Da luu du lieu vao file: " + filePath);
-    }
 
     @Override
     public void add(PromotionDTO promotion) {

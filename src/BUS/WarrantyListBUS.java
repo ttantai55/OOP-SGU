@@ -38,7 +38,7 @@ public class WarrantyListBUS {
     //Load/Save file
     public void loadFile(){
         warDAO.readFile(FILE_PATH);
-        System.out.println("Da tai du lieu thanh cong tu file" + FILE_PATH);
+        Logger.debug("Da tai du lieu thanh cong tu file" + FILE_PATH);//an thong bao tai file
     }
 
     public void saveFile(){

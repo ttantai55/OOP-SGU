@@ -16,7 +16,6 @@ public class GoodsReceiptItemListDAO implements IInvoiceManage<GoodsReceiptItemD
     public void add(GoodsReceiptItemDTO obj) {
         details = Arrays.copyOf(details, details.length + 1);
         details[details.length - 1] = obj;
-        System.out.println("Da them chi tiet phieu nhap thanh cong: " + obj.getProductId() + ".");
     }
 
     @Override

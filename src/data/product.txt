@@ -18,5 +18,5 @@ Accessory,AIMEI-005,AC003,CAT07,Headphone,BR09,Sony,1946,Sony WH-1000XM5,7500000
 Accessory,AIMEI-006,AC003,CAT07,Headphone,BR09,Sony,1946,Sony WH-1000XM5,7500000.0,12,Vietnam,Dang ban,Wireless,Noise cancelling headphone
 Accessory,AIMEI-007,AC004,CAT08,Storage,BR10,Samsung,1938,Samsung 980 Pro 1TB,2500000.0,60,Korea,Tam ngung,SSD,NVMe Gen 4
 Accessory,AIMEI-008,AC004,CAT08,Storage,BR10,Samsung,1938,Samsung 980 Pro 1TB,2500000.0,60,Korea,Tam ngung,SSD,NVMe Gen 4
-Accessory,AIMEI-009,AC005,CAT10,Hub,BR11,Ugreen,2012,Ugreen Type C 6 in 1,650000.0,12,China,Dang ban,Hub USB-C,HDMI 4K and USB 3.0
+Accessory,AIMEI-009,AC005,CAT10,Hub,BR11,Ugreen,2012,Ugreen Type C 6 in 1,650000.0,12,China,Tam ngung,Hub USB-C,HDMI 4K and USB 3.0
 Accessory,AIMEI-010,AC005,CAT10,Hub,BR11,Ugreen,2012,Ugreen Type C 6 in 1,650000.0,12,China,Dang ban,Hub USB-C,HDMI 4K and USB 3.0

@@ -1,9 +1,6 @@
 package DAO;
 
 import DTO.InvoiceItemDTO;
-import DTO.ProductsDTO;
-import DTO.PromotionDTO;
-import DTO.WarrantyDTO;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -19,7 +16,6 @@ public class InvoiceItemListDAO implements IInvoiceManage<InvoiceItemDTO> {
     public void add(InvoiceItemDTO item) {
         itemList = Arrays.copyOf(itemList, itemList.length + 1);
         itemList[itemList.length - 1] = item;
-        System.out.println("Da them chi tiet hoa don thanh cong: " + item.getProductId() + ".");
     }
 
     // khi xóa 1 chi tiết thì nên nhập cả mã hóa đơn(invoiceId) và mã sản phẩm(productId) để tránh xóa nhầm 1 chi tiết của hóa đơn khác

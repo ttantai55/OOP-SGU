@@ -25,16 +25,17 @@ public class BillMenu {
         repairBUS    = new RepairRecordListBUS();
 
         // Tự động tải dữ liệu từ file khi khởi tạo
-        loadData();
+        invoiceBUS.loadFile();
+        grBUS.loadFile();
     }
 
     // ==================== LOAD / SAVE ====================
 
     public void loadData() {
-        System.out.println("Dang tai du lieu hoa don va phieu nhap...");
+        System.out.println("\nDang tai du lieu hoa don va phieu nhap...");
         invoiceBUS.loadFile();
         grBUS.loadFile();
-        System.out.println("Tai du lieu hoa don va phieu nhap thanh cong!");
+       
     }
 
     public void saveData() {
