@@ -1,5 +1,0 @@
-KM001,Giam gia mua he,LT001,01/06/2026,30/06/2026,Mua tu 1 san pham,10.0,Active
-KM002,Flash Sale cuoi tuan,LT002,10/05/2026,31/05/2026,Ap dung cho tat ca,15.0,Active
-KM003,Khuyen mai sinh nhat,LT003,01/05/2026,31/05/2026,Khach hang VIP,20.0,Active
-KM004,Back to School,AC001,01/08/2026,31/08/2026,Mua kem laptop giam gia,5.0,Active
-KM005,Uu dai dac biet,LT004,15/05/2026,15/06/2026,Don hang tren 30 trieu,12.0,Active
