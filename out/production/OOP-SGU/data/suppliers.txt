@@ -1,0 +1,10 @@
+NCC001,ASUS Viet Nam,0901234567,asus.distributor.vn@gmail.com
+NCC002,Dell Global BV,0987654321,dell.vietnam.b2b@gmail.com
+NCC003,HP Viet Nam LLC,0912345678,hp.partner.vn@gmail.com
+NCC004,Lenovo Viet Nam,0934567890,lenovo.sales.vn@gmail.com
+NCC005,Acer Viet Nam,0978123456,acer.info.vn@gmail.com
+NCC006,Apple Viet Nam LLC,0865112233,apple.macbook.vn@gmail.com
+NCC007,MSI Computer VN,0888999777,msi.gaming.vn@gmail.com
+NCC008,Gigabyte Technology,0944556677,gigabyte.vn@gmail.com
+NCC009,LG Electronics VN,0922334455,lg.gram.vietnam@gmail.com
+NCC010,Digiworld Corporation,0966778899,digiworld.supplier@gmail.com
