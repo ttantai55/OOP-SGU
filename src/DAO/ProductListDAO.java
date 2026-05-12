@@ -198,8 +198,6 @@ public class ProductListDAO  implements IProductManage<ProductsDTO> {
     public void add(ProductsDTO product){
         pList = Arrays.copyOf(pList, pList.length+1);
         pList[pList.length-1] = product;
-        System.out.println("Da them thanh cong san pham");
-
     }
 
     @Override
